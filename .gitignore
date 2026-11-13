@@ -1,0 +1,29 @@
+node_modules
+.DS_Store
+dist
+coverage
+*.local
+*.log
+*.tsbuildinfo
+*.tgz
+.eslintcache
+.stylelintcache
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+
+# Nuxt
+.nuxt
+.output
+.data
+
+# Written by Nuxt UI's Vite plugin when Vite runs
+playgrounds/vue/auto-imports.d.ts
+playgrounds/vue/components.d.ts
+
+# Playwright
+/test-results
+/playwright-report
+/blob-report

@@ -1,0 +1,18 @@
+// The package, the tests and the configs at the root. Each playground has its own, which
+// type-checks its Vue files.
+{
+  "extends": "@tsconfig/node24/tsconfig.json",
+  "compilerOptions": {
+    "target": "es2022",
+    "lib": ["es2022", "dom", "dom.iterable"],
+    "module": "preserve",
+    "moduleResolution": "bundler",
+    "types": ["node"],
+    "noUncheckedIndexedAccess": true,
+    "verbatimModuleSyntax": true,
+    "erasableSyntaxOnly": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true
+  },
+  "include": ["packages/ui-vue/src", "tests", "*.config.ts"]
+}

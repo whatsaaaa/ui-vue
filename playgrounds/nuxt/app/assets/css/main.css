@@ -1,0 +1,166 @@
+@import '@whatsaaaa/ui-vue/index.css';
+
+/*
+ * The gallery shows hover and focus without a pointer or a keyboard: an example marked
+ * data-demo="hover" or data-demo="focus" draws that state, and so does what is inside it. The
+ * same rules draw the real state; this build only adds the marked one to them.
+ */
+@custom-variant hover {
+  @media (hover: hover) {
+    &:hover {
+      @slot;
+    }
+  }
+
+  &:where([data-demo~='hover'], [data-demo~='hover'] *) {
+    @slot;
+  }
+}
+
+@custom-variant focus-visible {
+  &:focus-visible {
+    @slot;
+  }
+
+  &:where([data-demo~='focus'], [data-demo~='focus'] *) {
+    @slot;
+  }
+}
+
+/*
+ * The window: on a wide screen it fills the screen and its content scrolls inside it, on a
+ * phone it grows with the content and the page scrolls. As on the website.
+ */
+body {
+  min-height: 100dvh;
+  padding: var(--ws-space-20);
+}
+
+.window {
+  height: calc(100dvh - 2 * var(--ws-space-20));
+  max-width: var(--ws-size-frame);
+  margin-inline: auto;
+}
+
+/*
+ * The content scrolls here, and is positioned here too: an element taken out of the flow, such
+ * as a label kept for screen readers only, then scrolls and clips with the rest instead of
+ * making the page itself taller.
+ */
+.window__main {
+  position: relative;
+  min-height: 0;
+  overflow: auto;
+}
+
+@media (width < 64rem) {
+  body {
+    padding: var(--ws-space-12);
+  }
+
+  .window {
+    height: auto;
+    min-height: calc(100dvh - 2 * var(--ws-space-12));
+  }
+
+  .window__main {
+    overflow: visible;
+  }
+}
+
+/*
+ * The window and the status line clip what crosses their edges, and a tab and a key fill their
+ * bar, so their focus ring is drawn inside them, as on the website.
+ */
+.ws-tabs a:focus-visible,
+.ws-status-line__keys :is(a, button):focus-visible,
+.status-line__theme:focus-visible {
+  outline-offset: calc(-1 * var(--ws-border-width-medium));
+}
+
+.ws-status-line__keys :is(a, button) {
+  margin-inline: calc(-1 * var(--ws-space-8));
+  padding-inline: var(--ws-space-8);
+}
+
+/* The name of the theme is the last item, in the window's corner: its ring follows the curve. */
+.status-line__theme:focus-visible {
+  border-radius: var(--ws-radius-sm) var(--ws-radius-sm)
+    calc(var(--ws-radius-xl) - var(--ws-border-width-thin)) var(--ws-radius-sm);
+}
+
+/*
+ * The path gives way on a narrow screen, so the switches after it always fit: its box takes the
+ * room left in the line, the path shrinks to its ellipsis in it, and goes as a whole once "~…"
+ * no longer fits inside its padding, as in the sample apps.
+ */
+.status-line__path {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  container-type: inline-size;
+}
+
+@container (width < calc(2ch + 2 * 0.875rem)) {
+  .ws-status-line__file {
+    display: none;
+  }
+}
+
+.status-line__theme {
+  margin: 0;
+  border-block: 0;
+  border-right: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.status-line__theme:hover {
+  color: var(--ws-color-text);
+}
+
+@media (width < 64rem) {
+  :is(
+    .ws-status-line__mode,
+    .ws-status-line__file,
+    .ws-status-line__item,
+    .ws-status-line__switch
+  ) {
+    padding-inline: var(--ws-space-10);
+  }
+}
+
+/* The mark of the handle at 32 px, in the cut for the page's theme. */
+.tab-bar__mark {
+  width: var(--ws-space-32);
+  height: var(--ws-space-32);
+  margin-inline: calc(-1 * var(--ws-space-4));
+}
+
+[data-theme='dark'] .tab-bar__mark--light,
+[data-theme='light'] .tab-bar__mark--dark {
+  display: none;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .tab-bar__mark--dark {
+    display: none;
+  }
+}
+
+@media not (prefers-color-scheme: light) {
+  :root:not([data-theme]) .tab-bar__mark--light {
+    display: none;
+  }
+}
+
+/* A prompt that wraps keeps its chevron on its first line, as on the website. */
+.ws-prompt {
+  align-items: flex-start;
+}
+
+.ws-prompt::before {
+  margin-top: calc((1lh - 0.875em) / 2);
+}

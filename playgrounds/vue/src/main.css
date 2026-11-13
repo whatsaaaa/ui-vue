@@ -1,0 +1,11 @@
+@import '@whatsaaaa/ui-vue/index.css';
+
+body {
+  padding: var(--ws-space-20);
+}
+
+@media (width < 64rem) {
+  body {
+    padding: var(--ws-space-12);
+  }
+}
