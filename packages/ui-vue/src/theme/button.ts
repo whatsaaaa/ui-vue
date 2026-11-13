@@ -61,7 +61,10 @@ const ghostHover: ByColor = {
   neutral: 'hover:bg-raised active:bg-raised',
 }
 
-/** A link is underlined, as links in the system are, and thickens it on hover. */
+/**
+ * A link is the sample apps' quiet button: no box, the regular weight, underlined as links in the
+ * system are, the line thicker on hover.
+ */
 const link: ByColor = {
   primary: 'text-interactive hover:text-interactive active:text-interactive',
   success: 'text-tip-text hover:text-tip-text active:text-tip-text',
@@ -125,7 +128,7 @@ export default {
     {
       variant: 'link',
       class:
-        'h-auto px-0 underline decoration-1 underline-offset-[0.2em] hover:decoration-2 active:decoration-2',
+        'h-auto px-0 font-normal underline decoration-1 underline-offset-[0.2em] hover:decoration-2 active:decoration-2',
     },
     // Disabled, every kind is faint: an outline of the faint color around faint text. A loading
     // button is disabled too, but keeps its look, with the icon turning in it.

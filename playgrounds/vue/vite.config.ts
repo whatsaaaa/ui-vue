@@ -24,5 +24,15 @@ function headScripts(): Plugin {
 
 // The smallest Vue setup: Nuxt UI's Vite plugin takes the theme and the components' config.
 export default defineConfig({
-  plugins: [vue(), ui({ theme, ui: components, router: false }), headScripts()],
+  plugins: [
+    vue(),
+    ui({
+      theme,
+      ui: components,
+      router: false,
+      // the icons the app uses are bundled with it, so the page asks no server for them
+      icon: { clientBundle: { scan: true } },
+    }),
+    headScripts(),
+  ],
 })

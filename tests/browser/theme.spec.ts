@@ -46,6 +46,20 @@ for (const colorScheme of ['dark', 'light'] as const) {
   })
 }
 
+test('asks no other host for anything: the fonts and the icons are in the build', async ({
+  page,
+  baseURL,
+}) => {
+  const elsewhere: string[] = []
+  page.on('request', (request) => {
+    if (!request.url().startsWith(baseURL!) && !request.url().startsWith('data:'))
+      elsewhere.push(request.url())
+  })
+  await open(page)
+  await page.waitForLoadState('networkidle')
+  expect(elsewhere).toEqual([])
+})
+
 test('the two themes differ', async ({ page }) => {
   await open(page)
   expect(await resolveColor(page, 'var(--ui-bg)', 'dark')).not.toBe(
