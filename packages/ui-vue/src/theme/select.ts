@@ -20,6 +20,8 @@ export const selectSlots = {
   separator: '-mx-1 my-1 h-px bg-border',
   item: `cursor-pointer before:rounded-sm data-disabled:opacity-100 data-disabled:text-text-faint text-text data-highlighted:not-data-disabled:text-text data-highlighted:not-data-disabled:before:bg-raised ${transition} motion-reduce:before:transition-none`,
   itemLeadingIcon: `text-text-secondary group-data-highlighted:not-group-data-disabled:text-text ${transition}`,
+  // the chosen option's tick, centered on the option's first line
+  itemTrailing: 'h-lh',
   itemTrailingIcon: 'text-interactive',
   itemDescription: 'truncate text-text-secondary text-body-sm',
 }
@@ -28,13 +30,14 @@ export const selectSlots = {
 export const listMotion =
   'data-[state=open]:animate-[fade-in_var(--ws-motion-duration-fast)_var(--ws-motion-easing-out)] data-[state=closed]:animate-[fade-out_var(--ws-motion-duration-fast)_var(--ws-motion-easing-in)] motion-safe:data-[state=open]:animate-[scale-in_var(--ws-motion-duration-fast)_var(--ws-motion-easing-out)] motion-safe:data-[state=closed]:animate-[scale-out_var(--ws-motion-duration-fast)_var(--ws-motion-easing-in)]'
 
+/** An option's icon is centered on its first line, as the tick is, whatever lines follow. */
 export const selectVariants = {
   size: {
     xs: {
       ...fieldSizes.xs,
       label: 'px-1.5 py-1 text-overline',
       item: 'px-1.5 py-1 gap-1.5 text-body-sm',
-      itemLeadingIcon: 'size-4',
+      itemLeadingIcon: 'size-4 my-[calc((1lh-1rem)/2)]',
       itemTrailingIcon: 'size-4',
       empty: 'p-2 text-body-sm',
     },
@@ -42,7 +45,7 @@ export const selectVariants = {
       ...fieldSizes.sm,
       label: 'px-2 py-1 text-overline',
       item: 'px-2 py-1 gap-1.5 text-body-sm',
-      itemLeadingIcon: 'size-4',
+      itemLeadingIcon: 'size-4 my-[calc((1lh-1rem)/2)]',
       itemTrailingIcon: 'size-4',
       empty: 'p-2.5 text-body-sm',
     },
@@ -50,7 +53,7 @@ export const selectVariants = {
       ...fieldSizes.md,
       label: 'px-2 py-1.5 text-overline',
       item: 'px-2 py-1.5 gap-2 text-body',
-      itemLeadingIcon: 'size-4',
+      itemLeadingIcon: 'size-4 my-[calc((1lh-1rem)/2)]',
       itemTrailingIcon: 'size-4',
       empty: 'p-3 text-body-sm',
     },
@@ -58,7 +61,7 @@ export const selectVariants = {
       ...fieldSizes.lg,
       label: 'px-2.5 py-1.5 text-overline',
       item: 'px-2.5 py-2 gap-2 text-body',
-      itemLeadingIcon: 'size-5',
+      itemLeadingIcon: 'size-5 my-[calc((1lh-1.25rem)/2)]',
       itemTrailingIcon: 'size-5',
       empty: 'p-3 text-body',
     },
@@ -66,7 +69,7 @@ export const selectVariants = {
       ...fieldSizes.xl,
       label: 'px-3 py-2 text-overline',
       item: 'px-3 py-2 gap-2.5 text-body',
-      itemLeadingIcon: 'size-5',
+      itemLeadingIcon: 'size-5 my-[calc((1lh-1.25rem)/2)]',
       itemTrailingIcon: 'size-5',
       empty: 'p-3 text-body',
     },

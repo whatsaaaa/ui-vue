@@ -18,9 +18,10 @@ export default {
     footer: 'flex-wrap justify-end gap-3 px-4 py-3 sm:px-4 lg:px-5',
     title: 'font-mono font-bold text-h4 text-text',
     description: 'font-sans text-body-sm text-text-secondary',
-    // In the header's flow, not over it. Its box reaches into the header's padding, so its icon
-    // ends where the content does.
-    close: 'static shrink-0 mt-1 -me-3',
+    // In the header's flow, not over it, and smaller than the bar, so its focus ring has room
+    // inside the window. Its box reaches into the header's padding, so its icon ends where the
+    // content does.
+    close: 'static shrink-0 size-8 mt-2 -me-2',
   },
   variants: {
     transition: {

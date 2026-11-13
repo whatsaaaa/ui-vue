@@ -1,5 +1,9 @@
+<script setup lang="ts">
+import { sr } from './locale'
+</script>
+
 <template>
-  <UApp>
+  <UApp :locale="sr">
     <NuxtPage />
   </UApp>
 </template>

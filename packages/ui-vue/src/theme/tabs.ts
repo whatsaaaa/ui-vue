@@ -8,29 +8,36 @@ import { type ByColor, byColor, transition } from './shared.ts'
  *
  * Until the indicator is in the page, as in the HTML from the server, the current tab draws it
  * itself: the classes that start with in-[[data-slot=list]...] do that.
+ *
+ * A tab keeps its whole label: tabs that do not fit their row scroll inside it, as a table does,
+ * and the marker of a link is drawn inside the row, over its divider.
  */
 
+/**
+ * The current tab of a pill is raised and outlined: the raised fill alone is too close to the bar
+ * to be seen, the outline is in a color that reads on it.
+ */
 const pill: ByColor = {
   primary:
-    'data-[state=active]:text-text in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:bg-raised',
+    'data-[state=active]:text-text in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:bg-raised in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:ring-field-border',
   success:
-    'data-[state=active]:text-tip-text in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:bg-tip-tint',
-  info: 'data-[state=active]:text-note-text in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:bg-note-tint',
+    'data-[state=active]:text-tip-text in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:bg-tip-tint in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:ring-tip',
+  info: 'data-[state=active]:text-note-text in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:bg-note-tint in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:ring-note',
   warning:
-    'data-[state=active]:text-warning-text in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:bg-warning-tint',
+    'data-[state=active]:text-warning-text in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:bg-warning-tint in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:ring-warning',
   error:
-    'data-[state=active]:text-danger-text in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:bg-danger-tint',
+    'data-[state=active]:text-danger-text in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:bg-danger-tint in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:ring-danger',
   neutral:
-    'data-[state=active]:text-text in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:bg-raised',
+    'data-[state=active]:text-text in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:bg-raised in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:ring-field-border',
 }
 
 const pillIndicator: ByColor = {
-  primary: 'bg-raised',
-  success: 'bg-tip-tint',
-  info: 'bg-note-tint',
-  warning: 'bg-warning-tint',
-  error: 'bg-danger-tint',
-  neutral: 'bg-raised',
+  primary: 'bg-raised ring ring-inset ring-field-border',
+  success: 'bg-tip-tint ring ring-inset ring-tip',
+  info: 'bg-note-tint ring ring-inset ring-note',
+  warning: 'bg-warning-tint ring ring-inset ring-warning',
+  error: 'bg-danger-tint ring ring-inset ring-danger',
+  neutral: 'bg-raised ring ring-inset ring-field-border',
 }
 
 const link: ByColor = {
@@ -75,14 +82,14 @@ export default {
       pill: {
         list: 'bg-bg ring ring-inset ring-border rounded-md p-1',
         trigger:
-          "grow rounded-sm in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:content-[''] in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:absolute in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:inset-0 in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:rounded-sm in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:-z-10 isolate",
+          "grow shrink-0 rounded-sm in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:content-[''] in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:absolute in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:inset-0 in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:rounded-sm in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:ring in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:ring-inset in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:-z-10 isolate",
         indicator: 'rounded-sm',
       },
       link: {
         list: 'p-0 border-border',
         indicator: 'rounded-none',
         trigger:
-          "rounded-none in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:after:content-[''] in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:after:absolute",
+          "shrink-0 rounded-none in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:after:content-[''] in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:after:absolute",
       },
     },
     size: {
@@ -94,11 +101,13 @@ export default {
     },
   },
   compoundVariants: [
+    // A row of tabs that does not fit scrolls inside itself. A column keeps its width.
+    { orientation: 'horizontal', class: { list: 'overflow-x-auto' } },
     ...byColor(pill, { variant: 'pill' }, 'trigger'),
     ...byColor(pillIndicator, { variant: 'pill' }, 'indicator'),
     ...byColor(link, { variant: 'link' }, 'trigger'),
     ...byColor(linkIndicator, { variant: 'link' }, 'indicator'),
-    // A link's tabs are as tall as a field, and its marker is two pixels, on the divider.
+    // A link's tabs are as tall as a field, and its marker is two pixels, just over the divider.
     { variant: 'link', size: 'xs', class: { trigger: 'h-7' } },
     { variant: 'link', size: 'sm', class: { trigger: 'h-8' } },
     { variant: 'link', size: 'md', class: { trigger: 'h-10' } },
@@ -108,18 +117,18 @@ export default {
       orientation: 'horizontal',
       variant: 'link',
       class: {
-        indicator: '-bottom-px h-0.5',
+        indicator: 'bottom-0 h-0.5',
         trigger:
-          'in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:after:-bottom-px in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:after:h-0.5',
+          'in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:after:bottom-0 in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:after:h-0.5',
       },
     },
     {
       orientation: 'vertical',
       variant: 'link',
       class: {
-        indicator: '-start-px w-0.5',
+        indicator: 'start-0 w-0.5',
         trigger:
-          'justify-start in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:after:-start-px in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:after:w-0.5',
+          'justify-start in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:after:start-0 in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:after:w-0.5',
       },
     },
     // Nuxt UI tints the focus outline of a tab and of its panel with the color: the ring is the
