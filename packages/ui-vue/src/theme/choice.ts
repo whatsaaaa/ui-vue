@@ -27,12 +27,17 @@ export const cardHoverBorder =
 
 /** A checked card: the border in the color, on the color's tint. */
 export const checkedCard: ByColor = {
-  primary: 'has-data-[state=checked]:border-interactive has-data-[state=checked]:bg-tag-bg',
-  success: 'has-data-[state=checked]:border-tip has-data-[state=checked]:bg-tip-tint',
-  info: 'has-data-[state=checked]:border-note has-data-[state=checked]:bg-note-tint',
-  warning: 'has-data-[state=checked]:border-warning has-data-[state=checked]:bg-warning-tint',
-  error: 'has-data-[state=checked]:border-danger has-data-[state=checked]:bg-danger-tint',
-  neutral: 'has-data-[state=checked]:border-text has-data-[state=checked]:bg-raised',
+  primary:
+    'has-data-[state=checked]:border-interactive has-data-[state=checked]:bg-tag-bg not-has-disabled:has-focus-visible:has-data-[state=checked]:border-interactive',
+  success:
+    'has-data-[state=checked]:border-tip has-data-[state=checked]:bg-tip-tint not-has-disabled:has-focus-visible:has-data-[state=checked]:border-tip',
+  info: 'has-data-[state=checked]:border-note has-data-[state=checked]:bg-note-tint not-has-disabled:has-focus-visible:has-data-[state=checked]:border-note',
+  warning:
+    'has-data-[state=checked]:border-warning has-data-[state=checked]:bg-warning-tint not-has-disabled:has-focus-visible:has-data-[state=checked]:border-warning',
+  error:
+    'has-data-[state=checked]:border-danger has-data-[state=checked]:bg-danger-tint not-has-disabled:has-focus-visible:has-data-[state=checked]:border-danger',
+  neutral:
+    'has-data-[state=checked]:border-text has-data-[state=checked]:bg-raised not-has-disabled:has-focus-visible:has-data-[state=checked]:border-text',
 }
 
 /** A highlighted control, as with an error, takes its color as the outline. */
@@ -46,12 +51,17 @@ export const highlight: ByColor = {
 }
 
 export const highlightCard: ByColor = {
-  primary: 'not-has-disabled:not-has-aria-disabled:border-interactive',
-  success: 'not-has-disabled:not-has-aria-disabled:border-tip',
-  info: 'not-has-disabled:not-has-aria-disabled:border-note',
-  warning: 'not-has-disabled:not-has-aria-disabled:border-warning',
-  error: 'not-has-disabled:not-has-aria-disabled:border-danger',
-  neutral: 'not-has-disabled:not-has-aria-disabled:border-text',
+  primary:
+    'not-has-disabled:not-has-aria-disabled:border-interactive not-has-disabled:not-has-aria-disabled:has-focus-visible:border-interactive',
+  success:
+    'not-has-disabled:not-has-aria-disabled:border-tip not-has-disabled:not-has-aria-disabled:has-focus-visible:border-tip',
+  info: 'not-has-disabled:not-has-aria-disabled:border-note not-has-disabled:not-has-aria-disabled:has-focus-visible:border-note',
+  warning:
+    'not-has-disabled:not-has-aria-disabled:border-warning not-has-disabled:not-has-aria-disabled:has-focus-visible:border-warning',
+  error:
+    'not-has-disabled:not-has-aria-disabled:border-danger not-has-disabled:not-has-aria-disabled:has-focus-visible:border-danger',
+  neutral:
+    'not-has-disabled:not-has-aria-disabled:border-text not-has-disabled:not-has-aria-disabled:has-focus-visible:border-text',
 }
 
 /**

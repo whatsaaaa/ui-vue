@@ -7,6 +7,7 @@ const payments = [
   { label: 'Cash', value: 'cash', description: 'At the door, on the first day.' },
 ]
 const tickets = ['One day', 'Two days', 'All three days']
+const sessions = ['Morning', 'Afternoon', 'Evening']
 
 const payment = ref('card')
 const ticket = ref('All three days')
@@ -47,6 +48,19 @@ const ticket = ref('All three days')
         <URadioGroup v-model="payment" legend="Payment" variant="card" :items="payments" />
         <URadioGroup v-model="payment" legend="Payment" variant="table" :items="payments" />
       </div>
+    </GalleryRow>
+
+    <GalleryRow label="cards without the circle, with an error">
+      <UFormField name="session" error="Choose a session." class="w-full">
+        <URadioGroup
+          legend="Session"
+          variant="card"
+          indicator="hidden"
+          orientation="horizontal"
+          :items="sessions"
+          required
+        />
+      </UFormField>
     </GalleryRow>
 
     <GalleryRow label="sizes" align="start">

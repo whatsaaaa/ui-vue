@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test'
+import { expect, test, type Locator, type Page } from '@playwright/test'
 import { open, playground, resolveColor } from './pages.ts'
 
 /**
@@ -127,6 +127,36 @@ test.describe('the gallery', () => {
     await page.keyboard.press('ArrowRight')
     await page.keyboard.press('ArrowRight')
     await expect(tabs.getByRole('tab', { name: 'Overview' })).toBeFocused()
+  })
+
+  test('a card keeps the border of its state with the focus: checked, or in error', async ({
+    page,
+  }) => {
+    const interactive = await resolveColor(page, 'var(--ws-color-interactive)')
+    const danger = await resolveColor(page, 'var(--ws-color-danger)')
+    // An option drawn as a card is a label around its control.
+    const card = (control: Locator) => page.locator('label', { has: control })
+    const cards: [Locator, string][] = [
+      [card(page.getByRole('checkbox', { name: 'Workshop: Vue in practice' })), interactive],
+      ...(await card(page.getByRole('radio', { name: 'Card' })).all()).map(
+        (checked) => [checked, interactive] as [Locator, string],
+      ),
+      [card(page.getByRole('radio', { name: 'Morning' })), danger],
+    ]
+    expect(cards).toHaveLength(4)
+    // the border once its transition is over
+    const border = (card: Locator) =>
+      card.evaluate(async (element) => {
+        await Promise.all(element.getAnimations().map((animation) => animation.finished))
+        return getComputedStyle(element).borderTopColor
+      })
+    for (const [card, color] of cards) {
+      expect(await border(card)).toBe(color)
+      const control = card.getByRole('checkbox').or(card.getByRole('radio'))
+      await control.focus()
+      expect(await control.evaluate((element) => element.matches(':focus-visible'))).toBe(true)
+      expect(await border(card)).toBe(color)
+    }
   })
 
   test('a checkbox and a radio group answer the keyboard', async ({ page }) => {
