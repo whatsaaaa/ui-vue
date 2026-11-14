@@ -2,8 +2,7 @@
   "extends": "@tsconfig/node24/tsconfig.json",
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
-    // the config imports the package, whose color mode runs in the browser
-    "lib": ["es2024", "dom", "dom.iterable"],
+    "lib": ["es2024"],
     "module": "preserve",
     "moduleResolution": "bundler",
     "types": ["node"],
