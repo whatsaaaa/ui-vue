@@ -78,7 +78,7 @@ const CASES: Case[] = [
     theme: 'dark',
   },
 
-  // a data-theme wins over a class, nearer or farther
+  // a data-theme wins over the class
   {
     by: 'data-theme',
     system: 'dark',
@@ -93,15 +93,8 @@ const CASES: Case[] = [
     body: '<div data-theme="light"><p id="probe"></p></div>',
     theme: 'light',
   },
-  {
-    by: 'data-theme',
-    system: 'dark',
-    html: { 'data-theme': 'light' },
-    body: '<div class="dark"><p id="probe"></p></div>',
-    theme: 'light',
-  },
 
-  // without a data-theme, the class: on <html>, above the element, on it, and in a part
+  // without a data-theme, the class on <html>
   {
     by: 'the class',
     system: 'light',
@@ -116,19 +109,36 @@ const CASES: Case[] = [
     body: '<p id="probe"></p>',
     theme: 'light',
   },
+
+  // the class on a part of the page is no theme: the page's holds, whether the visitor follows
+  // the system or chose
+  {
+    by: 'the system',
+    system: 'dark',
+    body: '<div class="light"><p id="probe"></p></div>',
+    theme: 'dark',
+  },
+  { by: 'the system', system: 'light', body: '<p id="probe" class="dark"></p>', theme: 'light' },
   {
     by: 'the class',
     system: 'dark',
+    html: { class: 'dark' },
     body: '<div class="light"><p id="probe"></p></div>',
-    theme: 'light',
-  },
-  { by: 'the class', system: 'light', body: '<p id="probe" class="dark"></p>', theme: 'dark' },
-  {
-    by: 'the class',
-    system: 'light',
-    html: { class: 'light' },
-    body: '<div class="dark"><p id="probe"></p></div>',
     theme: 'dark',
+  },
+  {
+    by: 'data-theme',
+    system: 'dark',
+    html: { class: 'dark', 'data-theme': 'dark' },
+    body: '<div class="light"><p id="probe"></p></div>',
+    theme: 'dark',
+  },
+  {
+    by: 'data-theme',
+    system: 'dark',
+    html: { class: 'light', 'data-theme': 'light' },
+    body: '<div class="dark"><p id="probe"></p></div>',
+    theme: 'light',
   },
 ]
 
@@ -147,7 +157,7 @@ async function stylesheet(): Promise<string> {
   return compiler.build(['dark:underline', 'light:italic'])
 }
 
-test('dark: and light: follow the theme of the element, and the class without a data-theme', async ({
+test("dark:, light: and Nuxt UI's colors follow the theme of the element, and the class of <html>", async ({
   page,
 }, testInfo) => {
   test.skip(playground(testInfo) !== 'nuxt', "The gallery's stylesheet, the same on both pages")
@@ -176,6 +186,7 @@ test('dark: and light: follow the theme of the element, and the class without a 
           dark: style.textDecorationLine === 'underline',
           light: style.fontStyle === 'italic',
           tokens: [background('dark'), background('light')].indexOf(background('probe')),
+          nuxtUi: style.getPropertyValue('--ui-bg') === style.getPropertyValue('--ws-color-bg'),
         }
       },
       [html, body] as const,
@@ -185,6 +196,7 @@ test('dark: and light: follow the theme of the element, and the class without a 
       dark: theme === 'dark',
       light: theme === 'light',
     })
+    expect(shown.nuxtUi, `Nuxt UI's page color is the tokens', ${where}`).toBe(true)
     // where the tokens set it too, they agree
     if (by !== 'the class')
       expect(shown.tokens, `the tokens, ${where}`).toBe(theme === 'dark' ? 0 : 1)

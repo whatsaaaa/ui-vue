@@ -1,16 +1,20 @@
 /*
- * dark: and light: follow the theme as the tokens do, and the dark or light class besides:
+ * dark: and light: follow the theme as the tokens do, and the dark or light class of <html>
+ * besides:
  *
  *   - data-theme="dark" or "light" on the element or above it, and in a part of the page kept
  *     in the other theme, that part's,
- *   - without a data-theme, a dark or light class on the element or above it, as Nuxt UI's color
- *     mode puts on <html>, and in a part with the other class, that part's,
+ *   - without a data-theme, a dark or light class on <html>, where Nuxt UI's color mode puts it
+ *     and color-mode.ts keeps it in step with data-theme,
  *   - without either, the system: dark unless it asks for light.
+ *
+ * The class on any other element is no theme, as the tokens do not read it.
  *
  * A selector tells a part in the other theme, but not a part inside it back in the first one:
  * there neither applies.
  *
- * tailwind.css brings them, and index.css again after Nuxt UI, whose own follow the class alone.
+ * tailwind.css brings them, and index.css again after Nuxt UI, whose own follow the class on
+ * any element.
  */
 @custom-variant dark {
   &:where([data-theme='dark'], [data-theme='dark'] *):not(
@@ -19,12 +23,14 @@
     @slot;
   }
 
-  &:where(.dark, .dark *):not(:where([data-theme], [data-theme] *, .light, .dark .light *)) {
+  &:where(:root.dark, :root.dark *):not(:where([data-theme], [data-theme] *)) {
     @slot;
   }
 
   @media not (prefers-color-scheme: light) {
-    &:not(:where([data-theme], [data-theme] *, .dark, .dark *, .light, .light *)) {
+    &:where(:root:not(.dark, .light), :root:not(.dark, .light) *):not(
+        :where([data-theme], [data-theme] *)
+      ) {
       @slot;
     }
   }
@@ -37,12 +43,14 @@
     @slot;
   }
 
-  &:where(.light, .light *):not(:where([data-theme], [data-theme] *, .dark, .light .dark *)) {
+  &:where(:root.light, :root.light *):not(:where([data-theme], [data-theme] *)) {
     @slot;
   }
 
   @media (prefers-color-scheme: light) {
-    &:not(:where([data-theme], [data-theme] *, .dark, .dark *, .light, .light *)) {
+    &:where(:root:not(.dark, .light), :root:not(.dark, .light) *):not(
+        :where([data-theme], [data-theme] *)
+      ) {
       @slot;
     }
   }
