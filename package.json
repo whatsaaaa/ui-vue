@@ -1,0 +1,52 @@
+{
+  "name": "ui-vue-workspace",
+  "private": true,
+  "description": "Nuxt UI themed with the Whatsaaaa design system, for Vue and Nuxt",
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm --filter playground-nuxt dev",
+    "dev:vue": "pnpm --filter playground-vue dev",
+    "build": "pnpm --filter './playgrounds/*' build",
+    "test": "vitest run",
+    "test:browser": "run-s build test:browser:run",
+    "test:browser:run": "playwright test",
+    "type-check": "run-s type-check:root type-check:nuxt type-check:vue",
+    "type-check:root": "tsc --noEmit -p tsconfig.json",
+    "type-check:nuxt": "pnpm --filter playground-nuxt type-check",
+    "type-check:vue": "pnpm --filter playground-vue type-check",
+    "lint": "run-s lint:oxlint lint:eslint lint:css",
+    "lint:oxlint": "oxlint . --fix",
+    "lint:eslint": "eslint . --fix --cache",
+    "lint:css": "stylelint \"**/*.{css,vue}\" --fix",
+    "format": "oxfmt .",
+    "format:check": "oxfmt --check ."
+  },
+  "devDependencies": {
+    "@playwright/test": "1.65.0",
+    "@tailwindcss/node": "4.3.5",
+    "@tailwindcss/oxide": "4.3.5",
+    "@tsconfig/node24": "^24.0.6",
+    "@types/node": "^24.19.2",
+    "@vue/eslint-config-typescript": "^14.9.0",
+    "eslint": "^10.14.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-oxlint": "^1.93.0",
+    "eslint-plugin-vue": "^10.12.1",
+    "happy-dom": "^21.0.4",
+    "jiti": "^2.7.0",
+    "npm-run-all2": "^9.0.4",
+    "oxfmt": "^0.78.0",
+    "oxlint": "^1.93.0",
+    "postcss-html": "^2.0.0",
+    "stylelint": "^18.0.0",
+    "stylelint-config-standard": "^41.0.0",
+    "stylelint-value-no-unknown-custom-properties": "^6.1.1",
+    "typescript": "~6.0.3",
+    "vitest": "^5.1.0",
+    "vue-tsc": "^3.3.14"
+  },
+  "engines": {
+    "node": "^22.18.0 || >=24.12.0"
+  },
+  "packageManager": "pnpm@12.18.0"
+}

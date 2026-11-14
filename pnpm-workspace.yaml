@@ -1,0 +1,15 @@
+packages:
+  - packages/*
+  - playgrounds/*
+
+# Install scripts that may run. esbuild's postinstall only checks the native binary that pnpm
+# already installs through its optional platform package, and vue-demi's only picks the build
+# for Vue 2 or 3, where the one it ships with is already Vue 3's.
+allowBuilds:
+  esbuild: false
+  vue-demi: false
+
+# The design system's 0.1.1 is the first release this package can use, and it is newer than
+# pnpm's minimum release age.
+minimumReleaseAgeExclude:
+  - '@whatsaaaa/design-system@0.1.1'

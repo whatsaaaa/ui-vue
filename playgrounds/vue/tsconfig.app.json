@@ -1,0 +1,16 @@
+// The app. auto-imports.d.ts and components.d.ts are written by Nuxt UI's Vite plugin when
+// Vite runs, so the app is built before it is type-checked.
+{
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "noUncheckedIndexedAccess": true,
+    // the package is TypeScript, imported as it is
+    "allowImportingTsExtensions": true,
+    "types": ["vite/client"],
+    "paths": {
+      "#build/ui/*": ["./node_modules/.nuxt-ui/ui/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.vue", "auto-imports.d.ts", "components.d.ts"]
+}

@@ -1,0 +1,43 @@
+/*
+ * Nuxt UI on the design system: the app's whole stylesheet, imported alone and before the
+ * app's own rules.
+ *
+ *   @import '@whatsaaaa/ui-vue/index.css';
+ *
+ * In this order: Tailwind and the design system in their layers, then Nuxt UI, then the
+ * system's dark: and light: variants again, over Nuxt UI's, then the bridge of Nuxt UI's
+ * variables to the system's roles, outside any layer. See tailwind.css for the layers.
+ */
+@import './tailwind.css';
+@import '@nuxt/ui';
+@import './variants.css';
+@import './theme.css';
+
+/* The classes the component themes use. */
+@source './theme';
+
+/*
+ * A status as text is set in its text color, which differs from the status color in the light
+ * theme: text-error is the danger text, bg-error and ring-error the danger color.
+ */
+@theme inline {
+  --text-color-success: var(--ws-color-tip-text);
+  --text-color-info: var(--ws-color-note-text);
+  --text-color-warning: var(--ws-color-warning-text);
+  --text-color-error: var(--ws-color-danger-text);
+}
+
+/* A control that does something when clicked says so with the pointer, as in the sample apps. */
+@layer base {
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+/* Nuxt UI draws a link's focus ring on the text: the system's is three pixels out. */
+@layer base {
+  a:focus-visible {
+    outline-offset: 3px;
+  }
+}

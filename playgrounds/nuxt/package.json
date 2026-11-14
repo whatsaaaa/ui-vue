@@ -1,0 +1,26 @@
+{
+  "name": "playground-nuxt",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "type-check": "nuxt prepare && vue-tsc -b --noEmit"
+  },
+  "dependencies": {
+    "@iconify-json/lucide": "^1.2.154",
+    "@nuxt/ui": "4.12.0",
+    "@whatsaaaa/design-system": "^0.1.1",
+    "@whatsaaaa/ui-vue": "workspace:*",
+    "nuxt": "^4.6.4",
+    "tailwindcss": "^4.3.5",
+    "vue": "^3.5.45",
+    "vue-router": "^5.4.0"
+  },
+  "devDependencies": {
+    "typescript": "~6.0.3",
+    "vue-tsc": "^3.3.14"
+  }
+}
