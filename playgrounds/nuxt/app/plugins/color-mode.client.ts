@@ -1,6 +1,6 @@
-import { syncColorMode } from '@whatsaaaa/ui-vue/color-mode'
+import { bindThemeModule } from '@whatsaaaa/ui-vue/color-mode'
 
-// The design system's theme and Nuxt UI's color mode, in step.
+// The design system's theme switch moves Nuxt UI's color mode.
 export default defineNuxtPlugin(() => {
-  syncColorMode(useColorMode())
+  bindThemeModule(useColorMode())
 })

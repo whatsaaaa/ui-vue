@@ -42,20 +42,20 @@ export function designSystemSwitch(page: Page, where: Playground) {
     : page.getByRole('button', { name: 'Theme', exact: true })
 }
 
-/**
- * The theme as <html> says it: data-theme and the classes, and the remembered choice as the
- * design system reads it. @nuxtjs/color-mode keeps "system" there while it follows the
- * system, which the design system reads as no choice.
- */
+/** Where Nuxt UI's color mode remembers its preference: @nuxtjs/color-mode's key, and VueUse's. */
+export const COLOR_MODE_STORAGE_KEY: Record<Playground, string> = {
+  nuxt: 'nuxt-color-mode',
+  vue: 'vueuse-color-scheme',
+}
+
+/** The theme as <html> says it: data-theme and the classes. */
 export function themeState(page: Page) {
   return page.evaluate(() => {
     const html = document.documentElement
-    const stored = localStorage.getItem('ws-theme')
     return {
       theme: html.dataset.theme ?? null,
       dark: html.classList.contains('dark'),
       light: html.classList.contains('light'),
-      stored: stored === 'dark' || stored === 'light' ? stored : null,
     }
   })
 }

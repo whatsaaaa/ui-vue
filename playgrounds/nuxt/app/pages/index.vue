@@ -64,5 +64,6 @@ const sections = [
     <SectionsModalSection />
     <SectionsTableSection />
     <SectionsTabsSection />
+    <SectionsThemePartSection />
   </GalleryFrame>
 </template>

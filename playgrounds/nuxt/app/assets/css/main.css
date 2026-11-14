@@ -135,23 +135,6 @@ body {
   margin-inline: calc(-1 * var(--ws-space-4));
 }
 
-[data-theme='dark'] .tab-bar__mark--light,
-[data-theme='light'] .tab-bar__mark--dark {
-  display: none;
-}
-
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme]) .tab-bar__mark--dark {
-    display: none;
-  }
-}
-
-@media not (prefers-color-scheme: light) {
-  :root:not([data-theme]) .tab-bar__mark--light {
-    display: none;
-  }
-}
-
 /* A prompt that wraps keeps its chevron on its first line, as on the website. */
 .ws-prompt {
   align-items: flex-start;

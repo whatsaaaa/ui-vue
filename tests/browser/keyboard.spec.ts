@@ -5,7 +5,8 @@ import { open, playground, resolveColor } from './pages.ts'
  * The ring of the element with the focus: the design system's is two pixels of interactive,
  * three pixels out. Where the window or a bar would cut it off, as on a tab, it is drawn inside
  * the element instead. A control drawn as a card, such as a checkbox card, draws it on the card
- * around it.
+ * around it. Its color is the interactive color of the theme where it is, which in a part of the
+ * page kept in the other theme is that theme's.
  */
 function focusRing(page: Page) {
   return page.evaluate(() => {
@@ -18,19 +19,24 @@ function focusRing(page: Page) {
       parent = parent.parentElement
     }
     const style = getComputedStyle(ringed)
+    const probe = document.createElement('span')
+    probe.style.color = style.getPropertyValue('--ws-color-interactive')
+    document.body.append(probe)
+    const interactive = getComputedStyle(probe).color
+    probe.remove()
     return {
       element: `${element.tagName.toLowerCase()} ${element.getAttribute('aria-label') ?? element.textContent?.trim().slice(0, 30) ?? ''}`,
       style: style.outlineStyle,
       width: parseFloat(style.outlineWidth),
       color: style.outlineColor,
       offset: parseFloat(style.outlineOffset),
+      interactive,
     }
   })
 }
 
 test('every control the Tab key reaches shows the focus ring', async ({ page }) => {
   await open(page)
-  const interactive = await resolveColor(page, 'var(--ws-color-interactive)')
   const seen = new Set<string>()
   let stops = 0
   // Tab through the whole page, until the focus comes round to where it started.
@@ -46,7 +52,7 @@ test('every control the Tab key reaches shows the focus ring', async ({ page }) 
     seen.add(id)
     expect(ring.style, `${ring.element} has a ring`).toBe('solid')
     expect(ring.width, `${ring.element} has a ring two pixels wide`).toBe(2)
-    expect(ring.color, `${ring.element} has a ring in the interactive color`).toBe(interactive)
+    expect(ring.color, `${ring.element} has a ring in the interactive color`).toBe(ring.interactive)
     expect([3, -2], `${ring.element} has a ring three pixels out, or inside itself`).toContain(
       ring.offset,
     )

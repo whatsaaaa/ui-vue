@@ -184,6 +184,9 @@ importers:
       '@vue/eslint-config-typescript':
         specifier: ^14.9.0
         version: 14.9.0(eslint-plugin-vue@10.12.1(@typescript-eslint/parser@8.72.2(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3))(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(vue-eslint-parser@10.4.2(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)))(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3)
+      '@whatsaaaa/design-system':
+        specifier: ^0.4.0
+        version: 0.4.0(vue@3.5.45(typescript@6.0.3))
       eslint:
         specifier: ^10.14.0
         version: 10.14.0(jiti@2.7.0)(supports-color@10.2.2)
@@ -229,6 +232,9 @@ importers:
       vitest:
         specifier: ^5.1.0
         version: 5.1.0(@types/node@24.19.2)(happy-dom@21.0.4)(vite@8.3.8(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2))
+      vue:
+        specifier: ^3.5.45
+        version: 3.5.45(typescript@6.0.3)
       vue-tsc:
         specifier: ^3.3.14
         version: 3.3.14(typescript@6.0.3)
@@ -242,8 +248,8 @@ importers:
         specifier: ^14.4.0
         version: 14.4.0(vue@3.5.45(typescript@6.0.3))
       '@whatsaaaa/design-system':
-        specifier: ^0.1.1
-        version: 0.1.1(vue@3.5.45(typescript@6.0.3))
+        specifier: ^0.4.0
+        version: 0.4.0(vue@3.5.45(typescript@6.0.3))
       tailwindcss:
         specifier: ^4.3.5
         version: 4.3.5
@@ -260,8 +266,8 @@ importers:
         specifier: 4.12.0
         version: 4.12.0(26d7d00bc6147ef25f87d0658a90d77a)
       '@whatsaaaa/design-system':
-        specifier: ^0.1.1
-        version: 0.1.1(vue@3.5.45(typescript@6.0.3))
+        specifier: ^0.4.0
+        version: 0.4.0(vue@3.5.45(typescript@6.0.3))
       '@whatsaaaa/ui-vue':
         specifier: workspace:*
         version: link:../../packages/ui-vue
@@ -297,8 +303,8 @@ importers:
         specifier: ^14.4.0
         version: 14.4.0(vue@3.5.45(typescript@6.0.3))
       '@whatsaaaa/design-system':
-        specifier: ^0.1.1
-        version: 0.1.1(vue@3.5.45(typescript@6.0.3))
+        specifier: ^0.4.0
+        version: 0.4.0(vue@3.5.45(typescript@6.0.3))
       '@whatsaaaa/ui-vue':
         specifier: workspace:*
         version: link:../../packages/ui-vue
@@ -2509,8 +2515,8 @@ packages:
     peerDependencies:
       vue: ^3.5.0
 
-  '@whatsaaaa/design-system@0.1.1':
-    resolution: {integrity: sha512-1LWR3jvIYdLxcRUH/FvvCbRxgLfEILU0mP/fMq5S6i3daEYM6jzIt0NtWRHAsvz9bKAhA+UihNenNVZGOyfq4g==}
+  '@whatsaaaa/design-system@0.4.0':
+    resolution: {integrity: sha512-dQ5BTbElYNA89viJqOWwZcZAfQ9xHYnAKu+UJ63FEt4ZzDg1mNPESuumKzCPkzG2gxA6EYHobYbje/ob0bZOjg==}
     engines: {node: ^22.18.0 || >=24.12.0}
     peerDependencies:
       vitepress: ^1.6.4
@@ -7470,7 +7476,7 @@ snapshots:
     dependencies:
       vue: 3.5.45(typescript@6.0.3)
 
-  '@whatsaaaa/design-system@0.1.1(vue@3.5.45(typescript@6.0.3))':
+  '@whatsaaaa/design-system@0.4.0(vue@3.5.45(typescript@6.0.3))':
     dependencies:
       '@terrazzo/token-types': 2.10.0
     optionalDependencies:

@@ -6,21 +6,9 @@ import markOnLight from '~/assets/mark-on-light.svg'
 <template>
   <header class="ws-tab-bar">
     <span class="ws-tab-bar__brand">
-      <!-- The kit has a cut of the mark for each theme. The stylesheet shows the page's one. -->
-      <img
-        class="tab-bar__mark tab-bar__mark--dark"
-        :src="markOnDark"
-        alt=""
-        width="32"
-        height="32"
-      />
-      <img
-        class="tab-bar__mark tab-bar__mark--light"
-        :src="markOnLight"
-        alt=""
-        width="32"
-        height="32"
-      />
+      <!-- The kit has a cut of the mark for each theme. The design system shows the page's one. -->
+      <img class="tab-bar__mark ws-theme-dark" :src="markOnDark" alt="" width="32" height="32" />
+      <img class="tab-bar__mark ws-theme-light" :src="markOnLight" alt="" width="32" height="32" />
       ui-vue
     </span>
     <nav class="ws-tabs" aria-label="Main">

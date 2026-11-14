@@ -37,7 +37,7 @@
 
 /*
  * Inline: a utility reads the token itself, where it is used. So bg-surface follows a
- * data-theme set on any element, as the tokens do.
+ * data-theme or a dark or light class set on any element, as the tokens do.
  */
 @theme inline {
   /*

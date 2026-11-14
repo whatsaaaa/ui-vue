@@ -11,10 +11,6 @@ export default defineNuxtConfig({
     // The design system brings its fonts, self-hosted. @nuxt/fonts would fetch them again.
     fonts: false,
   },
-  // Nuxt UI's color mode remembers its preference where the design system remembers its theme.
-  colorMode: {
-    storageKey: 'ws-theme',
-  },
   icon: {
     // The icons are bundled with the app, so a static copy asks no server for them.
     provider: 'none',
@@ -29,7 +25,8 @@ export default defineNuxtConfig({
         { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' },
         { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
       ],
-      // Before the stylesheet: a remembered theme and "keys off" apply before the first paint.
+      // Before the stylesheet: the browser's bars take the theme's color, and a remembered "keys
+      // off" applies before the first paint. @nuxtjs/color-mode adds its own for the theme.
       script: [{ innerHTML: colorModeInitScript }, { innerHTML: keysInitScript }],
     },
   },
