@@ -34,7 +34,6 @@ for (const colorScheme of ['dark', 'light'] as const) {
         theme: null,
         dark: colorScheme === 'dark',
         light: colorScheme === 'light',
-        stored: null,
       })
       expect(await pageColor(page)).toBe(await resolveColor(page, 'var(--ws-color-bg)'))
       for (const [ui, role] of BRIDGE) {

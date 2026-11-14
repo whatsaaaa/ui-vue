@@ -2,7 +2,7 @@ import ui from '@nuxt/ui/vite'
 import vue from '@vitejs/plugin-vue'
 import { keysInitScript } from '@whatsaaaa/design-system/shortcuts'
 import { theme, ui as components } from '@whatsaaaa/ui-vue'
-import { colorModeInitScript } from '@whatsaaaa/ui-vue/color-mode'
+import { vueColorModeInitScript } from '@whatsaaaa/ui-vue/color-mode'
 import { defineConfig, type Plugin } from 'vite'
 
 /**
@@ -15,7 +15,7 @@ function headScripts(): Plugin {
     transformIndexHtml: {
       order: 'pre',
       handler: () => [
-        { tag: 'script', children: colorModeInitScript, injectTo: 'head' },
+        { tag: 'script', children: vueColorModeInitScript, injectTo: 'head' },
         { tag: 'script', children: keysInitScript, injectTo: 'head' },
       ],
     },

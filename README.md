@@ -6,7 +6,7 @@
 
 | Folder             | What it is                                                                                        |
 | ------------------ | ------------------------------------------------------------------------------------------------- |
-| `packages/ui-vue`  | `@whatsaaaa/ui-vue`: the theme, the stylesheets and the color mode bridge                         |
+| `packages/ui-vue`  | `@whatsaaaa/ui-vue`: the theme, the stylesheets and the color mode's head script                  |
 | `playgrounds/nuxt` | The gallery: every themed component in its variants, sizes and states, generated as a static site |
 | `playgrounds/vue`  | The smallest plain Vue (Vite) setup, one page                                                     |
 
@@ -15,26 +15,34 @@
 The package brings three things:
 
 - **`@whatsaaaa/ui-vue/index.css`**, the app's whole stylesheet. Import it alone, first:
-  Tailwind and the design system in cascade layers (`theme`, then `base`: Tailwind's preflight, then the system's `base.css`, then `components`, then `utilities`), Nuxt UI, the system's `dark:` and `light:` variants over Nuxt UI's (they follow `data-theme` as the tokens do; see `variants.css`), and the bridge of Nuxt UI's `--ui-*` variables to the system's `--ws-*` roles. Its part `tailwind.css` is the design system for Tailwind on its own, meant to move into the design system.
+  Tailwind and the design system in cascade layers (`theme`, then `base`: Tailwind's preflight, then the system's `base.css`, then `components`, then `utilities`), Nuxt UI, the system's `dark:` and `light:` variants over Nuxt UI's (they follow the nearest `data-theme` or `dark` or `light` class, as the tokens do; see `variants.css`), and the bridge of Nuxt UI's `--ui-*` variables to the system's `--ws-*` roles. Its part `tailwind.css` is the design system for Tailwind on its own, meant to move into the design system.
 - **`theme` and `ui`** from `@whatsaaaa/ui-vue`: Nuxt UI's module options and the components' config.
-- **`@whatsaaaa/ui-vue/color-mode`**: a head script and a sync that keep the system's `data-theme` and Nuxt UI's `.dark` class in step, both ways.
+- **`@whatsaaaa/ui-vue/color-mode`**: the head script the design system's theme needs next to Nuxt UI's color mode. The tokens follow the `dark` or `light` class the color mode puts on `<html>`, so the color mode switches the theme and remembers it, and a page that forces its color mode keeps its theme. Switch the theme with the color mode, not with the design system's `setTheme` or `toggleTheme`: the `data-theme` they write wins over the class. The head script keeps a theme remembered under the design system's `ws-theme` from winning over the class too.
+
+A `dark` or `light` class, like `data-theme`, also keeps a part of a page in one theme: everything inside it, Nuxt UI's components included, takes that theme. A menu or a select list in such a part opens in it with `:portal="false"` and a `z-index` on its list, as in the gallery: in a portal at the end of the page it takes the page's theme.
 
 On Nuxt, as in `playgrounds/nuxt`:
 
 ```ts
 // nuxt.config.ts
 ui: { theme, fonts: false },             // the system brings its fonts
-colorMode: { storageKey: 'ws-theme' },   // one remembered choice for both
 app: { head: { script: [{ innerHTML: colorModeInitScript }] } },
 
 // app/app.config.ts
 export default defineAppConfig({ ui })
 
-// app/plugins/color-mode.client.ts
-export default defineNuxtPlugin(() => syncColorMode(useColorMode()))
+// a theme switch: <button :disabled="colorMode.forced" @click="switchTheme">
+const colorMode = useColorMode()
+const switchTheme = () => {
+  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
+}
+
+// a page kept in one theme, as the gallery's dark page. The switch is disabled there: the color
+// mode would neither show nor remember a choice made on it.
+definePageMeta({ colorMode: 'dark' })
 ```
 
-On Vue, as in `playgrounds/vue`: `ui({ theme, ui })` in the Vite plugin's options, `colorModeInitScript` in the `<head>`, and `syncColorMode(vueColorMode())` after mounting the app.
+On Vue, as in `playgrounds/vue`: `ui({ theme, ui })` in the Vite plugin's options, `vueColorModeInitScript` in the `<head>`, and VueUse's `useColorMode()` in the app's root component, which switches the theme. Unlike the `useDark` of Nuxt UI's plugin, it puts a `light` class on `<html>` as well as a `dark` one, which the tokens need to tell a chosen light theme from the system's.
 
 The package is TypeScript, imported as it is, so a consumer's `tsconfig` sets `allowImportingTsExtensions`. A build step comes with publishing.
 
@@ -47,7 +55,7 @@ You need Node.js 24.12 or later and pnpm. `corepack enable` sets pnpm up.
 | `pnpm dev`          | Starts the gallery                                                          |
 | `pnpm dev:vue`      | Starts the Vue page                                                         |
 | `pnpm build`        | Builds both playgrounds; the gallery into `playgrounds/nuxt/.output/public` |
-| `pnpm test`         | Unit tests: the config and the colors it builds, the head script            |
+| `pnpm test`         | Unit tests: the config and the colors it builds, the head scripts           |
 | `pnpm test:browser` | Builds both playgrounds and tests them in a browser                         |
 | `pnpm lint`         | Checks the code and the stylesheets                                         |
 | `pnpm type-check`   | Type-checks the package and both playgrounds                                |

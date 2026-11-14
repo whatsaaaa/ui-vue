@@ -36,8 +36,7 @@ const sections = [
         </ul>
       </nav>
       <!--
-        Nuxt UI's own color mode, next to the design system's switch in the status line: either
-        one moves the other.
+        Nuxt UI's own color mode, which the theme switch in the status line moves too.
       -->
       <ClientOnly>
         <URadioGroup
@@ -64,5 +63,6 @@ const sections = [
     <SectionsModalSection />
     <SectionsTableSection />
     <SectionsTabsSection />
+    <SectionsThemePartSection />
   </GalleryFrame>
 </template>

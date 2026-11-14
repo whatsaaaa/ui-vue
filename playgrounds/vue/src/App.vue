@@ -1,10 +1,18 @@
 <script setup lang="ts">
-import { toggleTheme } from '@whatsaaaa/design-system/theme'
 import { useColorMode } from '@vueuse/core'
 import { ref } from 'vue'
 
-// Nuxt UI's color mode on Vue is VueUse's, which names the system's setting auto.
-const { store: colorMode } = useColorMode()
+/*
+ * Nuxt UI's color mode on Vue is VueUse's, which names the system's setting auto. Unlike the
+ * useDark of Nuxt UI's plugin it puts a light class on <html> as well as a dark one, which the
+ * tokens need to tell a chosen light theme from the system's.
+ */
+const { store: colorMode, state: theme } = useColorMode()
+
+/** Chooses the other theme from the one on show, with the color mode, which remembers it. */
+function switchTheme() {
+  colorMode.value = theme.value === 'dark' ? 'light' : 'dark'
+}
 
 const modes = [
   { label: 'system', value: 'auto' },
@@ -35,7 +43,7 @@ const terms = ref(true)
           variant="outline"
           icon="i-lucide-sun-moon"
           label="Theme"
-          @click="toggleTheme"
+          @click="switchTheme"
         />
       </header>
 

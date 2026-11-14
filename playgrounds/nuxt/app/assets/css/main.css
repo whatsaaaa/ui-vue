@@ -117,6 +117,16 @@ body {
   color: var(--ws-color-text);
 }
 
+:is(.ws-status-line__keys button, .status-line__theme):disabled {
+  color: var(--ws-color-text-faint);
+  cursor: not-allowed;
+}
+
+.ws-status-line__keys button:disabled .ws-kbd {
+  border-color: var(--ws-color-border);
+  color: inherit;
+}
+
 @media (width < 64rem) {
   :is(
     .ws-status-line__mode,
@@ -133,23 +143,6 @@ body {
   width: var(--ws-space-32);
   height: var(--ws-space-32);
   margin-inline: calc(-1 * var(--ws-space-4));
-}
-
-[data-theme='dark'] .tab-bar__mark--light,
-[data-theme='light'] .tab-bar__mark--dark {
-  display: none;
-}
-
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme]) .tab-bar__mark--dark {
-    display: none;
-  }
-}
-
-@media not (prefers-color-scheme: light) {
-  :root:not([data-theme]) .tab-bar__mark--light {
-    display: none;
-  }
 }
 
 /* A prompt that wraps keeps its chevron on its first line, as on the website. */

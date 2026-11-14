@@ -9,7 +9,7 @@ allowBuilds:
   esbuild: false
   vue-demi: false
 
-# The design system's 0.1.1 is the first release this package can use, and it is newer than
-# pnpm's minimum release age.
+# The design system's 0.4.0, the first release whose tokens follow a dark or light class, is
+# newer than pnpm's minimum release age.
 minimumReleaseAgeExclude:
-  - '@whatsaaaa/design-system@0.1.1'
+  - '@whatsaaaa/design-system@0.4.0'

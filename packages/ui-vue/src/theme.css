@@ -3,10 +3,9 @@
  * themselves: the roles switch, and these read them.
  *
  * Outside any layer, so it wins over Nuxt UI's own values, which it keeps in its theme layer
- * and in a style it adds at runtime. Declared again on every element with a data-theme, so a
- * part of a page kept in one theme reads that theme's roles, and on every element with a dark
- * or light class, where Nuxt UI puts its own: a part with the class keeps the page's roles, as
- * the tokens do.
+ * and in a style it adds at runtime. Declared again on every element with a data-theme or a dark
+ * or light class, where Nuxt UI puts its own, so a part of a page kept in one theme, either way,
+ * reads that theme's roles, as the tokens do.
  *
  * Where Nuxt UI wants a step the system has no role for, it is mixed from the roles around it
  * in oklab. The shade scales Nuxt UI makes of each color run from the page (50) through the

@@ -6,7 +6,7 @@ import { playground } from './pages.ts'
 type Theme = 'dark' | 'light'
 
 interface Case {
-  /** What sets the theme: the tokens follow data-theme and the system, and not the class. */
+  /** What sets the theme: data-theme, a dark or light class, or the system. */
   by: 'the system' | 'data-theme' | 'the class'
   system: Theme
   /** The attributes of <html>. */
@@ -78,7 +78,7 @@ const CASES: Case[] = [
     theme: 'dark',
   },
 
-  // a data-theme wins over the class
+  // a data-theme wins over the class, on the same element
   {
     by: 'data-theme',
     system: 'dark',
@@ -88,13 +88,12 @@ const CASES: Case[] = [
   },
   {
     by: 'data-theme',
-    system: 'dark',
-    html: { class: 'dark' },
-    body: '<div data-theme="light"><p id="probe"></p></div>',
-    theme: 'light',
+    system: 'light',
+    body: '<p id="probe" class="light" data-theme="dark"></p>',
+    theme: 'dark',
   },
 
-  // without a data-theme, the class on <html>
+  // the class alone, on <html>, as Nuxt UI's color mode puts it, against the system both ways
   {
     by: 'the class',
     system: 'light',
@@ -110,34 +109,72 @@ const CASES: Case[] = [
     theme: 'light',
   },
 
-  // the class on a part of the page is no theme: the page's holds, whether the visitor follows
-  // the system or chose
+  // both classes choose nothing
   {
     by: 'the system',
+    system: 'light',
+    html: { class: 'dark light' },
+    body: '<p id="probe"></p>',
+    theme: 'light',
+  },
+
+  // the class on a part of the page or on the element: the nearest choice holds, made either way
+  {
+    by: 'the class',
     system: 'dark',
     body: '<div class="light"><p id="probe"></p></div>',
-    theme: 'dark',
+    theme: 'light',
   },
-  { by: 'the system', system: 'light', body: '<p id="probe" class="dark"></p>', theme: 'light' },
+  { by: 'the class', system: 'light', body: '<p id="probe" class="dark"></p>', theme: 'dark' },
   {
     by: 'the class',
     system: 'dark',
     html: { class: 'dark' },
     body: '<div class="light"><p id="probe"></p></div>',
-    theme: 'dark',
+    theme: 'light',
   },
   {
-    by: 'data-theme',
+    by: 'the class',
     system: 'dark',
     html: { class: 'dark', 'data-theme': 'dark' },
     body: '<div class="light"><p id="probe"></p></div>',
+    theme: 'light',
+  },
+  {
+    by: 'the class',
+    system: 'light',
+    html: { class: 'light', 'data-theme': 'light' },
+    body: '<div class="dark"><p id="probe"></p></div>',
     theme: 'dark',
   },
   {
     by: 'data-theme',
     system: 'dark',
-    html: { class: 'light', 'data-theme': 'light' },
-    body: '<div class="dark"><p id="probe"></p></div>',
+    html: { class: 'light' },
+    body: '<div data-theme="dark"><p id="probe"></p></div>',
+    theme: 'dark',
+  },
+  {
+    by: 'data-theme',
+    system: 'dark',
+    html: { class: 'dark' },
+    body: '<div data-theme="light"><p id="probe"></p></div>',
+    theme: 'light',
+  },
+
+  // a part inside a part, back in the page's theme
+  {
+    by: 'the class',
+    system: 'light',
+    html: { class: 'dark' },
+    body: '<div class="light"><div class="dark"><p id="probe"></p></div></div>',
+    theme: 'dark',
+  },
+  {
+    by: 'the class',
+    system: 'dark',
+    html: { class: 'light' },
+    body: '<div class="dark"><div data-theme="light"><p id="probe"></p></div></div>',
     theme: 'light',
   },
 ]
@@ -157,7 +194,7 @@ async function stylesheet(): Promise<string> {
   return compiler.build(['dark:underline', 'light:italic'])
 }
 
-test("dark:, light: and Nuxt UI's colors follow the theme of the element, and the class of <html>", async ({
+test("dark:, light: and Nuxt UI's colors follow the theme of the element, as the tokens do", async ({
   page,
 }, testInfo) => {
   test.skip(playground(testInfo) !== 'nuxt', "The gallery's stylesheet, the same on both pages")
@@ -197,8 +234,6 @@ test("dark:, light: and Nuxt UI's colors follow the theme of the element, and th
       light: theme === 'light',
     })
     expect(shown.nuxtUi, `Nuxt UI's page color is the tokens', ${where}`).toBe(true)
-    // where the tokens set it too, they agree
-    if (by !== 'the class')
-      expect(shown.tokens, `the tokens, ${where}`).toBe(theme === 'dark' ? 0 : 1)
+    expect(shown.tokens, `the tokens, ${where}`).toBe(theme === 'dark' ? 0 : 1)
   }
 })

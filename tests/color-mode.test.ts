@@ -1,68 +1,38 @@
-import { Window } from 'happy-dom'
-import { describe, expect, test } from 'vitest'
-import { colorModeInitScript } from '../packages/ui-vue/src/color-mode.ts'
+// @vitest-environment happy-dom
+import { afterEach, describe, expect, test } from 'vitest'
+import { colorModeInitScript, vueColorModeInitScript } from '../packages/ui-vue/src/color-mode.ts'
 
-interface Page {
-  system: 'dark' | 'light'
-  stored?: string
-  markup?: { theme?: string; class?: string }
-}
+const html = document.documentElement
 
-/** Runs the head script in a page, as the browser does before the first paint. */
-function headScript({ system, stored, markup = {} }: Page) {
-  const window = new Window({ settings: { device: { prefersColorScheme: system } } })
-  const html = window.document.documentElement
-  if (stored) window.localStorage.setItem('ws-theme', stored)
-  if (markup.theme) html.dataset.theme = markup.theme
-  if (markup.class) html.className = markup.class
-  new Function('document', 'localStorage', 'matchMedia', colorModeInitScript)(
-    window.document,
-    window.localStorage,
-    window.matchMedia.bind(window),
-  )
+afterEach(() => {
+  localStorage.clear()
+  html.removeAttribute('class')
+  html.removeAttribute('data-theme')
+})
+
+/** Runs a head script, as the browser does before the first paint. */
+function run(script: string) {
+  new Function(script)()
   return { theme: html.dataset.theme ?? null, class: html.className }
 }
 
 describe('the head script', () => {
-  test('with nothing chosen, follows the system', () => {
-    expect(headScript({ system: 'dark' })).toEqual({ theme: null, class: 'dark' })
-    expect(headScript({ system: 'light' })).toEqual({ theme: null, class: 'light' })
+  test('forgets a theme the design system remembered, which would win over the class', () => {
+    localStorage.setItem('ws-theme', 'dark')
+    expect(run(colorModeInitScript)).toEqual({ theme: null, class: '' })
+    expect(localStorage.getItem('ws-theme')).toBeNull()
   })
 
-  test("reads @nuxtjs/color-mode's system as nothing chosen", () => {
-    expect(headScript({ system: 'light', stored: 'system' })).toEqual({
-      theme: null,
-      class: 'light',
-    })
+  test("on Vue, puts VueUse's remembered choice on <html> as the class", () => {
+    localStorage.setItem('vueuse-color-scheme', 'light')
+    localStorage.setItem('ws-theme', 'dark')
+    expect(run(vueColorModeInitScript)).toEqual({ theme: null, class: 'light' })
+    expect(localStorage.getItem('ws-theme')).toBeNull()
   })
 
-  test('applies a remembered choice over the system', () => {
-    expect(headScript({ system: 'dark', stored: 'light' })).toEqual({
-      theme: 'light',
-      class: 'light',
-    })
-    expect(headScript({ system: 'light', stored: 'dark' })).toEqual({
-      theme: 'dark',
-      class: 'dark',
-    })
-  })
-
-  test('takes a data-theme in the markup, and gives it its class', () => {
-    expect(headScript({ system: 'dark', markup: { theme: 'light' } })).toEqual({
-      theme: 'light',
-      class: 'light',
-    })
-  })
-
-  test('takes a dark or light class in the markup as the choice', () => {
-    expect(headScript({ system: 'light', markup: { class: 'dark' } })).toEqual({
-      theme: 'dark',
-      class: 'dark',
-    })
-    // a remembered choice is the visitor's, and wins over the markup's
-    expect(headScript({ system: 'light', stored: 'light', markup: { class: 'dark' } })).toEqual({
-      theme: 'light',
-      class: 'light',
-    })
+  test('on Vue, leaves the theme to the system while VueUse follows it', () => {
+    expect(run(vueColorModeInitScript)).toEqual({ theme: null, class: '' })
+    localStorage.setItem('vueuse-color-scheme', 'auto')
+    expect(run(vueColorModeInitScript)).toEqual({ theme: null, class: '' })
   })
 })

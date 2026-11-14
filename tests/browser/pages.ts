@@ -17,10 +17,20 @@ export function reportsOf(page: Page): string[] {
   return reports
 }
 
-/** Opens the page and waits for the app: Nuxt UI's color mode control is drawn by the app. */
+/** Opens the page and waits for the app. */
 export async function open(page: Page): Promise<void> {
   await page.goto('/')
-  await expect(colorMode(page)).toBeVisible()
+  await waitForApp(page)
+}
+
+/**
+ * Waits for the app, after the page loads or the gallery comes back: Nuxt UI's color mode control
+ * is drawn by the app, on the gallery once all of it is hydrated. The gallery has every component
+ * in every variant, some nine thousand elements, which take seconds while the tests run side by
+ * side.
+ */
+export async function waitForApp(page: Page): Promise<void> {
+  await expect(colorMode(page)).toBeVisible({ timeout: 15_000 })
 }
 
 /** Nuxt UI's color mode: a radio group bound to it, on both pages. */
@@ -33,29 +43,29 @@ export function colorModeOption(page: Page, label: 'system' | 'dark' | 'light') 
 }
 
 /**
- * The design system's own theme switch: the theme's name in the status line of the gallery,
- * a button on the Vue page. Both call its theme module's toggleTheme.
+ * The page's theme switch: the theme's name in the status line of the gallery, a button on the
+ * Vue page. Both choose the other theme with Nuxt UI's color mode.
  */
-export function designSystemSwitch(page: Page, where: Playground) {
+export function themeSwitch(page: Page, where: Playground) {
   return where === 'nuxt'
     ? page.getByRole('button', { name: /^Switch theme, now/ }).filter({ visible: true })
     : page.getByRole('button', { name: 'Theme', exact: true })
 }
 
-/**
- * The theme as <html> says it: data-theme and the classes, and the remembered choice as the
- * design system reads it. @nuxtjs/color-mode keeps "system" there while it follows the
- * system, which the design system reads as no choice.
- */
+/** Where Nuxt UI's color mode remembers its preference: @nuxtjs/color-mode's key, and VueUse's. */
+export const COLOR_MODE_STORAGE_KEY: Record<Playground, string> = {
+  nuxt: 'nuxt-color-mode',
+  vue: 'vueuse-color-scheme',
+}
+
+/** The theme as <html> says it: data-theme and the classes. */
 export function themeState(page: Page) {
   return page.evaluate(() => {
     const html = document.documentElement
-    const stored = localStorage.getItem('ws-theme')
     return {
       theme: html.dataset.theme ?? null,
       dark: html.classList.contains('dark'),
       light: html.classList.contains('light'),
-      stored: stored === 'dark' || stored === 'light' ? stored : null,
     }
   })
 }
