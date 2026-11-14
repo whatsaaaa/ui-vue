@@ -1,0 +1,49 @@
+/*
+ * dark: and light: follow the theme as the tokens do, and the dark or light class besides:
+ *
+ *   - data-theme="dark" or "light" on the element or above it, and in a part of the page kept
+ *     in the other theme, that part's,
+ *   - without a data-theme, a dark or light class on the element or above it, as Nuxt UI's color
+ *     mode puts on <html>, and in a part with the other class, that part's,
+ *   - without either, the system: dark unless it asks for light.
+ *
+ * A selector tells a part in the other theme, but not a part inside it back in the first one:
+ * there neither applies.
+ *
+ * tailwind.css brings them, and index.css again after Nuxt UI, whose own follow the class alone.
+ */
+@custom-variant dark {
+  &:where([data-theme='dark'], [data-theme='dark'] *):not(
+      :where([data-theme='light'], [data-theme='dark'] [data-theme='light'] *)
+    ) {
+    @slot;
+  }
+
+  &:where(.dark, .dark *):not(:where([data-theme], [data-theme] *, .light, .dark .light *)) {
+    @slot;
+  }
+
+  @media not (prefers-color-scheme: light) {
+    &:not(:where([data-theme], [data-theme] *, .dark, .dark *, .light, .light *)) {
+      @slot;
+    }
+  }
+}
+
+@custom-variant light {
+  &:where([data-theme='light'], [data-theme='light'] *):not(
+      :where([data-theme='dark'], [data-theme='light'] [data-theme='dark'] *)
+    ) {
+    @slot;
+  }
+
+  &:where(.light, .light *):not(:where([data-theme], [data-theme] *, .dark, .light .dark *)) {
+    @slot;
+  }
+
+  @media (prefers-color-scheme: light) {
+    &:not(:where([data-theme], [data-theme] *, .dark, .dark *, .light, .light *)) {
+      @slot;
+    }
+  }
+}

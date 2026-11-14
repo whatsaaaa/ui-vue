@@ -5,11 +5,12 @@
  *   @import '@whatsaaaa/ui-vue/index.css';
  *
  * In this order: Tailwind and the design system in their layers, then Nuxt UI, then the
- * bridge of Nuxt UI's variables to the system's roles, outside any layer. See tailwind.css for
- * the layers.
+ * system's dark: and light: variants again, over Nuxt UI's, then the bridge of Nuxt UI's
+ * variables to the system's roles, outside any layer. See tailwind.css for the layers.
  */
 @import './tailwind.css';
 @import '@nuxt/ui';
+@import './variants.css';
 @import './theme.css';
 
 /* The classes the component themes use. */
@@ -31,5 +32,12 @@
   button:not(:disabled),
   [role='button']:not(:disabled) {
     cursor: pointer;
+  }
+}
+
+/* Nuxt UI draws a link's focus ring on the text: the system's is three pixels out. */
+@layer base {
+  a:focus-visible {
+    outline-offset: 3px;
   }
 }

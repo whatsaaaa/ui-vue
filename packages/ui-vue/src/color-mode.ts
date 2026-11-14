@@ -13,7 +13,7 @@
  * - and with no choice both follow the system.
  *
  * The class of the theme on show is always on <html>: dark or light, as @nuxtjs/color-mode puts
- * it. Nuxt UI's light: variant reads the second.
+ * it. The dark: and light: variants read it where there is no data-theme.
  */
 import { setTheme, THEME_STORAGE_KEY } from '@whatsaaaa/design-system/theme'
 import { useColorMode } from '@vueuse/core'

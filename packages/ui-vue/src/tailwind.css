@@ -4,8 +4,9 @@
  *   @import '@whatsaaaa/ui-vue/tailwind.css';
  *
  * It brings Tailwind and everything the design system's index.css brings, in cascade layers,
- * and gives Tailwind the system's tokens as its theme. Written to move into the design system
- * as @whatsaaaa/design-system/tailwind.css: only the import paths change.
+ * gives Tailwind the system's tokens as its theme, and brings the dark: and light: variants of
+ * variants.css. Written to move into the design system with variants.css, as
+ * @whatsaaaa/design-system/tailwind.css: only the import paths change.
  *
  * The layers, in the order they win:
  *
@@ -32,6 +33,7 @@
 @import '@whatsaaaa/design-system/css/terminal.css' layer(components);
 @import '@whatsaaaa/design-system/css/ghost.css' layer(components);
 @import 'tailwindcss/utilities.css' layer(utilities);
+@import './variants.css';
 
 /*
  * Inline: a utility reads the token itself, where it is used. So bg-surface follows a
@@ -198,20 +200,4 @@
    * The one breakpoint is Tailwind's lg, 64rem: max-lg: is the system's compact width,
    * width < 64rem. The other breakpoints stay for code that expects them.
    */
-}
-
-/*
- * dark: follows the theme as the tokens do: data-theme="dark" on the element or above it, or
- * no data-theme on <html> and a system that does not ask for light.
- */
-@custom-variant dark {
-  &:where([data-theme='dark'], [data-theme='dark'] *) {
-    @slot;
-  }
-
-  @media not (prefers-color-scheme: light) {
-    &:where(:root:not([data-theme]), :root:not([data-theme]) *) {
-      @slot;
-    }
-  }
 }

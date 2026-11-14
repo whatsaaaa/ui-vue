@@ -1,6 +1,6 @@
-import { readdir, readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { compile } from '@tailwindcss/node'
+import stylelint from 'stylelint'
 import { describe, expect, test } from 'vitest'
 import { theme, ui } from '../packages/ui-vue/src/index.ts'
 
@@ -32,6 +32,18 @@ function classesOf(config: Record<string, unknown>): Set<string> {
   return names
 }
 
+/** One layer of Tailwind's output, the at-rule and all it holds. */
+function layerOf(css: string, name: string): string {
+  const start = css.indexOf(`@layer ${name} {`)
+  expect(start, `@layer ${name}`).toBeGreaterThanOrEqual(0)
+  let depth = 0
+  for (let end = start; end < css.length; end++) {
+    if (css[end] === '{') depth++
+    else if (css[end] === '}' && --depth === 0) return css.slice(start, end + 1)
+  }
+  throw new Error(`@layer ${name} does not close`)
+}
+
 describe('the components config', () => {
   test('survives JSON, as Nuxt UI writes it on Vue', () => {
     expect(JSON.parse(JSON.stringify(ui))).toEqual(ui)
@@ -58,16 +70,26 @@ describe('the components config', () => {
       built = next
     }
     expect(unknown).toEqual([])
-  })
-})
 
-test('the package has no hex color anywhere', async () => {
-  const files = (await readdir(source, { recursive: true })).filter((file) =>
-    /\.(ts|css)$/.test(file),
-  )
-  expect(files.length).toBeGreaterThan(10)
-  for (const file of files) {
-    const text = await readFile(join(source, file), 'utf8')
-    expect(text.match(/#[\da-f]{3,8}\b/gi), file).toBeNull()
-  }
+    // Every color the classes build is a design system role: the color rules of the stylesheets
+    // hold for the utilities too, so a hex value, a named color or a color function is an error.
+    const config = await stylelint.resolveConfig(join(source, 'index.css'))
+    const rules = Object.fromEntries(
+      ['color-no-hex', 'color-named', 'function-disallowed-list'].map((rule) => [
+        rule,
+        config?.rules?.[rule],
+      ]),
+    )
+    const colorErrors = async (css: string) => {
+      const { results } = await stylelint.lint({
+        code: layerOf(css, 'utilities'),
+        config: { rules },
+      })
+      return results[0]?.warnings.map((warning) => warning.text) ?? []
+    }
+    expect(await colorErrors(built)).toEqual([])
+    // and a color written into a class is one
+    const written = compiler.build(['bg-[#fff]', 'text-[rgb(0_0_0)]', 'border-[red]'])
+    expect(await colorErrors(written)).toHaveLength(3)
+  })
 })
