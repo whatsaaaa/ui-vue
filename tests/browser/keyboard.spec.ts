@@ -1,5 +1,12 @@
 import { expect, test, type Locator, type Page } from '@playwright/test'
-import { open, playground, resolveColor } from './pages.ts'
+import {
+  COLOR_MODE_STORAGE_KEY,
+  colorModeOption,
+  open,
+  playground,
+  resolveColor,
+  themeSwitch,
+} from './pages.ts'
 
 /**
  * The ring of the element with the focus: the design system's is two pixels of interactive,
@@ -195,5 +202,33 @@ test.describe('the gallery', () => {
       'aria-checked',
       'true',
     )
+  })
+
+  test('a page that forces its theme disables the theme switch, and t changes nothing', async ({
+    page,
+  }) => {
+    const hint = page.getByRole('button', { name: 'Switch theme', exact: true })
+    const stored = () =>
+      page.evaluate((key) => localStorage.getItem(key), COLOR_MODE_STORAGE_KEY.nuxt)
+    const boxes = () =>
+      Promise.all([hint, themeSwitch(page, 'nuxt')].map((control) => control.boundingBox()))
+    await colorModeOption(page, 'dark').click()
+    await expect.poll(stored).toBe('dark')
+    const gallery = await boxes()
+
+    await page.keyboard.press('2')
+    await expect(page).toHaveURL(/\/dark$/)
+    await expect(hint).toBeDisabled()
+    await expect(themeSwitch(page, 'nuxt')).toBeDisabled()
+    // in the same places as on the gallery
+    expect(await boxes()).toEqual(gallery)
+    await page.keyboard.press('t')
+
+    // back in the gallery the choice is the one made there, and the switch works again
+    await page.keyboard.press('1')
+    await expect(page).toHaveURL(/\/$/)
+    await expect(colorModeOption(page, 'dark')).toBeChecked()
+    expect(await stored()).toBe('dark')
+    await expect(themeSwitch(page, 'nuxt')).toBeEnabled()
   })
 })

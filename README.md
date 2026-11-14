@@ -31,11 +31,14 @@ app: { head: { script: [{ innerHTML: colorModeInitScript }] } },
 // app/app.config.ts
 export default defineAppConfig({ ui })
 
-// a theme switch
+// a theme switch: <button :disabled="colorMode.forced" @click="switchTheme">
 const colorMode = useColorMode()
-colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
+const switchTheme = () => {
+  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
+}
 
-// a page kept in one theme, as the gallery's dark page
+// a page kept in one theme, as the gallery's dark page. The switch is disabled there: the color
+// mode would neither show nor remember a choice made on it.
 definePageMeta({ colorMode: 'dark' })
 ```
 
