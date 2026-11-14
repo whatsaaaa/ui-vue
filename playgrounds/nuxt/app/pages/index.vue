@@ -2,9 +2,9 @@
 const colorMode = useColorMode()
 
 const modes = [
-  { label: 'sistem', value: 'system' },
-  { label: 'tamna', value: 'dark' },
-  { label: 'svetla', value: 'light' },
+  { label: 'system', value: 'system' },
+  { label: 'dark', value: 'dark' },
+  { label: 'light', value: 'light' },
 ]
 
 const sections = [
@@ -23,12 +23,12 @@ const sections = [
 
 <template>
   <GalleryFrame
-    title="Nuxt UI na dizajn sistemu"
-    lead="Deset osnovnih komponenti Nuxt UI-ja, obučenih u Whatsaaaa dizajn sistem centralnom konfiguracijom, u tamnoj i svetloj temi."
+    title="Nuxt UI on the design system"
+    lead="Ten core Nuxt UI components, dressed in the Whatsaaaa design system through its central config, in the dark and the light theme."
   >
     <div class="mt-10 flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-16">
       <nav aria-labelledby="contents-title" class="min-w-0">
-        <h2 id="contents-title" class="ws-prompt">ls komponente</h2>
+        <h2 id="contents-title" class="ws-prompt">ls components</h2>
         <ul class="mt-4 flex flex-wrap gap-x-5 gap-y-2 font-mono text-label">
           <li v-for="section in sections" :key="section.id">
             <a :href="`#${section.id}`">{{ section.label }}</a>
@@ -42,7 +42,7 @@ const sections = [
       <ClientOnly>
         <URadioGroup
           v-model="colorMode.preference"
-          legend="Režim boja Nuxt UI-ja"
+          legend="Nuxt UI color mode"
           orientation="horizontal"
           :items="modes"
           class="shrink-0"

@@ -1,64 +1,55 @@
 <script setup lang="ts">
-const cities = [
-  'Beograd',
-  'Novi Sad',
-  'Niš',
-  'Kragujevac',
-  'Subotica',
-  'Zrenjanin',
-  'Pančevo',
-  'Čačak',
-]
+const cities = ['Amsterdam', 'Berlin', 'Copenhagen', 'Dublin', 'Lisbon', 'Oslo', 'Prague', 'Vienna']
 const sizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const
 
 const days = [
-  { type: 'label' as const, label: 'Konferencija' },
-  { label: 'Prvi dan, 10. maj', value: 'day-1' },
-  { label: 'Drugi dan, 11. maj', value: 'day-2' },
+  { type: 'label' as const, label: 'Conference' },
+  { label: 'Day one, May 10', value: 'day-1' },
+  { label: 'Day two, May 11', value: 'day-2' },
   { type: 'separator' as const },
-  { type: 'label' as const, label: 'Radionice' },
-  { label: 'Treći dan, 12. maj', value: 'day-3' },
-  { label: 'Večera govornika', value: 'dinner', disabled: true },
+  { type: 'label' as const, label: 'Workshops' },
+  { label: 'Day three, May 12', value: 'day-3' },
+  { label: "Speakers' dinner", value: 'dinner', disabled: true },
 ]
 
-const city = ref('Novi Sad')
+const city = ref('Lisbon')
 const day = ref('day-1')
-const menuCity = ref('Beograd')
-const menuCities = ref(['Niš', 'Subotica'])
+const menuCity = ref('Berlin')
+const menuCities = ref(['Oslo', 'Vienna'])
 </script>
 
 <template>
   <GallerySection
     id="select"
     title="USelect, USelectMenu"
-    lead="Okidač je polje. Lista se otvara na panelu sa obrubom i bez senke: pređena opcija je izdignuta, izabrana je označena interaktivnom bojom. USelectMenu dodaje pretragu na vrh liste."
+    lead="The trigger is a field. The list opens on a panel with a border and no shadow: the hovered option is raised, the chosen one marked in the interactive color. USelectMenu adds a search at the top of the list."
   >
-    <GalleryRow label="stanja">
+    <GalleryRow label="states">
       <div class="grid w-full gap-x-6 gap-y-6 md:grid-cols-2 xl:grid-cols-3">
-        <UFormField label="Grad" help="Gde se održava konferencija.">
+        <UFormField label="City" help="Where the conference takes place.">
           <USelect v-model="city" :items="cities" class="w-full" />
         </UFormField>
-        <UFormField label="Grad" help="hover">
+        <UFormField label="City" help="hover">
           <USelect v-model="city" :items="cities" class="w-full" data-demo="hover" />
         </UFormField>
-        <UFormField label="Grad" help="fokus">
+        <UFormField label="City" help="focus">
           <USelect v-model="city" :items="cities" class="w-full" data-demo="focus" />
         </UFormField>
-        <UFormField label="Grad" help="Određuje organizator.">
-          <USelect model-value="Niš" :items="cities" class="w-full" disabled />
+        <UFormField label="City" help="Set by the organizer.">
+          <USelect model-value="Oslo" :items="cities" class="w-full" disabled />
         </UFormField>
-        <UFormField label="Dan" required error="Izaberite dan za koji se prijavljujete.">
+        <UFormField label="Day" required error="Choose the day you are registering for.">
           <USelect :items="days" class="w-full" />
         </UFormField>
-        <UFormField label="Grad" help="Učitavamo gradove.">
-          <USelect model-value="Beograd" :items="cities" loading class="w-full" />
+        <UFormField label="City" help="Loading the cities.">
+          <USelect model-value="Berlin" :items="cities" loading class="w-full" />
         </UFormField>
       </div>
     </GalleryRow>
 
-    <GalleryRow label="grupe u listi">
+    <GalleryRow label="groups in the list">
       <div class="grid w-full gap-x-6 gap-y-6 md:grid-cols-2 xl:grid-cols-3">
-        <UFormField label="Dan" help="Opcije u grupama, jedna onemogućena.">
+        <UFormField label="Day" help="Options in groups, one of them disabled.">
           <USelect v-model="day" :items="days" class="w-full" data-testid="select-days" />
         </UFormField>
       </div>
@@ -66,7 +57,7 @@ const menuCities = ref(['Niš', 'Subotica'])
 
     <GalleryRow label="USelectMenu">
       <div class="grid w-full gap-x-6 gap-y-6 md:grid-cols-2 xl:grid-cols-3">
-        <UFormField label="Grad" help="Pretraga po imenu grada.">
+        <UFormField label="City" help="Search by the city's name.">
           <USelectMenu
             v-model="menuCity"
             :items="cities"
@@ -74,25 +65,25 @@ const menuCities = ref(['Niš', 'Subotica'])
             data-testid="select-menu"
           />
         </UFormField>
-        <UFormField label="Gradovi" help="Više gradova odjednom.">
+        <UFormField label="Cities" help="Several cities at once.">
           <USelectMenu v-model="menuCities" :items="cities" multiple class="w-full" />
         </UFormField>
-        <UFormField label="Grad" help="fokus">
+        <UFormField label="City" help="focus">
           <USelectMenu v-model="menuCity" :items="cities" class="w-full" data-demo="focus" />
         </UFormField>
       </div>
     </GalleryRow>
 
-    <GalleryRow label="veličine">
+    <GalleryRow label="sizes">
       <div class="grid w-full gap-x-6 gap-y-6 md:grid-cols-2 xl:grid-cols-3">
         <UFormField
           v-for="size in sizes"
           :key="size"
           :size="size"
-          label="Grad"
-          :help="`veličina ${size}`"
+          label="City"
+          :help="`size ${size}`"
         >
-          <USelect model-value="Subotica" :items="cities" class="w-full" />
+          <USelect model-value="Dublin" :items="cities" class="w-full" />
         </UFormField>
       </div>
     </GalleryRow>

@@ -31,7 +31,7 @@ onUnmounted(() => {
     <span class="ws-status-line__mode">{{ mode }}</span>
     <!-- The room left in the line, which the path shows in whole or not at all. -->
     <span class="status-line__path">
-      <span class="ws-status-line__file"><span>~/ui-vue/galerija</span></span>
+      <span class="ws-status-line__file"><span>~/ui-vue/gallery</span></span>
     </span>
     <!-- Each hint is the control it names: the key clicks the button. -->
     <span class="ws-status-line__keys">

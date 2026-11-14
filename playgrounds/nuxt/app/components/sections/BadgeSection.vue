@@ -4,12 +4,12 @@ const variants = ['soft', 'subtle', 'outline', 'solid'] as const
 const sizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const
 
 const labels = {
-  primary: 'novo',
-  neutral: 'nacrt',
-  success: 'plaćeno',
-  info: 'na čekanju',
-  warning: 'ističe',
-  error: 'otkazano',
+  primary: 'new',
+  neutral: 'draft',
+  success: 'paid',
+  info: 'pending',
+  warning: 'expiring',
+  error: 'cancelled',
 }
 </script>
 
@@ -17,31 +17,31 @@ const labels = {
   <GallerySection
     id="badge"
     title="UBadge"
-    lead="Oznaka dizajn sistema: mono natpis na nijansi boje, mali radijus. Podrazumevana varijanta je soft, kao ws-tag. Status nikad nije samo boja: reč ga nosi."
+    lead="The design system's tag: a mono label on a tint of its color, in the small radius. Soft, the ws-tag, is the default. A status is never a color alone: the word carries it."
   >
-    <GalleryRow label="boje i varijante">
+    <GalleryRow label="colors and variants">
       <GalleryMatrix
         v-slot="{ row, column }"
         :rows="colors"
         :columns="variants"
-        label="Oznake u svakoj boji i varijanti"
+        label="Badges in every color and variant"
       >
         <UBadge :color="row" :variant="column" :label="labels[row]" />
       </GalleryMatrix>
     </GalleryRow>
 
-    <GalleryRow label="veličine">
+    <GalleryRow label="sizes">
       <GalleryItem v-for="size in sizes" :key="size" :caption="size">
-        <UBadge :size="size" label="novo" />
+        <UBadge :size="size" label="new" />
       </GalleryItem>
     </GalleryRow>
 
-    <GalleryRow label="sa ikonom">
-      <GalleryItem caption="ikona ispred">
-        <UBadge color="success" icon="i-lucide-check" label="plaćeno" />
+    <GalleryRow label="with an icon">
+      <GalleryItem caption="leading icon">
+        <UBadge color="success" icon="i-lucide-check" label="paid" />
       </GalleryItem>
-      <GalleryItem caption="ikona iza">
-        <UBadge color="neutral" variant="outline" trailing-icon="i-lucide-x" label="Novi Sad" />
+      <GalleryItem caption="trailing icon">
+        <UBadge color="neutral" variant="outline" trailing-icon="i-lucide-x" label="Lisbon" />
       </GalleryItem>
     </GalleryRow>
   </GallerySection>

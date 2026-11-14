@@ -62,23 +62,23 @@ test.describe('the gallery', () => {
     await select.focus()
     // The list opens on the chosen option, and the arrow keys move from it.
     await page.keyboard.press('Enter')
-    await expect(option('Prvi dan, 10. maj')).toBeFocused()
+    await expect(option('Day one, May 10')).toBeFocused()
     await page.keyboard.press('ArrowDown')
-    await expect(option('Drugi dan, 11. maj')).toBeFocused()
+    await expect(option('Day two, May 11')).toBeFocused()
     await page.keyboard.press('Enter')
     await expect(page.getByRole('listbox')).toBeHidden()
-    await expect(select).toHaveText('Drugi dan, 11. maj')
+    await expect(select).toHaveText('Day two, May 11')
     await expect(select).toBeFocused()
 
     // The disabled option is passed over.
     await page.keyboard.press('Enter')
-    await expect(option('Drugi dan, 11. maj')).toBeFocused()
+    await expect(option('Day two, May 11')).toBeFocused()
     await page.keyboard.press('ArrowDown')
-    await expect(option('Treći dan, 12. maj')).toBeFocused()
+    await expect(option('Day three, May 12')).toBeFocused()
     await page.keyboard.press('ArrowDown')
-    await expect(option('Treći dan, 12. maj')).toBeFocused()
+    await expect(option('Day three, May 12')).toBeFocused()
     await page.keyboard.press('Escape')
-    await expect(select).toHaveText('Drugi dan, 11. maj')
+    await expect(select).toHaveText('Day two, May 11')
   })
 
   test('a select menu searches and chooses with the keyboard', async ({ page }) => {
@@ -86,18 +86,18 @@ test.describe('the gallery', () => {
     await menu.focus()
     await page.keyboard.press('Enter')
     await expect(page.getByRole('combobox').and(page.locator('input'))).toBeFocused()
-    await page.keyboard.type('Čač')
+    await page.keyboard.type('Pra')
     const options = page.getByRole('option')
     await expect(options).toHaveCount(1)
     await page.keyboard.press('Enter')
-    await expect(menu).toHaveText('Čačak')
+    await expect(menu).toHaveText('Prague')
   })
 
   test('a modal opens with the keyboard, keeps the focus and gives it back', async ({ page }) => {
-    const trigger = page.getByRole('button', { name: 'Obriši prijavu' })
+    const trigger = page.getByRole('button', { name: 'Delete registration' })
     await trigger.focus()
     await page.keyboard.press('Enter')
-    const dialog = page.getByRole('dialog', { name: 'Brisanje prijave' })
+    const dialog = page.getByRole('dialog', { name: 'Delete registration' })
     await expect(dialog).toBeVisible()
     for (let i = 0; i < 5; i++) {
       await page.keyboard.press('Tab')
@@ -112,29 +112,29 @@ test.describe('the gallery', () => {
 
   test('tabs move with the arrow keys and pass over a disabled tab', async ({ page }) => {
     const tabs = page.getByRole('tablist').first()
-    await tabs.getByRole('tab', { name: 'Pregled' }).focus()
+    await tabs.getByRole('tab', { name: 'Overview' }).focus()
     await page.keyboard.press('ArrowRight')
-    await expect(tabs.getByRole('tab', { name: 'Podešavanja' })).toHaveAttribute(
+    await expect(tabs.getByRole('tab', { name: 'Settings' })).toHaveAttribute(
       'aria-selected',
       'true',
     )
     await page.keyboard.press('ArrowRight')
     await page.keyboard.press('ArrowRight')
-    await expect(tabs.getByRole('tab', { name: 'Pregled' })).toBeFocused()
+    await expect(tabs.getByRole('tab', { name: 'Overview' })).toBeFocused()
   })
 
   test('a checkbox and a radio group answer the keyboard', async ({ page }) => {
-    const news = page.getByRole('checkbox', { name: 'Šaljite mi novosti' }).first()
+    const news = page.getByRole('checkbox', { name: 'Send me news' }).first()
     await news.focus()
     await page.keyboard.press('Space')
     await expect(news).toBeChecked()
 
     const payment = page.locator('#radio-group').getByRole('radiogroup').first()
-    await payment.getByRole('radio', { name: 'Kartica' }).focus()
+    await payment.getByRole('radio', { name: 'Card' }).focus()
     // An arrow moves to the next option and checks it while the key is down, as a hand presses it.
     await page.keyboard.down('ArrowDown')
-    await expect(payment.getByRole('radio', { name: 'Uplatnica' })).toBeChecked()
+    await expect(payment.getByRole('radio', { name: 'Bank transfer' })).toBeChecked()
     await page.keyboard.up('ArrowDown')
-    await expect(payment.getByRole('radio', { name: 'Uplatnica' })).toBeFocused()
+    await expect(payment.getByRole('radio', { name: 'Bank transfer' })).toBeFocused()
   })
 })

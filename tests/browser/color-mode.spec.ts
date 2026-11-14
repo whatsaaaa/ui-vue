@@ -19,7 +19,7 @@ test.describe('on a dark system', () => {
 
   test("the design system's switch moves Nuxt UI's color mode", async ({ page }, testInfo) => {
     await open(page)
-    await expect(colorModeOption(page, 'sistem')).toBeChecked()
+    await expect(colorModeOption(page, 'system')).toBeChecked()
 
     await designSystemSwitch(page, playground(testInfo)).click()
     await expect
@@ -30,7 +30,7 @@ test.describe('on a dark system', () => {
         light: true,
         stored: 'light',
       })
-    await expect(colorModeOption(page, 'svetla')).toBeChecked()
+    await expect(colorModeOption(page, 'light')).toBeChecked()
     expect(await pageColor(page)).toBe(await resolveColor(page, 'var(--ws-color-bg)', 'light'))
 
     await designSystemSwitch(page, playground(testInfo)).click()
@@ -42,13 +42,13 @@ test.describe('on a dark system', () => {
         light: false,
         stored: 'dark',
       })
-    await expect(colorModeOption(page, 'tamna')).toBeChecked()
+    await expect(colorModeOption(page, 'dark')).toBeChecked()
   })
 
   test("Nuxt UI's color mode moves the design system's theme", async ({ page }) => {
     await open(page)
 
-    await colorModeOption(page, 'svetla').click()
+    await colorModeOption(page, 'light').click()
     await expect
       .poll(() => themeState(page))
       .toEqual({
@@ -61,11 +61,11 @@ test.describe('on a dark system', () => {
 
     // The choice is remembered, and applies again on the next visit.
     await page.reload()
-    await expect(colorModeOption(page, 'svetla')).toBeChecked()
+    await expect(colorModeOption(page, 'light')).toBeChecked()
     expect((await themeState(page)).theme).toBe('light')
 
     // Following the system again takes the choice away: the system is dark.
-    await colorModeOption(page, 'sistem').click()
+    await colorModeOption(page, 'system').click()
     await expect
       .poll(() => themeState(page))
       .toMatchObject({ theme: null, dark: true, light: false })
@@ -87,7 +87,7 @@ test.describe('on a light system', () => {
         light: false,
         stored: 'dark',
       })
-    await expect(colorModeOption(page, 'tamna')).toBeChecked()
+    await expect(colorModeOption(page, 'dark')).toBeChecked()
     expect(await pageColor(page)).toBe(await resolveColor(page, 'var(--ws-color-bg)', 'dark'))
   })
 

@@ -7,16 +7,16 @@ import { ref } from 'vue'
 const { store: colorMode } = useColorMode()
 
 const modes = [
-  { label: 'sistem', value: 'auto' },
-  { label: 'tamna', value: 'dark' },
-  { label: 'svetla', value: 'light' },
+  { label: 'system', value: 'auto' },
+  { label: 'dark', value: 'dark' },
+  { label: 'light', value: 'light' },
 ]
 
-const cities = ['Beograd', 'Novi Sad', 'Niš', 'Kragujevac', 'Subotica']
+const cities = ['Amsterdam', 'Berlin', 'Dublin', 'Lisbon', 'Vienna']
 
-const name = ref('Milica Petrović')
-const email = ref('milica@primer')
-const city = ref('Novi Sad')
+const name = ref('Maya Collins')
+const email = ref('maya@example')
+const city = ref('Lisbon')
 const terms = ref(true)
 </script>
 
@@ -25,51 +25,51 @@ const terms = ref(true)
     <main class="mx-auto flex max-w-xl flex-col gap-8 py-6 lg:py-10">
       <header class="flex flex-wrap items-end justify-between gap-6">
         <div>
-          <h1 class="font-mono text-h2-compact lg:text-h2">ui-vue na Vue-u</h1>
+          <h1 class="font-mono text-h2-compact lg:text-h2">ui-vue on Vue</h1>
           <p class="mt-1 text-body-sm text-text-secondary">
-            Ista tema, kroz opcije Vite dodatka Nuxt UI-ja.
+            The same theme, through the options of Nuxt UI's Vite plugin.
           </p>
         </div>
         <UButton
           color="neutral"
           variant="outline"
           icon="i-lucide-sun-moon"
-          label="Tema"
+          label="Theme"
           @click="toggleTheme"
         />
       </header>
 
       <URadioGroup
         v-model="colorMode"
-        legend="Režim boja Nuxt UI-ja"
+        legend="Nuxt UI color mode"
         orientation="horizontal"
         :items="modes"
         data-testid="color-mode"
       />
 
-      <UCard title="Prijava" description="Harbour Conf 2027, Novi Sad.">
+      <UCard title="Registration" description="Harbour Conf 2027, Lisbon.">
         <div class="flex flex-col gap-6">
-          <UFormField label="Ime i prezime" help="Kao na ličnoj karti.">
+          <UFormField label="Full name" help="As on your ID.">
             <UInput v-model="name" class="w-full" />
           </UFormField>
           <UFormField
-            label="Imejl adresa"
+            label="Email address"
             required
-            error="Unesite imejl adresu sa domenom, na primer milica@primer.rs."
+            error="Enter an email address with a domain, such as maya@example.com."
           >
             <UInput v-model="email" type="email" class="w-full" />
           </UFormField>
-          <UFormField label="Grad" help="Gde se održava konferencija.">
+          <UFormField label="City" help="Where the conference takes place.">
             <USelect v-model="city" :items="cities" class="w-full" />
           </UFormField>
-          <UCheckbox v-model="terms" label="Prihvatam uslove korišćenja" />
+          <UCheckbox v-model="terms" label="I accept the terms of use" />
         </div>
         <template #footer>
           <div class="flex flex-wrap items-center justify-between gap-3">
-            <UBadge color="info" label="na čekanju" />
+            <UBadge color="info" label="pending" />
             <div class="flex flex-wrap gap-3">
-              <UButton color="neutral" variant="outline" label="Otkaži" />
-              <UButton label="Prijavi se" />
+              <UButton color="neutral" variant="outline" label="Cancel" />
+              <UButton label="Register" />
             </div>
           </div>
         </template>

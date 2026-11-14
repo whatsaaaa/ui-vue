@@ -28,7 +28,7 @@ export function colorMode(page: Page) {
   return page.getByTestId('color-mode')
 }
 
-export function colorModeOption(page: Page, label: 'sistem' | 'tamna' | 'svetla') {
+export function colorModeOption(page: Page, label: 'system' | 'dark' | 'light') {
   return colorMode(page).getByRole('radio', { name: label, exact: true })
 }
 
@@ -39,7 +39,7 @@ export function colorModeOption(page: Page, label: 'sistem' | 'tamna' | 'svetla'
 export function designSystemSwitch(page: Page, where: Playground) {
   return where === 'nuxt'
     ? page.getByRole('button', { name: /^Switch theme, now/ }).filter({ visible: true })
-    : page.getByRole('button', { name: 'Tema', exact: true })
+    : page.getByRole('button', { name: 'Theme', exact: true })
 }
 
 /**

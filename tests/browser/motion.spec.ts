@@ -16,7 +16,7 @@ for (const reducedMotion of ['no-preference', 'reduce'] as const) {
 
     test('a button changes color at the fast duration, or at once', async ({ page }) => {
       await open(page)
-      const button = page.getByRole('button', { name: 'Prijavi se' }).first()
+      const button = page.getByRole('button', { name: 'Register' }).first()
       const transition = await button.evaluate((element) => {
         const style = getComputedStyle(element)
         return { property: style.transitionProperty, duration: style.transitionDuration }

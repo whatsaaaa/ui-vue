@@ -22,8 +22,8 @@ export default defineNuxtConfig({
   },
   app: {
     head: {
-      htmlAttrs: { lang: 'sr-Latn' },
-      title: 'ui-vue - Nuxt UI na dizajn sistemu',
+      htmlAttrs: { lang: 'en' },
+      title: 'ui-vue - Nuxt UI on the design system',
       link: [
         { rel: 'icon', href: '/favicon.ico', sizes: '48x48' },
         { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' },

@@ -1,53 +1,58 @@
 <script setup lang="ts">
-const removeOpen = ref(false)
-const name = ref('Milica Petrović')
+const deleteOpen = ref(false)
+const name = ref('Maya Collins')
 </script>
 
 <template>
   <GallerySection
     id="modal"
     title="UModal"
-    lead="Prozor terminala: površina u obrubu sa radijusom prozora, bez senke. Zaglavlje je traka visine trake kartica, na boji stranice. Stranica iza je zatamnjena svojom bojom."
+    lead="A window of the terminal: the surface in a border with the window's radius, no shadow. Its header is a bar as tall as the tab bar, on the page color. The page behind it is dimmed in its own color."
   >
-    <GalleryRow label="otvaranje">
-      <GalleryItem caption="potvrda">
+    <GalleryRow label="opening">
+      <GalleryItem caption="confirmation">
         <UModal
-          v-model:open="removeOpen"
-          title="Brisanje prijave"
-          description="Prijava Milice Petrović biće trajno obrisana."
+          v-model:open="deleteOpen"
+          title="Delete registration"
+          description="Maya Collins's registration will be deleted for good."
         >
-          <UButton color="error" variant="outline" icon="i-lucide-trash-2" label="Obriši prijavu" />
+          <UButton
+            color="error"
+            variant="outline"
+            icon="i-lucide-trash-2"
+            label="Delete registration"
+          />
           <template #body>
             <p class="text-body-sm">
-              Kotizacija se vraća na račun sa kog je uplaćena, u roku od pet radnih dana. Ovo ne
-              može da se poništi.
+              The fee goes back to the account it was paid from within five working days. This
+              cannot be undone.
             </p>
           </template>
           <template #footer>
-            <UButton color="neutral" variant="outline" label="Otkaži" @click="removeOpen = false" />
-            <UButton color="error" label="Obriši" @click="removeOpen = false" />
+            <UButton color="neutral" variant="outline" label="Cancel" @click="deleteOpen = false" />
+            <UButton color="error" label="Delete" @click="deleteOpen = false" />
           </template>
         </UModal>
       </GalleryItem>
-      <GalleryItem caption="sa obrascem">
-        <UModal title="Izmena prijave">
+      <GalleryItem caption="with a form">
+        <UModal title="Edit registration">
           <UButton
             color="neutral"
             variant="outline"
             icon="i-lucide-pencil"
-            label="Izmeni prijavu"
+            label="Edit registration"
           />
           <template #body>
             <div class="flex flex-col gap-6">
-              <UFormField label="Ime i prezime" help="Kao na ličnoj karti.">
+              <UFormField label="Full name" help="As on your ID.">
                 <UInput v-model="name" class="w-full" />
               </UFormField>
-              <UCheckbox label="Treba mi smeštaj" />
+              <UCheckbox label="I need accommodation" />
             </div>
           </template>
           <template #footer="{ close }">
-            <UButton color="neutral" variant="outline" label="Otkaži" @click="close" />
-            <UButton label="Sačuvaj" @click="close" />
+            <UButton color="neutral" variant="outline" label="Cancel" @click="close" />
+            <UButton label="Save" @click="close" />
           </template>
         </UModal>
       </GalleryItem>

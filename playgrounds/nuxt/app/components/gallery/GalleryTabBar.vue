@@ -23,9 +23,9 @@ import markOnLight from '~/assets/mark-on-light.svg'
       />
       ui-vue
     </span>
-    <nav class="ws-tabs" aria-label="Glavna">
+    <nav class="ws-tabs" aria-label="Main">
       <ul>
-        <li><a href="#" aria-current="page">galerija</a></li>
+        <li><a href="#" aria-current="page">gallery</a></li>
       </ul>
     </nav>
     <div class="ws-tab-bar__end">

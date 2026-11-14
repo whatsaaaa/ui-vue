@@ -6,53 +6,35 @@ interface Registration {
   city: string
   ticket: string
   fee: string
-  status: 'plaćeno' | 'na čekanju' | 'otkazano'
+  status: 'paid' | 'pending' | 'cancelled'
 }
 
 const data: Registration[] = [
+  { name: 'Maya Collins', city: 'Lisbon', ticket: 'All three days', fee: '€420', status: 'paid' },
+  { name: 'Daniel Brooks', city: 'Berlin', ticket: 'Two days', fee: '€320', status: 'pending' },
+  { name: 'Priya Shah', city: 'Dublin', ticket: 'One day', fee: '€180', status: 'paid' },
   {
-    name: 'Milica Petrović',
-    city: 'Novi Sad',
-    ticket: 'Sva tri dana',
-    fee: '18.000 RSD',
-    status: 'plaćeno',
-  },
-  {
-    name: 'Đorđe Jovanović',
-    city: 'Beograd',
-    ticket: 'Dva dana',
-    fee: '13.500 RSD',
-    status: 'na čekanju',
-  },
-  {
-    name: 'Jelena Šćepanović',
-    city: 'Niš',
-    ticket: 'Jedan dan',
-    fee: '7.500 RSD',
-    status: 'plaćeno',
-  },
-  {
-    name: 'Nikola Ćirić',
-    city: 'Subotica',
-    ticket: 'Sva tri dana',
-    fee: '18.000 RSD',
-    status: 'otkazano',
+    name: 'Tom Fischer',
+    city: 'Vienna',
+    ticket: 'All three days',
+    fee: '€420',
+    status: 'cancelled',
   },
 ]
 
 const statusColor = {
-  plaćeno: 'success',
-  'na čekanju': 'info',
-  otkazano: 'error',
+  paid: 'success',
+  pending: 'info',
+  cancelled: 'error',
 } as const
 
 const UBadge = resolveComponent('UBadge')
 
 const columns: TableColumn<Registration>[] = [
-  { accessorKey: 'name', header: 'Ime i prezime' },
-  { accessorKey: 'city', header: 'Grad' },
-  { accessorKey: 'ticket', header: 'Kotizacija' },
-  { accessorKey: 'fee', header: 'Iznos' },
+  { accessorKey: 'name', header: 'Full name' },
+  { accessorKey: 'city', header: 'City' },
+  { accessorKey: 'ticket', header: 'Ticket' },
+  { accessorKey: 'fee', header: 'Fee' },
   {
     accessorKey: 'status',
     header: 'Status',
@@ -66,20 +48,20 @@ const columns: TableColumn<Registration>[] = [
   <GallerySection
     id="table"
     title="UTable"
-    lead="Tabela iz proze sistema: u obrubu sa velikim radijusom, skroluje unutar sebe. Zaglavlje je na površini, kao nadnaslov; ćelija je mali tekst tela."
+    lead="The table of the system's prose: in a border with the large radius, scrolling inside itself. The head is on the surface, as an overline; a cell is small body text."
   >
-    <GalleryRow label="podaci">
+    <GalleryRow label="data">
       <UTable :data="data" :columns="columns" class="w-full" />
     </GalleryRow>
 
-    <GalleryRow label="učitava, prazna">
+    <GalleryRow label="loading, empty">
       <div class="grid w-full gap-6 lg:grid-cols-2">
         <UTable :data="data.slice(0, 2)" :columns="columns.slice(0, 3)" loading class="w-full" />
         <UTable
           :data="[]"
           :columns="columns.slice(0, 3)"
           class="w-full"
-          empty="Još nema prijava."
+          empty="No registrations yet."
         />
       </div>
     </GalleryRow>
