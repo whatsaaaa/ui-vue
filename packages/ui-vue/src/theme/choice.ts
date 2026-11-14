@@ -25,7 +25,10 @@ export const cardHoverFill =
 export const cardHoverBorder =
   'hover:not-has-disabled:not-has-aria-disabled:not-has-focus-visible:not-has-data-[state=checked]:border-field-border'
 
-/** A checked card: the border in the color, on the color's tint. */
+/**
+ * A checked card: the border in the color, on the color's tint. The border is given again for a
+ * focused card, where it wins over the plain border of cardFocus.
+ */
 export const checkedCard: ByColor = {
   primary:
     'has-data-[state=checked]:border-interactive has-data-[state=checked]:bg-tag-bg not-has-disabled:has-focus-visible:has-data-[state=checked]:border-interactive',
@@ -50,6 +53,7 @@ export const highlight: ByColor = {
   neutral: 'ring-text hover:ring-text',
 }
 
+/** A highlighted card: the border in its color, focused too, as with checkedCard. */
 export const highlightCard: ByColor = {
   primary:
     'not-has-disabled:not-has-aria-disabled:border-interactive not-has-disabled:not-has-aria-disabled:has-focus-visible:border-interactive',

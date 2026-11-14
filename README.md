@@ -15,7 +15,7 @@
 The package brings three things:
 
 - **`@whatsaaaa/ui-vue/index.css`**, the app's whole stylesheet. Import it alone, first:
-  Tailwind and the design system in cascade layers (`theme`, then `base`: Tailwind's preflight, then the system's `base.css`, then `components`, then `utilities`), Nuxt UI, and the bridge of Nuxt UI's `--ui-*` variables to the system's `--ws-*` roles. Its part `tailwind.css` is the design system for Tailwind on its own, meant to move into the design system.
+  Tailwind and the design system in cascade layers (`theme`, then `base`: Tailwind's preflight, then the system's `base.css`, then `components`, then `utilities`), Nuxt UI, the system's `dark:` and `light:` variants over Nuxt UI's (they follow `data-theme` as the tokens do; see `variants.css`), and the bridge of Nuxt UI's `--ui-*` variables to the system's `--ws-*` roles. Its part `tailwind.css` is the design system for Tailwind on its own, meant to move into the design system.
 - **`theme` and `ui`** from `@whatsaaaa/ui-vue`: Nuxt UI's module options and the components' config.
 - **`@whatsaaaa/ui-vue/color-mode`**: a head script and a sync that keep the system's `data-theme` and Nuxt UI's `.dark` class in step, both ways.
 
