@@ -12,8 +12,10 @@ import markOnLight from '~/assets/mark-on-light.svg'
       ui-vue
     </span>
     <nav class="ws-tabs" aria-label="Main">
+      <!-- The router marks the tab of the page on show with aria-current. -->
       <ul>
-        <li><a href="#" aria-current="page">gallery</a></li>
+        <li><NuxtLink to="/">gallery</NuxtLink></li>
+        <li><NuxtLink to="/dark">dark</NuxtLink></li>
       </ul>
     </nav>
     <div class="ws-tab-bar__end">

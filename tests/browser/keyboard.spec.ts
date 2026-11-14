@@ -179,4 +179,21 @@ test.describe('the gallery', () => {
     await page.keyboard.up('ArrowDown')
     await expect(payment.getByRole('radio', { name: 'Bank transfer' })).toBeFocused()
   })
+
+  test('the number of a tab opens it, and the keys stay on there', async ({ page }) => {
+    await page.keyboard.press('2')
+    await expect(page).toHaveURL(/\/dark$/)
+    await expect(page.getByRole('switch', { name: 'Shortcut keys' })).toHaveAttribute(
+      'aria-checked',
+      'true',
+    )
+    await expect(page.getByRole('button', { name: 'Switch theme', exact: true })).toBeVisible()
+
+    await page.keyboard.press('1')
+    await expect(page).toHaveURL(/\/$/)
+    await expect(page.getByRole('switch', { name: 'Shortcut keys' })).toHaveAttribute(
+      'aria-checked',
+      'true',
+    )
+  })
 })

@@ -9,6 +9,9 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   reporter: process.env.CI ? [['list'], ['html', { open: 'never' }]] : 'list',
+  // The gallery hydrates hundreds of components, which takes longer than an assertion's usual
+  // five seconds while the tests run side by side, and a test waits for it after every load.
+  expect: { timeout: 15_000 },
   use: {
     ...devices['Desktop Chrome'],
     colorScheme: 'dark',

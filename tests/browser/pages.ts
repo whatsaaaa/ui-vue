@@ -33,10 +33,10 @@ export function colorModeOption(page: Page, label: 'system' | 'dark' | 'light') 
 }
 
 /**
- * The design system's own theme switch: the theme's name in the status line of the gallery,
- * a button on the Vue page. Both call its theme module's toggleTheme.
+ * The page's theme switch: the theme's name in the status line of the gallery, a button on the
+ * Vue page. Both choose the other theme with Nuxt UI's color mode.
  */
-export function designSystemSwitch(page: Page, where: Playground) {
+export function themeSwitch(page: Page, where: Playground) {
   return where === 'nuxt'
     ? page.getByRole('button', { name: /^Switch theme, now/ }).filter({ visible: true })
     : page.getByRole('button', { name: 'Theme', exact: true })

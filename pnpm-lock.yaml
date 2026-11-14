@@ -244,9 +244,6 @@ importers:
       '@nuxt/ui':
         specifier: 4.12.0
         version: 4.12.0(26d7d00bc6147ef25f87d0658a90d77a)
-      '@vueuse/core':
-        specifier: ^14.4.0
-        version: 14.4.0(vue@3.5.45(typescript@6.0.3))
       '@whatsaaaa/design-system':
         specifier: ^0.4.0
         version: 0.4.0(vue@3.5.45(typescript@6.0.3))

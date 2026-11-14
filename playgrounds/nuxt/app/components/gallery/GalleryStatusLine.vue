@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { enableShortcuts, isTyping } from '@whatsaaaa/design-system/shortcuts'
-import { toggleTheme } from '@whatsaaaa/design-system/theme'
+
+const colorMode = useColorMode()
+
+/** Chooses the other theme from the one on show, with Nuxt UI's color mode, which remembers it. */
+function switchTheme() {
+  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
+}
 
 /**
  * NORMAL while single keys are shortcuts, INSERT while they are typed into a field. It says
@@ -19,7 +25,7 @@ onMounted(() => {
   document.addEventListener('focusout', updateMode)
   disableShortcuts = enableShortcuts()
 })
-onUnmounted(() => {
+onBeforeUnmount(() => {
   document.removeEventListener('focusin', updateMode)
   document.removeEventListener('focusout', updateMode)
   disableShortcuts?.()
@@ -35,7 +41,7 @@ onUnmounted(() => {
     </span>
     <!-- Each hint is the control it names: the key clicks the button. -->
     <span class="ws-status-line__keys">
-      <button type="button" data-ws-key="t" aria-label="Switch theme" @click="toggleTheme">
+      <button type="button" data-ws-key="t" aria-label="Switch theme" @click="switchTheme">
         <kbd class="ws-kbd">t</kbd>theme
       </button>
     </span>
@@ -58,7 +64,7 @@ onUnmounted(() => {
     <button
       type="button"
       class="status-line__theme ws-status-line__item ws-status-line__item--edge ws-status-line__item--dark"
-      @click="toggleTheme"
+      @click="switchTheme"
     >
       <span class="sr-only">Switch theme, now</span>
       rose-pine
@@ -66,7 +72,7 @@ onUnmounted(() => {
     <button
       type="button"
       class="status-line__theme ws-status-line__item ws-status-line__item--edge ws-status-line__item--light"
-      @click="toggleTheme"
+      @click="switchTheme"
     >
       <span class="sr-only">Switch theme, now</span>
       rose-pine-dawn
