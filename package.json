@@ -24,6 +24,7 @@
   "devDependencies": {
     "@playwright/test": "1.65.0",
     "@tailwindcss/node": "4.3.5",
+    "@tailwindcss/oxide": "4.3.5",
     "@tsconfig/node24": "^24.0.6",
     "@types/node": "^24.19.2",
     "@vue/eslint-config-typescript": "^14.9.0",

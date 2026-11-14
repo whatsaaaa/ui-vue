@@ -1,5 +1,7 @@
+import { devNull } from 'node:os'
 import { join } from 'node:path'
 import { compile } from '@tailwindcss/node'
+import { Scanner } from '@tailwindcss/oxide'
 import stylelint from 'stylelint'
 import { describe, expect, test } from 'vitest'
 import { theme, ui } from '../packages/ui-vue/src/index.ts'
@@ -53,10 +55,25 @@ describe('the components config', () => {
     expect(theme.colors).toEqual(['primary', 'success', 'info', 'warning', 'error'])
   })
 
+  test("writes every class out whole, where Tailwind's scan of the stylesheet's sources finds it", async () => {
+    // Nuxt UI's #build/ui.css is the app's: the package alone has none
+    const compiler = await compile(`@import './index.css';`, {
+      base: source,
+      onDependency: () => {},
+      customCssResolver: async (id) => (id === '#build/ui.css' ? devNull : undefined),
+    })
+    const found = new Set(new Scanner({ sources: compiler.sources }).scan())
+    const names = [...classesOf(ui)]
+    expect(names.length).toBeGreaterThan(300)
+    expect(names.filter((name) => !found.has(name))).toEqual([])
+  })
+
   test('uses only classes that Tailwind builds from the design system', async () => {
-    // Nuxt UI's own names that the config uses, which its stylesheet defines
-    const css = `@import './tailwind.css';
-      @theme inline { --background-color-accented: var(--ui-bg-accented); }`
+    // The design system's Tailwind, building the utilities alone, and Nuxt UI's own names that
+    // the config uses, which its stylesheet defines
+    const css = `@reference './tailwind.css';
+      @theme inline { --background-color-accented: var(--ui-bg-accented); }
+      @layer utilities { @tailwind utilities; }`
     const compiler = await compile(css, { base: source, onDependency: () => {} })
     let built = compiler.build([])
     // a class Tailwind does not know adds nothing

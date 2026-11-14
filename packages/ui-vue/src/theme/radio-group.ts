@@ -1,6 +1,7 @@
 import {
   cardFocus,
-  cardHover,
+  cardHoverBorder,
+  cardHoverFill,
   checkedCard,
   choiceFocus,
   choiceSizes,
@@ -41,8 +42,8 @@ export default {
       neutral: { indicator: checked.neutral },
     },
     variant: {
-      card: { item: `border border-border rounded-lg ${cardHover}bg-raised/50 ${transition}` },
-      table: { item: `border border-border ${cardHover}bg-raised/50 ${transition}` },
+      card: { item: `border border-border rounded-lg ${cardHoverFill} ${transition}` },
+      table: { item: `border border-border ${cardHoverFill} ${transition}` },
     },
     orientation: {
       horizontal: { fieldset: 'gap-x-6' },
@@ -100,11 +101,7 @@ export default {
     { variant: 'list', indicator: ['start', 'end'], class: { base: choiceFocus } },
     { variant: ['card', 'table'], class: { item: cardFocus } },
     { variant: 'list', indicator: 'hidden', class: { item: cardFocus } },
-    {
-      variant: ['card', 'table'],
-      highlight: false,
-      class: { item: `${cardHover}border-field-border` },
-    },
+    { variant: ['card', 'table'], highlight: false, class: { item: cardHoverBorder } },
     { size: 'xs', variant: ['card', 'table'], class: { item: 'p-2.5' } },
     { size: 'sm', variant: ['card', 'table'], class: { item: 'p-3' } },
     { size: ['md', 'lg'], variant: ['card', 'table'], class: { item: 'p-4' } },

@@ -172,6 +172,9 @@ importers:
       '@tailwindcss/node':
         specifier: 4.3.5
         version: 4.3.5
+      '@tailwindcss/oxide':
+        specifier: 4.3.5
+        version: 4.3.5
       '@tsconfig/node24':
         specifier: ^24.0.6
         version: 24.0.6

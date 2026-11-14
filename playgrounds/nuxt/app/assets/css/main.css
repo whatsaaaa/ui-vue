@@ -18,11 +18,7 @@
 }
 
 @custom-variant focus-visible {
-  &:focus-visible {
-    @slot;
-  }
-
-  &:where([data-demo~='focus'], [data-demo~='focus'] *) {
+  &:is(:focus-visible, [data-demo~='focus'], [data-demo~='focus'] *) {
     @slot;
   }
 }

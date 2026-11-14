@@ -16,9 +16,14 @@ export const checked: ByColor = {
   neutral: 'bg-text text-bg',
 }
 
-/** The prefix Nuxt UI hovers a card with, so these replace its classes. */
-export const cardHover =
-  'hover:not-has-disabled:not-has-aria-disabled:not-has-focus-visible:not-has-data-[state=checked]:'
+/**
+ * A card under the pointer, under the conditions Nuxt UI hovers it with, so these replace its
+ * classes: the fill, and the border.
+ */
+export const cardHoverFill =
+  'hover:not-has-disabled:not-has-aria-disabled:not-has-focus-visible:not-has-data-[state=checked]:bg-raised/50'
+export const cardHoverBorder =
+  'hover:not-has-disabled:not-has-aria-disabled:not-has-focus-visible:not-has-data-[state=checked]:border-field-border'
 
 /** A checked card: the border in the color, on the color's tint. */
 export const checkedCard: ByColor = {
