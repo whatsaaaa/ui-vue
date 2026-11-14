@@ -8,6 +8,7 @@ import {
   resolveColor,
   themeState,
   themeSwitch,
+  waitForApp,
 } from './pages.ts'
 
 /*
@@ -57,6 +58,7 @@ test.describe('on a dark system', () => {
 
     // The color mode remembers the choice, and the next visit opens in it.
     await page.reload()
+    await waitForApp(page)
     await expect(colorModeOption(page, 'dark')).toBeChecked()
     await expectPageIn(page, 'dark')
   })
@@ -69,6 +71,7 @@ test.describe('on a dark system', () => {
     await expectPageIn(page, 'light')
 
     await page.reload()
+    await waitForApp(page)
     await expect(colorModeOption(page, 'light')).toBeChecked()
     await expectPageIn(page, 'light')
 
@@ -98,6 +101,7 @@ test.describe('on a light system', () => {
     await open(page)
     await page.evaluate(() => localStorage.setItem('ws-theme', 'dark'))
     await page.reload()
+    await waitForApp(page)
     await expect(colorModeOption(page, 'system')).toBeChecked()
     expect(await themeState(page)).toEqual({ theme: null, dark: false, light: true })
     expect(await page.evaluate(() => localStorage.getItem('ws-theme'))).toBeNull()
@@ -160,6 +164,7 @@ test.describe('on a light system', () => {
 
     // the visitor's choice holds on the other pages
     await tab('gallery').click()
+    await waitForApp(page)
     await expect(colorModeOption(page, 'light')).toBeChecked()
     await expect.poll(() => themeState(page)).toEqual({ theme: null, dark: false, light: true })
     await expectPageIn(page, 'light')

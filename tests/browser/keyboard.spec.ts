@@ -6,6 +6,7 @@ import {
   playground,
   resolveColor,
   themeSwitch,
+  waitForApp,
 } from './pages.ts'
 
 /**
@@ -198,6 +199,7 @@ test.describe('the gallery', () => {
 
     await page.keyboard.press('1')
     await expect(page).toHaveURL(/\/$/)
+    await waitForApp(page)
     await expect(page.getByRole('switch', { name: 'Shortcut keys' })).toHaveAttribute(
       'aria-checked',
       'true',
@@ -227,6 +229,7 @@ test.describe('the gallery', () => {
     // back in the gallery the choice is the one made there, and the switch works again
     await page.keyboard.press('1')
     await expect(page).toHaveURL(/\/$/)
+    await waitForApp(page)
     await expect(colorModeOption(page, 'dark')).toBeChecked()
     expect(await stored()).toBe('dark')
     await expect(themeSwitch(page, 'nuxt')).toBeEnabled()
