@@ -1,8 +1,9 @@
 import { devNull } from 'node:os'
 import { join } from 'node:path'
-import { compile } from '@tailwindcss/node'
+import { __unstable__loadDesignSystem, compile } from '@tailwindcss/node'
 import { Scanner } from '@tailwindcss/oxide'
 import stylelint from 'stylelint'
+import { cnMerge } from 'tailwind-variants'
 import { describe, expect, test } from 'vitest'
 import { theme, ui } from '../packages/ui-vue/src/index.ts'
 
@@ -108,5 +109,40 @@ describe('the components config', () => {
     // and a color written into a class is one
     const written = compiler.build(['bg-[#fff]', 'text-[rgb(0_0_0)]', 'border-[red]'])
     expect(await colorErrors(written)).toHaveLength(3)
+  })
+
+  test("has Nuxt UI's merge take the design system's names in their utilities, the later class staying", async () => {
+    // Every name of a text style, a size, a border width and an easing in Tailwind's theme, as
+    // Tailwind reads the design system's entry, against a class of Tailwind's own in the utility
+    const system = await __unstable__loadDesignSystem(
+      `@import '@whatsaaaa/design-system/tailwind.css';`,
+      { base: source },
+    )
+    const sides = ['', '-x', '-y', '-s', '-e', '-bs', '-be', '-t', '-r', '-b', '-l']
+    const conflicts: Record<string, (name: string) => [string, string][]> = {
+      '--spacing': (name) =>
+        ['h', 'w', 'size'].map((utility) => [`${utility}-${name} ${utility}-12`, `${utility}-12`]),
+      // a font size, which keeps the color
+      '--text': (name) => [[`text-sm text-text text-${name}`, `text-text text-${name}`]],
+      '--border-width': (name) =>
+        sides.map((side) => [
+          `border-border border${side}-2 border${side}-${name}`,
+          `border-border border${side}-${name}`,
+        ]),
+      '--ease': (name) => [[`ease-out ease-${name}`, `ease-${name}`]],
+    }
+    const wrong: string[] = []
+    for (const [namespace, pairs] of Object.entries(conflicts)) {
+      const names = [...system.theme.namespace(namespace).keys()].filter(
+        (name): name is string => !!name && !name.includes('--'),
+      )
+      expect(names, namespace).not.toEqual([])
+      for (const name of names)
+        for (const [classes, merged] of pairs(name)) {
+          const result = cnMerge(classes)(ui.tv)
+          if (result !== merged) wrong.push(`${classes} -> ${result}`)
+        }
+    }
+    expect(wrong).toEqual([])
   })
 })

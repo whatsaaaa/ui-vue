@@ -223,6 +223,9 @@ importers:
       stylelint-value-no-unknown-custom-properties:
         specifier: ^6.1.1
         version: 6.1.1(stylelint@18.0.0)
+      tailwind-variants:
+        specifier: ^3.3.1
+        version: 3.3.1(tailwind-merge@3.7.0)(tailwindcss@4.3.5)
       typescript:
         specifier: ~6.0.3
         version: 6.0.3
