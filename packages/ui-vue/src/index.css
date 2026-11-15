@@ -6,13 +6,14 @@
  *
  * In this order: the design system's Tailwind entry, Tailwind and the system in their layers,
  * then Nuxt UI, then the system's dark: and light: variants again, over Nuxt UI's, whose own
- * follow only the class, then the bridge of Nuxt UI's variables to the system's roles, outside
- * any layer. See the design system's tailwind.css for the layers.
+ * follow only the class, then the system's bridge of Nuxt UI's variables to its roles,
+ * @whatsaaaa/design-system/css/nuxt-ui.css, outside any layer. See the design system's
+ * tailwind.css for the layers.
  */
 @import '@whatsaaaa/design-system/tailwind.css';
 @import '@nuxt/ui';
 @import '@whatsaaaa/design-system/tailwind/variants.css';
-@import './theme.css';
+@import '@whatsaaaa/design-system/css/nuxt-ui.css';
 
 /* The classes the component themes use. */
 @source './theme';
