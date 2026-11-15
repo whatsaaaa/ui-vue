@@ -113,7 +113,7 @@ describe('the components config', () => {
 
   test("has Nuxt UI's merge take the design system's names in their utilities, the later class staying", async () => {
     // Every name of a text style, a size, a border width and an easing in Tailwind's theme, as
-    // Tailwind reads the design system's entry, against a class of Tailwind's own in the utility
+    // Tailwind reads the design system's entry, against another class in each utility that takes it
     const system = await __unstable__loadDesignSystem(
       `@import '@whatsaaaa/design-system/tailwind.css';`,
       { base: source },
@@ -123,12 +123,21 @@ describe('the components config', () => {
       '--spacing': (name) =>
         ['h', 'w', 'size'].map((utility) => [`${utility}-${name} ${utility}-12`, `${utility}-12`]),
       // a font size, which keeps the color
-      '--text': (name) => [[`text-sm text-text text-${name}`, `text-text text-${name}`]],
-      '--border-width': (name) =>
-        sides.map((side) => [
+      '--text': (name) =>
+        ['text-sm', 'text-label'].map((size) => [
+          `${size} text-text text-${name}`,
+          `text-text text-${name}`,
+        ]),
+      '--border-width': (name) => [
+        ...sides.map((side): [string, string] => [
           `border-border border${side}-2 border${side}-${name}`,
           `border-border border${side}-${name}`,
         ]),
+        ...['x', 'y'].map((axis): [string, string] => [
+          `divide-border divide-${axis}-2 divide-${axis}-${name}`,
+          `divide-border divide-${axis}-${name}`,
+        ]),
+      ],
       '--ease': (name) => [[`ease-out ease-${name}`, `ease-${name}`]],
     }
     const wrong: string[] = []

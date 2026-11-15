@@ -55,14 +55,21 @@ const sizes = [
   'tab-bar',
 ]
 
-/** The border widths: tailwind-merge has no theme key for them, but a class group per side. */
+/**
+ * The border widths, which Tailwind takes on every side of a border and on the dividers:
+ * tailwind-merge has no theme key for them, but a class group for each.
+ */
 const borderWidths = ['thin', 'medium', 'thick']
-const borderWidthGroups = Object.fromEntries(
-  ['', '-x', '-y', '-s', '-e', '-bs', '-be', '-t', '-r', '-b', '-l'].map((side) => [
-    `border-w${side}`,
-    [{ [`border${side}`]: borderWidths }],
-  ]),
-)
+const borderWidthGroups = {
+  ...Object.fromEntries(
+    ['', '-x', '-y', '-s', '-e', '-bs', '-be', '-t', '-r', '-b', '-l'].map((side) => [
+      `border-w${side}`,
+      [{ [`border${side}`]: borderWidths }],
+    ]),
+  ),
+  'divide-x': [{ 'divide-x': borderWidths }],
+  'divide-y': [{ 'divide-y': borderWidths }],
+}
 
 /**
  * The module options: the theme's colors, without secondary. Nuxt UI's transitions stay on:
