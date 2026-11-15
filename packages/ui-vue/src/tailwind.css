@@ -1,9 +1,0 @@
-/*
- * The design system for Tailwind CSS v4, under this package's name: the design system's
- * Tailwind entry, and nothing else. An app can import either:
- *
- *   @import '@whatsaaaa/design-system/tailwind.css';
- *
- * See that file for the layers. An app on Nuxt UI imports index.css instead, which brings it.
- */
-@import '@whatsaaaa/design-system/tailwind.css';

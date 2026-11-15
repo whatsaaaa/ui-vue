@@ -156,7 +156,7 @@ export default {
     // An icon button is as wide as it is tall.
     { square: true, size: 'xs', class: 'w-7 px-0 justify-center' },
     { square: true, size: 'sm', class: 'w-8 px-0 justify-center' },
-    { square: true, size: 'md', class: 'w-10 px-0 justify-center' },
+    { square: true, size: 'md', class: 'w-control px-0 justify-center' },
     { square: true, size: 'lg', class: 'w-11 px-0 justify-center' },
     { square: true, size: 'xl', class: 'w-12 px-0 justify-center' },
     // The loading icon turns only for a reader who has not asked for less motion.

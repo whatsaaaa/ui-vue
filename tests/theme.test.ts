@@ -71,7 +71,7 @@ describe('the components config', () => {
   test('uses only classes that Tailwind builds from the design system', async () => {
     // The design system's Tailwind, building the utilities alone, and Nuxt UI's own names that
     // the config uses, which its stylesheet defines
-    const css = `@reference './tailwind.css';
+    const css = `@reference '@whatsaaaa/design-system/tailwind.css';
       @theme inline { --background-color-accented: var(--ui-bg-accented); }
       @layer utilities { @tailwind utilities; }`
     const compiler = await compile(css, { base: source, onDependency: () => {} })

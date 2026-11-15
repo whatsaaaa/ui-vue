@@ -144,8 +144,6 @@ test.describe('on a light system', () => {
     page,
   }, testInfo) => {
     test.skip(playground(testInfo) !== 'nuxt', 'The gallery has the page')
-    // the gallery is drawn twice
-    test.slow()
     const tab = (name: string) =>
       page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name, exact: true })
 
