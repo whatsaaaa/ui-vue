@@ -6,13 +6,12 @@ import { type ByColor, byColor, focusRing, solid, text, tint, transition } from 
  */
 
 /**
- * Hover darkens a fill toward the text color, as the sample apps do for the primary button:
- * that keeps the contrast of the label, where a lighter fill would lose it in the light theme.
- * A status fill is already the text color in the light theme, so it lightens toward the page.
+ * The primary button takes the system's hover and pressed fills, a step further from the page.
+ * A status fill has none of its own: it is already the text color in the light theme, so it
+ * lightens toward the page, which keeps the contrast of its label.
  */
 const solidHover: ByColor = {
-  primary:
-    'hover:bg-[color-mix(in_oklab,var(--ws-color-interactive)_85%,var(--ws-color-text))] active:bg-[color-mix(in_oklab,var(--ws-color-interactive)_85%,var(--ws-color-text))]',
+  primary: 'hover:bg-interactive-hover active:bg-interactive-active',
   success: 'hover:bg-tip-text/85 active:bg-tip-text/85',
   info: 'hover:bg-note-text/85 active:bg-note-text/85',
   warning: 'hover:bg-warning-text/85 active:bg-warning-text/85',
@@ -94,7 +93,7 @@ export default {
         trailingIcon: 'size-4',
       },
       md: {
-        base: 'h-10 px-5 py-0 gap-2 text-label',
+        base: 'h-control px-5 py-0 gap-2 text-label',
         leadingIcon: 'size-4',
         trailingIcon: 'size-4',
       },
