@@ -75,7 +75,7 @@ export const highlightCard: ByColor = {
 export const choiceSizes = {
   xs: { base: 'size-3.5', container: 'h-6', wrapper: 'text-body-sm' },
   sm: { base: 'size-4', container: 'h-6', wrapper: 'text-body-sm' },
-  md: { base: 'size-5', container: 'h-6', wrapper: 'text-body leading-normal' },
+  md: { base: 'size-check', container: 'h-6', wrapper: 'text-body leading-normal' },
   lg: { base: 'size-5.5', container: 'h-7', wrapper: 'text-lead leading-7' },
   xl: { base: 'size-6', container: 'h-7', wrapper: 'text-lead leading-7' },
 }

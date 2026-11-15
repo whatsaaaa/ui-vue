@@ -12,11 +12,15 @@ import { colors } from './shared.ts'
 import table from './table.ts'
 import tabs from './tabs.ts'
 
-/**
- * The text styles of the Tailwind entry. tailwind-merge, which Nuxt UI resolves conflicting
- * classes with, has to know them as font sizes: otherwise it takes text-label for a color, and
- * drops it next to text-text, or keeps it next to Tailwind's text-sm.
+/*
+ * The names the design system's Tailwind entry adds to Tailwind's. tailwind-merge, which Nuxt UI
+ * resolves conflicting classes with, has to know each in its utility. Otherwise it keeps both of
+ * h-control and h-12, or of ease-standard and ease-out, so that Tailwind's order of the two
+ * decides and not which comes last; and it takes text-label or border-thick for a color, one
+ * that drops text-text or border-border, or is dropped by them.
  */
+
+/** The text styles, as font sizes. */
 const textStyles = [
   'display',
   'display-compact',
@@ -27,6 +31,8 @@ const textStyles = [
   'h3',
   'h4',
   'lead',
+  'tagline',
+  'tagline-compact',
   'body',
   'body-sm',
   'label',
@@ -35,6 +41,35 @@ const textStyles = [
   'overline',
   'code',
 ]
+
+/** The sizes, as spacing: h-control, size-check, max-w-content. */
+const sizes = [
+  'check',
+  'content',
+  'control',
+  'frame',
+  'outline',
+  'sidebar',
+  'status-line',
+  'step',
+  'tab-bar',
+]
+
+/**
+ * The border widths, which Tailwind takes on every side of a border and on the dividers:
+ * tailwind-merge has no theme key for them, but a class group for each.
+ */
+const borderWidths = ['thin', 'medium', 'thick']
+const borderWidthGroups = {
+  ...Object.fromEntries(
+    ['', '-x', '-y', '-s', '-e', '-bs', '-be', '-t', '-r', '-b', '-l'].map((side) => [
+      `border-w${side}`,
+      [{ [`border${side}`]: borderWidths }],
+    ]),
+  ),
+  'divide-x': [{ 'divide-x': borderWidths }],
+  'divide-y': [{ 'divide-y': borderWidths }],
+}
 
 /**
  * The module options: the theme's colors, without secondary. Nuxt UI's transitions stay on:
@@ -53,7 +88,8 @@ export const ui = {
   tv: {
     twMergeConfig: {
       extend: {
-        theme: { text: textStyles },
+        theme: { text: textStyles, spacing: sizes, ease: ['standard'] },
+        classGroups: borderWidthGroups,
       },
     },
   },

@@ -23,7 +23,7 @@ export const fieldSizes = {
     trailingIcon: 'size-4',
   },
   md: {
-    base: 'h-10 px-3 py-0 gap-2 text-body',
+    base: 'h-control px-3 py-0 gap-2 text-body',
     leading: 'ps-3',
     trailing: 'pe-3',
     leadingIcon: 'size-4',

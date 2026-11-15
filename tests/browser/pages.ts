@@ -1,4 +1,4 @@
-import { expect, type Page, type TestInfo } from '@playwright/test'
+import { expect, test, type Page, type TestInfo } from '@playwright/test'
 
 export type Playground = 'nuxt' | 'vue'
 
@@ -23,14 +23,20 @@ export async function open(page: Page): Promise<void> {
   await waitForApp(page)
 }
 
+/** How long the app may take to come, at most. */
+const APP_WAIT = 30_000
+
 /**
  * Waits for the app, after the page loads or the gallery comes back: Nuxt UI's color mode control
  * is drawn by the app, on the gallery once all of it is hydrated. The gallery has every component
  * in every variant, some nine thousand elements, which take seconds while the tests run side by
- * side.
+ * side, and over fifteen on a machine busy with more than the tests. Each wait adds its time to
+ * the test's, so a test that loads the gallery more than once has the time for each load.
  */
 export async function waitForApp(page: Page): Promise<void> {
-  await expect(colorMode(page)).toBeVisible({ timeout: 15_000 })
+  const testInfo = test.info()
+  if (testInfo.timeout) testInfo.setTimeout(testInfo.timeout + APP_WAIT)
+  await expect(colorMode(page)).toBeVisible({ timeout: APP_WAIT })
 }
 
 /** Nuxt UI's color mode: a radio group bound to it, on both pages. */
