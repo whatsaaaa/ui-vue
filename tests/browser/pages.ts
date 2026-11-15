@@ -27,10 +27,10 @@ export async function open(page: Page): Promise<void> {
  * Waits for the app, after the page loads or the gallery comes back: Nuxt UI's color mode control
  * is drawn by the app, on the gallery once all of it is hydrated. The gallery has every component
  * in every variant, some nine thousand elements, which take seconds while the tests run side by
- * side.
+ * side, and over fifteen on a machine busy with more than the tests.
  */
 export async function waitForApp(page: Page): Promise<void> {
-  await expect(colorMode(page)).toBeVisible({ timeout: 15_000 })
+  await expect(colorMode(page)).toBeVisible({ timeout: 30_000 })
 }
 
 /** Nuxt UI's color mode: a radio group bound to it, on both pages. */
