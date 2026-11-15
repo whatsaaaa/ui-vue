@@ -6,7 +6,7 @@
 
 | Folder             | What it is                                                                                        |
 | ------------------ | ------------------------------------------------------------------------------------------------- |
-| `packages/ui-vue`  | `@whatsaaaa/ui-vue`: the theme, the stylesheets and the color mode's head script                  |
+| `packages/ui-vue`  | `@whatsaaaa/ui-vue`: the theme, the stylesheet and the color mode's head script                   |
 | `playgrounds/nuxt` | The gallery: every themed component in its variants, sizes and states, generated as a static site |
 | `playgrounds/vue`  | The smallest plain Vue (Vite) setup, one page                                                     |
 
