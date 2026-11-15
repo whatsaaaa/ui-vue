@@ -65,59 +65,21 @@ body {
 }
 
 /*
- * The window and the status line clip what crosses their edges, and a tab and a key fill their
- * bar, so their focus ring is drawn inside them, as on the website.
+ * A key draws its focus ring inside it, in padding taken back from the gap between hints, as the
+ * design system does: here with the room of --ws-space-8.
  */
-.ws-tabs a:focus-visible,
-.ws-status-line__keys :is(a, button):focus-visible,
-.status-line__theme:focus-visible {
-  outline-offset: calc(-1 * var(--ws-border-width-medium));
-}
-
 .ws-status-line__keys :is(a, button) {
   margin-inline: calc(-1 * var(--ws-space-8));
   padding-inline: var(--ws-space-8);
 }
 
 /* The name of the theme is the last item, in the window's corner: its ring follows the curve. */
-.status-line__theme:focus-visible {
+.ws-status-line__theme:focus-visible {
   border-radius: var(--ws-radius-sm) var(--ws-radius-sm)
     calc(var(--ws-radius-xl) - var(--ws-border-width-thin)) var(--ws-radius-sm);
 }
 
-/*
- * The path gives way on a narrow screen, so the switches after it always fit: its box takes the
- * room left in the line, the path shrinks to its ellipsis in it, and goes as a whole once "~…"
- * no longer fits inside its padding, as in the sample apps.
- */
-.status-line__path {
-  display: flex;
-  flex: 1;
-  min-width: 0;
-  container-type: inline-size;
-}
-
-@container (width < calc(2ch + 2 * 0.875rem)) {
-  .ws-status-line__file {
-    display: none;
-  }
-}
-
-.status-line__theme {
-  margin: 0;
-  border-block: 0;
-  border-right: 0;
-  background: none;
-  color: inherit;
-  font: inherit;
-  cursor: pointer;
-}
-
-.status-line__theme:hover {
-  color: var(--ws-color-text);
-}
-
-:is(.ws-status-line__keys button, .status-line__theme):disabled {
+:is(.ws-status-line__keys button, .ws-status-line__theme):disabled {
   color: var(--ws-color-text-faint);
   cursor: not-allowed;
 }
@@ -131,8 +93,8 @@ body {
   :is(
     .ws-status-line__mode,
     .ws-status-line__file,
-    .ws-status-line__item,
-    .ws-status-line__switch
+    .ws-status-line__switch,
+    .ws-status-line__theme
   ) {
     padding-inline: var(--ws-space-10);
   }
@@ -143,13 +105,4 @@ body {
   width: var(--ws-space-32);
   height: var(--ws-space-32);
   margin-inline: calc(-1 * var(--ws-space-4));
-}
-
-/* A prompt that wraps keeps its chevron on its first line, as on the website. */
-.ws-prompt {
-  align-items: flex-start;
-}
-
-.ws-prompt::before {
-  margin-top: calc((1lh - 0.875em) / 2);
 }

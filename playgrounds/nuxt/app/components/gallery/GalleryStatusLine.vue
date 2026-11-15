@@ -41,7 +41,7 @@ onBeforeUnmount(() => {
   <footer class="ws-status-line" aria-label="Status">
     <span class="ws-status-line__mode">{{ mode }}</span>
     <!-- The room left in the line, which the path shows in whole or not at all. -->
-    <span class="status-line__path">
+    <span class="ws-status-line__path">
       <span class="ws-status-line__file"><span>~/ui-vue/{{ pageName }}</span></span>
     </span>
     <!-- Each hint is the control it names: the key clicks the button. -->
@@ -74,7 +74,7 @@ onBeforeUnmount(() => {
     -->
     <button
       type="button"
-      class="status-line__theme ws-status-line__item ws-status-line__item--edge ws-status-line__item--dark"
+      class="ws-status-line__theme ws-status-line__item--dark"
       :disabled="colorMode.forced"
       @click="switchTheme"
     >
@@ -83,7 +83,7 @@ onBeforeUnmount(() => {
     </button>
     <button
       type="button"
-      class="status-line__theme ws-status-line__item ws-status-line__item--edge ws-status-line__item--light"
+      class="ws-status-line__theme ws-status-line__item--light"
       :disabled="colorMode.forced"
       @click="switchTheme"
     >
