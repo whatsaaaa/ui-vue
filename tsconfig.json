@@ -1,7 +1,7 @@
 // The package, the tests and the configs at the root. Each playground has its own, which
 // type-checks its Vue files.
 {
-  "extends": "@tsconfig/node24/tsconfig.json",
+  "extends": "@tsconfig/node26/tsconfig.json",
   "compilerOptions": {
     "target": "es2022",
     "lib": ["es2022", "dom", "dom.iterable"],
