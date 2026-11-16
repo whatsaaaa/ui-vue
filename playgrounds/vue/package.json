@@ -12,7 +12,7 @@
     "@iconify-json/lucide": "^1.2.154",
     "@nuxt/ui": "4.12.0",
     "@vueuse/core": "^14.4.0",
-    "@whatsaaaa/design-system": "^0.7.0",
+    "@whatsaaaa/design-system": "^0.8.0",
     "@whatsaaaa/ui-vue": "workspace:*",
     "tailwindcss": "^4.3.5",
     "vue": "^3.5.45"

@@ -89,17 +89,6 @@ body {
   color: inherit;
 }
 
-@media (width < 64rem) {
-  :is(
-    .ws-status-line__mode,
-    .ws-status-line__file,
-    .ws-status-line__switch,
-    .ws-status-line__theme
-  ) {
-    padding-inline: var(--ws-space-10);
-  }
-}
-
 /* The mark of the handle at 32 px, in the cut for the page's theme. */
 .tab-bar__mark {
   width: var(--ws-space-32);
