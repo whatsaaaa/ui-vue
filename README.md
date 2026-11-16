@@ -44,6 +44,8 @@ definePageMeta({ colorMode: 'dark' })
 
 On Vue, as in `playgrounds/vue`: `ui({ theme, ui })` in the Vite plugin's options, `vueColorModeInitScript` in the `<head>`, and VueUse's `useColorMode()` in the app's root component, which switches the theme. Unlike the `useDark` of Nuxt UI's plugin, it puts a `light` class on `<html>` as well as a `dark` one, which the tokens need to tell a chosen light theme from the system's.
 
+Send the design system's two theme-color tags too, `themeColorMeta` from `@whatsaaaa/design-system/theme/meta`, in the `<head>` before the head script, so the browser's bars take the theme's background in the page as sent, as the design system's usage guide shows. On Vue they go in from the Vite plugin that inlines the head script. On Nuxt they go in from a Nitro plugin, as `playgrounds/nuxt/server/plugins/theme-color.ts` does, not from `app.head`: Nuxt's head would put back their colors as sent once the app hydrates, over the theme the head script keeps them at.
+
 The package is TypeScript, imported as it is, so a consumer's `tsconfig` sets `allowImportingTsExtensions`. A build step comes with publishing.
 
 ## Working on it
