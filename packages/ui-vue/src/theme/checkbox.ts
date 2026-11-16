@@ -40,7 +40,7 @@ export default {
       sm: { ...choiceSizes.sm, icon: 'size-3' },
       md: { ...choiceSizes.md, icon: 'size-3' },
       lg: { ...choiceSizes.lg, icon: 'size-3.5' },
-      xl: { ...choiceSizes.xl, icon: 'size-4' },
+      xl: { ...choiceSizes.xl, icon: 'size-icon' },
     },
     required: {
       true: { label: "after:content-['*'] after:ms-0.5 after:text-brand" },

@@ -11,7 +11,7 @@ export default {
     hint: 'text-text-secondary font-sans',
     help: 'mt-1.5 text-text-secondary font-sans',
     error:
-      "mt-1.5 flex gap-1.5 font-sans font-medium text-danger-text before:shrink-0 before:w-4 before:h-lh before:bg-danger before:content-[''] before:mask-(--ws-icon-danger) before:mask-center before:mask-no-repeat before:mask-size-[1rem] forced-colors:before:bg-[CanvasText]",
+      "mt-1.5 flex gap-1.5 font-sans font-medium text-danger-text before:shrink-0 before:w-icon before:h-lh before:bg-danger before:content-[''] before:mask-(--ws-icon-danger) before:mask-center before:mask-no-repeat before:mask-size-(--ws-size-icon) forced-colors:before:bg-[CanvasText]",
   },
   variants: {
     size: {
