@@ -48,6 +48,7 @@ const sizes = [
   'content',
   'control',
   'frame',
+  'icon',
   'outline',
   'sidebar',
   'status-line',
