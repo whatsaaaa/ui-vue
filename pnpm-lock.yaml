@@ -242,8 +242,8 @@ importers:
         specifier: 4.12.0
         version: 4.12.0(26d7d00bc6147ef25f87d0658a90d77a)
       '@whatsaaaa/design-system':
-        specifier: ^0.8.0
-        version: 0.8.0(tailwindcss@4.3.5)(vue@3.5.45(typescript@6.0.3))
+        specifier: ^0.8.1
+        version: 0.8.1(tailwindcss@4.3.5)(vue@3.5.45(typescript@6.0.3))
       tailwindcss:
         specifier: ^4.3.5
         version: 4.3.5
@@ -260,8 +260,8 @@ importers:
         specifier: 4.12.0
         version: 4.12.0(26d7d00bc6147ef25f87d0658a90d77a)
       '@whatsaaaa/design-system':
-        specifier: ^0.8.0
-        version: 0.8.0(tailwindcss@4.3.5)(vue@3.5.45(typescript@6.0.3))
+        specifier: ^0.8.1
+        version: 0.8.1(tailwindcss@4.3.5)(vue@3.5.45(typescript@6.0.3))
       '@whatsaaaa/ui-vue':
         specifier: workspace:*
         version: link:../../packages/ui-vue
@@ -297,8 +297,8 @@ importers:
         specifier: ^14.4.0
         version: 14.4.0(vue@3.5.45(typescript@6.0.3))
       '@whatsaaaa/design-system':
-        specifier: ^0.8.0
-        version: 0.8.0(tailwindcss@4.3.5)(vue@3.5.45(typescript@6.0.3))
+        specifier: ^0.8.1
+        version: 0.8.1(tailwindcss@4.3.5)(vue@3.5.45(typescript@6.0.3))
       '@whatsaaaa/ui-vue':
         specifier: workspace:*
         version: link:../../packages/ui-vue
@@ -2509,8 +2509,8 @@ packages:
     peerDependencies:
       vue: ^3.5.0
 
-  '@whatsaaaa/design-system@0.8.0':
-    resolution: {integrity: sha512-d2D1z83IraVF0fkYgVgeimad30SS064NChanaLUDnBinZwL20SSS8v0Z8w5sLabEHjzqmwiO6P01qyucmhWgfg==}
+  '@whatsaaaa/design-system@0.8.1':
+    resolution: {integrity: sha512-ZILLcKGA7ZBUvinoLKJoI1z/Z7oDhJMpT3dBEZ1UuQKCcobQF8xdU7crG0wNGbkAnnIA+ll3nIOi1CiMrhRGTA==}
     engines: {node: ^22.18.0 || >=24.12.0}
     peerDependencies:
       tailwindcss: ^4.3.5
@@ -7473,7 +7473,7 @@ snapshots:
     dependencies:
       vue: 3.5.45(typescript@6.0.3)
 
-  '@whatsaaaa/design-system@0.8.0(tailwindcss@4.3.5)(vue@3.5.45(typescript@6.0.3))':
+  '@whatsaaaa/design-system@0.8.1(tailwindcss@4.3.5)(vue@3.5.45(typescript@6.0.3))':
     dependencies:
       '@terrazzo/token-types': 2.10.0
     optionalDependencies:
