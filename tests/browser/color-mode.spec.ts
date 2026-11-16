@@ -218,4 +218,25 @@ test.describe('the theme-color tags', () => {
         .toEqual([light, light])
     })
   })
+
+  test.describe('on a light system', () => {
+    test.use({ colorScheme: 'light' })
+
+    test('the app, once it runs, leaves the two tags at a remembered theme', async ({
+      page,
+    }, testInfo) => {
+      const key = COLOR_MODE_STORAGE_KEY[playground(testInfo)]
+      await page.addInitScript((key) => localStorage.setItem(key, 'dark'), key)
+
+      await open(page)
+      await expect(colorModeOption(page, 'dark')).toBeChecked()
+      await expectPageIn(page, 'dark')
+
+      // the head manager of the app does not put back the color of the page as sent
+      const dark = await resolveColor(page, 'var(--ws-color-bg)', 'dark')
+      await expect
+        .poll(async () => (await themeColorTags(page)).map(({ color }) => color))
+        .toEqual([dark, dark])
+    })
+  })
 })

@@ -1,5 +1,4 @@
 import { keysInitScript } from '@whatsaaaa/design-system/shortcuts'
-import { themeColorMeta } from '@whatsaaaa/design-system/theme/meta'
 import { theme } from '@whatsaaaa/ui-vue'
 import { colorModeInitScript } from '@whatsaaaa/ui-vue/color-mode'
 
@@ -26,9 +25,7 @@ export default defineNuxtConfig({
         { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' },
         { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
       ],
-      // The browser's bars take the theme's background in the page as sent, for a visitor
-      // without JavaScript and a link preview. The head script keeps them at the theme shown.
-      meta: themeColorMeta.map((attrs) => ({ ...attrs })),
+      // The theme-color tags come from the server only: server/plugins/theme-color.ts.
       // Before the stylesheet: the browser's bars take the theme's color, and a remembered "keys
       // off" applies before the first paint. @nuxtjs/color-mode adds its own for the theme.
       script: [{ innerHTML: colorModeInitScript }, { innerHTML: keysInitScript }],
