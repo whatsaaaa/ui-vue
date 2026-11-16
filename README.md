@@ -2,7 +2,7 @@
 
 # ui-vue
 
-[Nuxt UI](https://ui.nuxt.com) themed with the [Whatsaaaa design system](https://github.com/whatsaaaa/design-system), for Vue and Nuxt. A trial, private for now: ten core components (button, badge, input, select and select menu, checkbox, radio group, card, modal, table, tabs) take the system's terminal look through Nuxt UI's central config, in both themes.
+[Nuxt UI](https://ui.nuxt.com) themed with the [Whatsaaaa design system](https://github.com/whatsaaaa/design-system), for Vue and Nuxt. A trial: ten core components (button, badge, input, select and select menu, checkbox, radio group, card, modal, table, tabs) take the system's terminal look through Nuxt UI's central config, in both themes.
 
 | Folder             | What it is                                                                                        |
 | ------------------ | ------------------------------------------------------------------------------------------------- |
@@ -62,3 +62,7 @@ You need Node.js 24.12 or later and pnpm. `corepack enable` sets pnpm up.
 | `pnpm lint`         | Checks the code and the stylesheets                                         |
 | `pnpm type-check`   | Type-checks the package and both playgrounds                                |
 | `pnpm format`       | Formats everything                                                          |
+
+## License
+
+[MIT](./LICENSE). Built on [Nuxt UI](https://ui.nuxt.com) and the [Whatsaaaa design system](https://github.com/whatsaaaa/design-system).
