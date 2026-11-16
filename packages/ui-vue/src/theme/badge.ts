@@ -47,13 +47,13 @@ export default {
       },
       lg: {
         base: 'rounded-sm px-2.5 py-1 gap-1.5 text-label',
-        leadingIcon: 'size-4',
-        trailingIcon: 'size-4',
+        leadingIcon: 'size-icon',
+        trailingIcon: 'size-icon',
       },
       xl: {
         base: 'rounded-sm px-3 py-1.5 gap-2 text-label',
-        leadingIcon: 'size-4',
-        trailingIcon: 'size-4',
+        leadingIcon: 'size-icon',
+        trailingIcon: 'size-icon',
       },
     },
   },

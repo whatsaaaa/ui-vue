@@ -94,9 +94,9 @@ export default {
     },
     size: {
       xs: { trigger: 'h-6 px-2 gap-1.5 text-label-sm', leadingIcon: 'size-3.5' },
-      sm: { trigger: 'h-7 px-2.5 gap-1.5 text-label-sm', leadingIcon: 'size-4' },
-      md: { trigger: 'h-8 px-3.5 gap-2 text-label', leadingIcon: 'size-4' },
-      lg: { trigger: 'h-9 px-4 gap-2 text-label', leadingIcon: 'size-4' },
+      sm: { trigger: 'h-7 px-2.5 gap-1.5 text-label-sm', leadingIcon: 'size-icon' },
+      md: { trigger: 'h-8 px-3.5 gap-2 text-label', leadingIcon: 'size-icon' },
+      lg: { trigger: 'h-9 px-4 gap-2 text-label', leadingIcon: 'size-icon' },
       xl: { trigger: 'h-10 px-4 gap-2.5 text-label', leadingIcon: 'size-4.5' },
     },
   },

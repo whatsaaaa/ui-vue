@@ -89,13 +89,13 @@ export default {
       },
       sm: {
         base: 'h-8 px-3 py-0 gap-1.5 text-label-sm',
-        leadingIcon: 'size-4',
-        trailingIcon: 'size-4',
+        leadingIcon: 'size-icon',
+        trailingIcon: 'size-icon',
       },
       md: {
         base: 'h-control px-5 py-0 gap-2 text-label',
-        leadingIcon: 'size-4',
-        trailingIcon: 'size-4',
+        leadingIcon: 'size-icon',
+        trailingIcon: 'size-icon',
       },
       lg: {
         base: 'h-11 px-5 py-0 gap-2 text-label',

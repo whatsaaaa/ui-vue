@@ -170,3 +170,52 @@ test.describe('on a light system', () => {
     await expectPageIn(page, 'light')
   })
 })
+
+/** The theme-color tags of the page, their media and their color as computed. */
+function themeColorTags(page: Page) {
+  return page.evaluate(() =>
+    [...document.querySelectorAll('meta[name="theme-color"]')].map((meta) => {
+      const probe = document.createElement('div')
+      probe.style.color = meta.getAttribute('content') ?? ''
+      document.body.append(probe)
+      const color = getComputedStyle(probe).color
+      probe.remove()
+      return { media: meta.getAttribute('media'), color }
+    }),
+  )
+}
+
+test.describe('the theme-color tags', () => {
+  test.describe('without JavaScript', () => {
+    test.use({ javaScriptEnabled: false })
+
+    test('the page as sent carries the background of each theme, dark first', async ({ page }) => {
+      await page.goto('/')
+      expect(await themeColorTags(page)).toEqual([
+        {
+          media: 'not all and (prefers-color-scheme: light)',
+          color: await resolveColor(page, 'var(--ws-color-bg)', 'dark'),
+        },
+        {
+          media: '(prefers-color-scheme: light)',
+          color: await resolveColor(page, 'var(--ws-color-bg)', 'light'),
+        },
+      ])
+    })
+  })
+
+  test.describe('on a dark system', () => {
+    test.use({ colorScheme: 'dark' })
+
+    test('the head script keeps the two tags at the theme shown', async ({ page }) => {
+      await open(page)
+      await colorModeOption(page, 'light').click()
+      await expect.poll(() => themeState(page)).toMatchObject({ dark: false, light: true })
+
+      const light = await resolveColor(page, 'var(--ws-color-bg)', 'light')
+      await expect
+        .poll(async () => (await themeColorTags(page)).map(({ color }) => color))
+        .toEqual([light, light])
+    })
+  })
+})
