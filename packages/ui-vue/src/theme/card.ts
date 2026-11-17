@@ -1,3 +1,5 @@
+import { forcedEdge } from './shared.ts'
+
 /*
  * A card is a panel of the system: the surface, a border and the large radius, its parts apart
  * by a divider. Its title is a minor heading in mono. The padding is the sample apps' group's,
@@ -5,6 +7,8 @@
  */
 export default {
   slots: {
+    // in forced colors every card is outlined
+    root: forcedEdge,
     header: 'px-4 py-3 sm:px-4 lg:px-5 lg:py-4',
     title: 'font-mono font-bold text-h4 text-text',
     description: 'font-sans text-body-sm text-text-secondary',

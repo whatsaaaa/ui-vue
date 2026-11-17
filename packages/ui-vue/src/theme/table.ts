@@ -31,5 +31,7 @@ export default {
   compoundVariants: [
     { loading: true, loadingColor: 'primary', class: { thead: 'after:bg-interactive' } },
     { loading: true, loadingColor: 'neutral', class: { thead: 'after:bg-text' } },
+    // In forced colors the loading bar is in the text color.
+    { loading: true, class: { thead: 'forced-colors:after:bg-[CanvasText]' } },
   ],
 }

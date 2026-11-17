@@ -1,4 +1,4 @@
-import { type ByColor, byColor } from './shared.ts'
+import { type ByColor, byColor, forcedControlEdge } from './shared.ts'
 
 /*
  * What a text field, a select and a select menu share: the field of the sample apps. Forty
@@ -45,11 +45,12 @@ export const fieldSizes = {
   },
 }
 
+/** In forced colors every field but the bare one is outlined, as a field there is. */
 export const fieldVariants = {
-  outline: 'text-text bg-bg ring ring-inset ring-field-border',
-  soft: 'text-text bg-raised/60 hover:bg-raised focus:bg-raised disabled:bg-transparent',
-  subtle: 'text-text bg-raised ring ring-inset ring-field-border',
-  ghost: 'text-text bg-transparent hover:bg-raised focus:bg-raised disabled:bg-transparent',
+  outline: `text-text bg-bg ring ring-inset ring-field-border ${forcedControlEdge}`,
+  soft: `text-text bg-raised/60 hover:bg-raised focus:bg-raised disabled:bg-transparent ${forcedControlEdge}`,
+  subtle: `text-text bg-raised ring ring-inset ring-field-border ${forcedControlEdge}`,
+  ghost: `text-text bg-transparent hover:bg-raised focus:bg-raised disabled:bg-transparent ${forcedControlEdge}`,
   none: 'text-text bg-transparent',
 }
 

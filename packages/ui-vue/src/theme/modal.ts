@@ -1,3 +1,5 @@
+import { forcedEdge } from './shared.ts'
+
 /*
  * A modal is a window of the terminal frame: the surface in a border with the window's radius,
  * no shadow. Its header is a bar as tall as the tab bar, on the page color, with the title as a
@@ -33,7 +35,7 @@ export default {
     },
     fullscreen: {
       false: {
-        content: 'w-[calc(100vw-2rem)] max-w-lg rounded-xl ring ring-border overflow-hidden',
+        content: `w-[calc(100vw-2rem)] max-w-lg rounded-xl ring ring-border overflow-hidden ${forcedEdge}`,
       },
     },
     overlay: {

@@ -5,10 +5,11 @@ import {
   checkedCard,
   choiceFocus,
   choiceSizes,
+  forcedCheckedCard,
   highlight,
   highlightCard,
 } from './choice.ts'
-import { type ByColor, byColor, transition } from './shared.ts'
+import { type ByColor, byColor, forcedChecked, forcedControlEdge, transition } from './shared.ts'
 
 /*
  * A round control with a dot. The group's name is a field label, in mono, and its options are
@@ -28,7 +29,8 @@ const checked: ByColor = {
 export default {
   slots: {
     legend: 'font-mono font-normal text-text',
-    base: `ring-field-border bg-bg cursor-pointer hover:ring-text-secondary ${transition}`,
+    base: `ring-field-border bg-bg cursor-pointer hover:ring-text-secondary ${forcedControlEdge} ${transition}`,
+    indicator: `${forcedChecked} forced-colors:after:bg-[HighlightText] forced-colors:in-disabled:after:bg-[Canvas]`,
     label: 'font-sans font-normal text-text cursor-pointer',
     description: 'text-text-secondary text-body-sm',
   },
@@ -42,8 +44,10 @@ export default {
       neutral: { indicator: checked.neutral },
     },
     variant: {
-      card: { item: `border border-border rounded-lg ${cardHoverFill} ${transition}` },
-      table: { item: `border border-border ${cardHoverFill} ${transition}` },
+      card: {
+        item: `border border-border rounded-lg ${cardHoverFill} ${forcedCheckedCard} ${transition}`,
+      },
+      table: { item: `border border-border ${cardHoverFill} ${forcedCheckedCard} ${transition}` },
     },
     orientation: {
       horizontal: { fieldset: 'gap-x-6' },

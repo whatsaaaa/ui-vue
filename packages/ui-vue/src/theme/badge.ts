@@ -1,4 +1,4 @@
-import { type ByColor, byColor, solid, tint } from './shared.ts'
+import { type ByColor, byColor, forcedEdge, forcedIcon, solid, tint } from './shared.ts'
 
 /*
  * A badge is the system's tag: a mono label on a tint, in the small radius. The tag is the soft
@@ -25,8 +25,11 @@ const subtleRing: ByColor = {
 
 export default {
   slots: {
-    base: 'rounded-sm font-mono font-normal whitespace-nowrap',
+    // in forced colors every tag is outlined
+    base: `rounded-sm font-mono font-normal whitespace-nowrap ${forcedEdge}`,
     label: 'truncate',
+    leadingIcon: forcedIcon,
+    trailingIcon: forcedIcon,
   },
   variants: {
     size: {
