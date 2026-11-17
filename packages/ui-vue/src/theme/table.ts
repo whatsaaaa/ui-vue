@@ -1,14 +1,14 @@
 /*
  * The table of the system's prose: in a border with the large radius, scrolling inside it.
  * The head is on the surface, as an overline, and the rows on the page color, so the head stands
- * out on a panel too; a cell is small body text, the rows apart by a divider. A row that can be
- * chosen is half raised under the pointer, and a selected row is raised, under the pointer too.
+ * out on a panel too; a cell is small body text, the rows apart by a divider. A selected row is
+ * raised.
  */
 export default {
   slots: {
     root: 'rounded-lg border border-border bg-bg outline-interactive focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-3',
     tbody:
-      'divide-border [&>tr]:data-[selectable=true]:not-data-[selected=true]:hover:bg-raised/50 [&>tr]:data-[selectable=true]:outline-interactive [&>tr]:data-[selectable=true]:focus-visible:outline-2 [&>tr]:data-[selectable=true]:-outline-offset-2',
+      'divide-border [&>tr]:data-[selectable=true]:hover:bg-raised/50 [&>tr]:data-[selectable=true]:outline-interactive [&>tr]:data-[selectable=true]:focus-visible:outline-2 [&>tr]:data-[selectable=true]:-outline-offset-2',
     tr: 'data-[selected=true]:bg-raised',
     th: 'px-4 py-2.5 bg-surface align-top font-mono font-bold text-overline uppercase text-text-secondary whitespace-nowrap',
     td: 'px-4 py-2.5 align-top font-sans text-body-sm text-text',

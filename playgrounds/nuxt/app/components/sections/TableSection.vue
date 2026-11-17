@@ -71,7 +71,7 @@ onMounted(() => {
   <GallerySection
     id="table"
     title="UTable"
-    lead="The table of the system's prose: in a border with the large radius, scrolling inside itself. The head is on the surface, as an overline; a cell is small body text, and an amount sits at the right edge in figures of one width. A row that can be chosen is half raised under the pointer, raised when selected, and ringed inside when focused."
+    lead="The table of the system's prose: in a border with the large radius, scrolling inside itself. The head is on the surface, as an overline; a cell is small body text, and an amount sits at the right edge in figures of one width. A selected row is raised, and a row that can be chosen is half raised under the pointer and ringed inside when focused."
   >
     <GalleryRow label="data">
       <UTable :data="data" :columns="columns" class="w-full" />
