@@ -5,7 +5,8 @@ defineProps<{ rows: readonly Row[]; columns: readonly Column[]; label: string }>
 <template>
   <!--
     Every row with every column, such as a color in every variant. It scrolls inside itself on a
-    narrow screen, and its controls take the keyboard there.
+    narrow screen, and its controls take the keyboard there. A row is centered on its line rather
+    than on a baseline: a control that starts with an icon, as a loading button does, has none.
   -->
   <div class="-mx-4 overflow-x-auto px-4 lg:mx-0 lg:px-0">
     <table class="border-separate border-spacing-x-3 border-spacing-y-2.5 -mx-3">
@@ -29,11 +30,11 @@ defineProps<{ rows: readonly Row[]; columns: readonly Column[]; label: string }>
         <tr v-for="row in rows" :key="row">
           <th
             scope="row"
-            class="pe-2 text-start align-baseline font-mono text-caption text-text-secondary"
+            class="pe-2 text-start align-middle font-mono text-caption text-text-secondary"
           >
             {{ row }}
           </th>
-          <td v-for="column in columns" :key="column" class="align-baseline whitespace-nowrap">
+          <td v-for="column in columns" :key="column" class="align-middle whitespace-nowrap">
             <slot :row="row" :column="column" />
           </td>
         </tr>
