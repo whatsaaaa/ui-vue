@@ -223,7 +223,12 @@ test("dark:, light: and Nuxt UI's colors follow the theme of the element, as the
           dark: style.textDecorationLine === 'underline',
           light: style.fontStyle === 'italic',
           tokens: [background('dark'), background('light')].indexOf(background('probe')),
-          nuxtUi: style.getPropertyValue('--ui-bg') === style.getPropertyValue('--ws-color-bg'),
+          nuxtUi: {
+            page: style.getPropertyValue('--ui-bg') === style.getPropertyValue('--ws-color-bg'),
+            primary:
+              style.getPropertyValue('--ui-primary') ===
+              style.getPropertyValue('--ws-color-interactive'),
+          },
         }
       },
       [html, body] as const,
@@ -233,7 +238,10 @@ test("dark:, light: and Nuxt UI's colors follow the theme of the element, as the
       dark: theme === 'dark',
       light: theme === 'light',
     })
-    expect(shown.nuxtUi, `Nuxt UI's page color is the tokens', ${where}`).toBe(true)
+    expect(shown.nuxtUi, `Nuxt UI's page and primary colors are the tokens', ${where}`).toEqual({
+      page: true,
+      primary: true,
+    })
     expect(shown.tokens, `the tokens, ${where}`).toBe(theme === 'dark' ? 0 : 1)
   }
 })
