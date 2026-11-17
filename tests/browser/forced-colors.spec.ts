@@ -113,7 +113,8 @@ function checked(page: Page): Promise<Findings> {
       const on = ['checked', 'indeterminate'].includes(control.dataset.state ?? '')
       const highlight = window.systemColor(control, 'Highlight')
 
-      if (control.getBoundingClientRect().width <= 2) {
+      // a control that is not shown, as sr-only hides it: clipped away, whatever its size
+      if (getComputedStyle(control).clipPath === 'inset(50%)') {
         const card = control.closest<HTMLElement>('[data-slot=root], [data-slot=item]')!
         const border = getComputedStyle(card).borderTopColor
         if ((border === highlight) !== on) findings.push(`${label}: the card's border is ${border}`)
@@ -191,6 +192,28 @@ for (const colorScheme of ['dark', 'light'] as const) {
       await openWithSystemColors(page)
       expect(await checked(page)).toEqual([])
       expect(await currentTabs(page)).toEqual([])
+    })
+
+    test('a card without its control shows it is checked, in an error and with the focus', async ({
+      page,
+    }, testInfo) => {
+      test.skip(playground(testInfo) !== 'nuxt', 'The gallery has the cards with an error')
+      await openWithSystemColors(page)
+      // An option drawn as a card is a label around its control.
+      const morning = page.getByRole('radio', { name: 'Morning' })
+      const afternoon = page.getByRole('radio', { name: 'Afternoon' })
+
+      await page.locator('label', { has: morning }).click()
+      await expect(morning).toBeChecked()
+      // once its colors have changed
+      await expect.poll(() => checked(page)).toEqual([])
+
+      // An arrow checks the next option while the key is down, as a hand presses it.
+      await page.keyboard.down('ArrowRight')
+      await expect(afternoon).toBeChecked()
+      await page.keyboard.up('ArrowRight')
+      expect(await afternoon.evaluate((element) => element.matches(':focus-visible'))).toBe(true)
+      await expect.poll(() => checked(page)).toEqual([])
     })
 
     test('an open list and a modal have their edges, and the hovered option its own', async ({

@@ -45,9 +45,10 @@ export const checkedCard: ByColor = {
 
 /**
  * A checked card in forced colors: the border in the selection color, which a card without its
- * control shows its state by alone.
+ * control shows its state by alone. It wins over every other border of the card, as a
+ * highlighted or a focused card has, whose colors forced colors would replace.
  */
-export const forcedCheckedCard = 'forced-colors:has-data-[state=checked]:border-[Highlight]'
+export const forcedCheckedCard = 'forced-colors:has-data-[state=checked]:border-[Highlight]!'
 
 /** A highlighted control, as with an error, takes its color as the outline. */
 export const highlight: ByColor = {

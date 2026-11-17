@@ -47,9 +47,10 @@ export const forcedChecked =
   'forced-colors:bg-[Highlight] forced-colors:text-[HighlightText] forced-colors:forced-color-adjust-none forced-colors:in-disabled:bg-[GrayText] forced-colors:in-disabled:text-[Canvas]'
 
 /**
- * An icon drawn as a mask, in the text color, gray in a disabled control as its label is. An icon
- * drawn as an SVG, as Nuxt UI draws them on Vue, already takes the text color, and a fill behind
- * it would hide it.
+ * An icon drawn as a mask, in the text color, gray inside a disabled control as its label is: a
+ * button, a select's trigger or a tab. An input's icons sit beside the input, not inside it, so
+ * they keep the text color when it is disabled. An icon drawn as an SVG, as Nuxt UI draws them on
+ * Vue, already takes the text color, and a fill behind it would hide it.
  */
 export const forcedIcon =
   'forced-colors:not-[svg]:bg-[CanvasText] forced-colors:in-disabled:not-[svg]:bg-[GrayText] forced-colors:in-aria-disabled:not-[svg]:bg-[GrayText]'
