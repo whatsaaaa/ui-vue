@@ -52,16 +52,16 @@ The package is TypeScript, imported as it is, so a consumer's `tsconfig` sets `a
 
 You need Node.js 24.12 or later and pnpm. `corepack enable` sets pnpm up.
 
-| Command             | What it does                                                                |
-| ------------------- | --------------------------------------------------------------------------- |
-| `pnpm dev`          | Starts the gallery                                                          |
-| `pnpm dev:vue`      | Starts the Vue page                                                         |
-| `pnpm build`        | Builds both playgrounds; the gallery into `playgrounds/nuxt/.output/public` |
-| `pnpm test`         | Unit tests: the config and the colors it builds, the head scripts           |
-| `pnpm test:browser` | Builds both playgrounds and tests them in a browser                         |
-| `pnpm lint`         | Checks the code and the stylesheets                                         |
-| `pnpm type-check`   | Type-checks the package and both playgrounds                                |
-| `pnpm format`       | Formats everything                                                          |
+| Command             | What it does                                                                          |
+| ------------------- | ------------------------------------------------------------------------------------- |
+| `pnpm dev`          | Starts the gallery                                                                    |
+| `pnpm dev:vue`      | Starts the Vue page                                                                   |
+| `pnpm build`        | Builds both playgrounds; the gallery into `playgrounds/nuxt/.output/public`           |
+| `pnpm test`         | Unit tests: the config and the colors it builds, the Nuxt UI bridge, the head scripts |
+| `pnpm test:browser` | Builds both playgrounds and tests them in a browser                                   |
+| `pnpm lint`         | Checks the code and the stylesheets                                                   |
+| `pnpm type-check`   | Type-checks the package and both playgrounds                                          |
+| `pnpm format`       | Formats everything                                                                    |
 
 ## License
 
