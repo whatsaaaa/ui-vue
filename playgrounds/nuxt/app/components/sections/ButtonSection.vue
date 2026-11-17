@@ -3,6 +3,27 @@ const colors = ['primary', 'neutral', 'success', 'info', 'warning', 'error'] as 
 const variants = ['solid', 'outline', 'soft', 'subtle', 'ghost', 'link'] as const
 const sizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const
 
+/** The kinds of button the system names, as Nuxt UI draws them. */
+const kinds = {
+  primary: { color: 'primary', variant: 'solid', label: 'Save' },
+  secondary: { color: 'neutral', variant: 'outline', label: 'Cancel' },
+  ghost: { color: 'neutral', variant: 'ghost', label: 'Later' },
+  quiet: { color: 'primary', variant: 'link', label: 'Edit' },
+  danger: { color: 'error', variant: 'outline', label: 'Delete' },
+} as const
+const kindNames = Object.keys(kinds) as (keyof typeof kinds)[]
+
+/** A state, drawn by its demo attribute or by its prop. */
+const states = {
+  default: {},
+  hover: { 'data-demo': 'hover' },
+  pressed: { 'data-demo': 'active' },
+  focus: { 'data-demo': 'focus' },
+  disabled: { disabled: true },
+  loading: { loading: true },
+} as const
+const stateNames = Object.keys(states) as (keyof typeof states)[]
+
 const labels = {
   primary: 'Save',
   neutral: 'Cancel',
@@ -60,39 +81,21 @@ const labels = {
     </GalleryRow>
 
     <GalleryRow label="states">
-      <GalleryItem caption="default">
-        <UButton label="Save" />
-      </GalleryItem>
-      <GalleryItem caption="hover">
-        <UButton label="Save" data-demo="hover" />
-      </GalleryItem>
-      <GalleryItem caption="focus">
-        <UButton label="Save" data-demo="focus" />
-      </GalleryItem>
-      <GalleryItem caption="disabled">
-        <UButton label="Save" disabled />
-      </GalleryItem>
-      <GalleryItem caption="loading">
-        <UButton label="Saving" loading />
-      </GalleryItem>
-    </GalleryRow>
-
-    <GalleryRow label="states, outline">
-      <GalleryItem caption="default">
-        <UButton color="neutral" variant="outline" label="Cancel" />
-      </GalleryItem>
-      <GalleryItem caption="hover">
-        <UButton color="neutral" variant="outline" label="Cancel" data-demo="hover" />
-      </GalleryItem>
-      <GalleryItem caption="focus">
-        <UButton color="neutral" variant="outline" label="Cancel" data-demo="focus" />
-      </GalleryItem>
-      <GalleryItem caption="disabled">
-        <UButton color="neutral" variant="outline" label="Cancel" disabled />
-      </GalleryItem>
-      <GalleryItem caption="loading">
-        <UButton color="neutral" variant="outline" label="Loading" loading />
-      </GalleryItem>
+      <GalleryMatrix
+        v-slot="{ row, column }"
+        :rows="kindNames"
+        :columns="stateNames"
+        label="Each kind of button in every state"
+      >
+        <!-- a quiet button is a link, which does not load -->
+        <UButton
+          v-if="row !== 'quiet' || column !== 'loading'"
+          :color="kinds[row].color"
+          :variant="kinds[row].variant"
+          :label="kinds[row].label"
+          v-bind="states[column]"
+        />
+      </GalleryMatrix>
     </GalleryRow>
 
     <GalleryRow label="full width">

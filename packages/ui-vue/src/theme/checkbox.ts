@@ -35,12 +35,14 @@ export default {
       start: { wrapper: 'ms-2.5' },
       end: { wrapper: 'me-2.5' },
     },
+    // The tick is drawn at the system's icon size in the twenty pixel box, four fifths of it; in
+    // the other boxes at four fifths too, to the even pixel, so it stays centered in the box.
     size: {
-      xs: { ...choiceSizes.xs, icon: 'size-2.5' },
+      xs: { ...choiceSizes.xs, icon: 'size-3' },
       sm: { ...choiceSizes.sm, icon: 'size-3' },
-      md: { ...choiceSizes.md, icon: 'size-3' },
-      lg: { ...choiceSizes.lg, icon: 'size-3.5' },
-      xl: { ...choiceSizes.xl, icon: 'size-icon' },
+      md: { ...choiceSizes.md, icon: 'size-icon' },
+      lg: { ...choiceSizes.lg, icon: 'size-4.5' },
+      xl: { ...choiceSizes.xl, icon: 'size-5' },
     },
     required: {
       true: { label: "after:content-['*'] after:ms-0.5 after:text-brand" },

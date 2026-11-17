@@ -10,7 +10,9 @@ import { transition } from './shared.ts'
 /** What a select and a select menu share. */
 export const selectSlots = {
   base: `font-sans cursor-pointer disabled:text-text-faint disabled:opacity-100 ${transition}`,
-  placeholder: 'truncate text-text-faint',
+  // often the only words in the trigger, so in the secondary text color, which reads at 4.5:1;
+  // faint with the rest of a disabled trigger
+  placeholder: 'truncate text-text-secondary group-disabled:text-text-faint',
   leadingIcon: 'text-text-secondary',
   trailingIcon: 'text-text-secondary',
   arrow: 'fill-surface stroke-border',

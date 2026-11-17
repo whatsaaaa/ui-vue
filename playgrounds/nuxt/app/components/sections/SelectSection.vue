@@ -39,7 +39,7 @@ const menuCities = ref(['Oslo', 'Vienna'])
           <USelect model-value="Oslo" :items="cities" class="w-full" disabled />
         </UFormField>
         <UFormField label="Day" required error="Choose the day you are registering for.">
-          <USelect :items="days" class="w-full" />
+          <USelect :items="days" placeholder="Choose a day" class="w-full" />
         </UFormField>
         <UFormField label="City" help="Loading the cities.">
           <USelect model-value="Berlin" :items="cities" loading class="w-full" />
@@ -68,8 +68,13 @@ const menuCities = ref(['Oslo', 'Vienna'])
         <UFormField label="Cities" help="Several cities at once.">
           <USelectMenu v-model="menuCities" :items="cities" multiple class="w-full" />
         </UFormField>
-        <UFormField label="City" help="focus">
-          <USelectMenu v-model="menuCity" :items="cities" class="w-full" data-demo="focus" />
+        <UFormField label="City" help="focus, nothing chosen yet">
+          <USelectMenu
+            :items="cities"
+            placeholder="Choose a city"
+            class="w-full"
+            data-demo="focus"
+          />
         </UFormField>
       </div>
     </GalleryRow>
