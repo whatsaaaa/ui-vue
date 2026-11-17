@@ -1,4 +1,14 @@
-import { type ByColor, byColor, focusRing, solid, text, tint, transition } from './shared.ts'
+import {
+  type ByColor,
+  byColor,
+  focusRing,
+  forcedControlEdge,
+  forcedIcon,
+  solid,
+  text,
+  tint,
+  transition,
+} from './shared.ts'
 
 /*
  * The button of the sample apps: forty pixels tall, a mono label in semibold, an outline in
@@ -79,6 +89,8 @@ export default {
   slots: {
     base: `rounded-md font-mono font-semibold cursor-pointer disabled:opacity-100 aria-disabled:opacity-100 ${transition} ${focusRing}`,
     label: 'truncate',
+    leadingIcon: forcedIcon,
+    trailingIcon: forcedIcon,
   },
   variants: {
     size: {
@@ -137,6 +149,8 @@ export default {
       class:
         'disabled:bg-transparent disabled:text-text-faint disabled:ring disabled:ring-inset disabled:ring-text-faint aria-disabled:bg-transparent aria-disabled:text-text-faint aria-disabled:ring aria-disabled:ring-inset aria-disabled:ring-text-faint',
     },
+    // In forced colors every kind but the link is a box, drawn as a border.
+    { variant: kinds, class: forcedControlEdge },
     {
       variant: 'ghost',
       loading: false,

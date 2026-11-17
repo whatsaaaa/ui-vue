@@ -1,4 +1,4 @@
-import { type ByColor, byColor, transition } from './shared.ts'
+import { type ByColor, byColor, forcedEdge, forcedIcon, transition } from './shared.ts'
 
 /*
  * Tabs read like the tabs of the frame: mono labels, the idle ones in the secondary text color.
@@ -11,6 +11,9 @@ import { type ByColor, byColor, transition } from './shared.ts'
  *
  * A tab keeps its whole label: tabs that do not fit their row scroll inside it, as a table does,
  * and the marker of a link is drawn inside the row, over its divider.
+ *
+ * In forced colors the current tab is marked in the selection color: a pill's outlined, a link's
+ * underlined, and the bar of the pills is outlined.
  */
 
 /**
@@ -73,6 +76,7 @@ export default {
     // the indicator moves only for a reader who has not asked for less motion, as Nuxt UI has it
     indicator:
       'transition-[translate,width,height] duration-(--ws-motion-duration-base) ease-standard',
+    leadingIcon: forcedIcon,
     trigger: `font-mono font-normal cursor-pointer data-[state=inactive]:text-text-secondary hover:data-[state=inactive]:not-disabled:text-text disabled:opacity-100 data-[state=inactive]:disabled:text-text-faint ${transition} ${focus}`,
     content:
       'outline-interactive focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-3',
@@ -80,16 +84,16 @@ export default {
   variants: {
     variant: {
       pill: {
-        list: 'bg-bg ring ring-inset ring-border rounded-md p-1',
+        list: `bg-bg ring ring-inset ring-border rounded-md p-1 ${forcedEdge}`,
         trigger:
-          "grow shrink-0 rounded-sm in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:content-[''] in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:absolute in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:inset-0 in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:rounded-sm in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:ring in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:ring-inset in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:-z-10 isolate",
-        indicator: 'rounded-sm',
+          "grow shrink-0 rounded-sm in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:content-[''] in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:absolute in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:inset-0 in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:rounded-sm in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:ring in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:ring-inset in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:-z-10 forced-colors:in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:border-2 forced-colors:in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:border-[Highlight] isolate",
+        indicator: 'rounded-sm forced-colors:border-2 forced-colors:border-[Highlight]',
       },
       link: {
         list: 'p-0 border-border',
-        indicator: 'rounded-none',
+        indicator: 'rounded-none forced-colors:bg-[Highlight]',
         trigger:
-          "shrink-0 rounded-none in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:after:content-[''] in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:after:absolute",
+          "shrink-0 rounded-none in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:after:content-[''] in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:after:absolute forced-colors:in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:after:bg-[Highlight]",
       },
     },
     size: {

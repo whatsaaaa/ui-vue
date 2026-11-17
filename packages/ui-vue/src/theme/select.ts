@@ -1,10 +1,11 @@
 import { fieldCompoundVariants, fieldSizes, fieldVariants } from './field.ts'
-import { transition } from './shared.ts'
+import { forcedEdge, forcedIcon, transition } from './shared.ts'
 
 /*
  * The trigger is a field. The list opens on a panel: the surface, its border and no shadow,
  * the hovered option raised, the chosen one marked in the interactive color. Options are values,
- * so they are in Inter; a group's name is an overline.
+ * so they are in Inter; a group's name is an overline. In forced colors the panel is outlined and
+ * the hovered option outlined in the selection color.
  */
 
 /** What a select and a select menu share. */
@@ -13,18 +14,18 @@ export const selectSlots = {
   // often the only words in the trigger, so in the secondary text color, which reads at 4.5:1;
   // faint with the rest of a disabled trigger
   placeholder: 'truncate text-text-secondary group-disabled:text-text-faint',
-  leadingIcon: 'text-text-secondary',
-  trailingIcon: 'text-text-secondary',
+  leadingIcon: `text-text-secondary ${forcedIcon}`,
+  trailingIcon: `text-text-secondary ${forcedIcon}`,
   arrow: 'fill-surface stroke-border',
   viewport: 'divide-y divide-border',
   empty: 'text-center text-text-secondary',
   label: 'font-mono font-bold uppercase text-text-secondary',
   separator: '-mx-1 my-1 h-px bg-border',
-  item: `cursor-pointer before:rounded-sm data-disabled:opacity-100 data-disabled:text-text-faint text-text data-highlighted:not-data-disabled:text-text data-highlighted:not-data-disabled:before:bg-raised ${transition} motion-reduce:before:transition-none`,
-  itemLeadingIcon: `text-text-secondary group-data-highlighted:not-group-data-disabled:text-text ${transition}`,
+  item: `cursor-pointer before:rounded-sm data-disabled:opacity-100 data-disabled:text-text-faint text-text data-highlighted:not-data-disabled:text-text data-highlighted:not-data-disabled:before:bg-raised forced-colors:data-highlighted:not-data-disabled:before:border forced-colors:data-highlighted:not-data-disabled:before:border-[Highlight] ${transition} motion-reduce:before:transition-none`,
+  itemLeadingIcon: `text-text-secondary group-data-highlighted:not-group-data-disabled:text-text ${forcedIcon} ${transition}`,
   // the chosen option's tick, centered on the option's first line
   itemTrailing: 'h-lh',
-  itemTrailingIcon: 'text-interactive',
+  itemTrailingIcon: `text-interactive ${forcedIcon}`,
   itemDescription: 'truncate text-text-secondary text-body-sm',
 }
 
@@ -89,7 +90,7 @@ export const selectVariants = {
 export default {
   slots: {
     ...selectSlots,
-    content: 'bg-surface ring-border',
+    content: `bg-surface ring-border ${forcedEdge}`,
   },
   variants: selectVariants,
   compoundVariants: fieldCompoundVariants,

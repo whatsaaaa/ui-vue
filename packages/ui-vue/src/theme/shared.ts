@@ -25,6 +25,35 @@ export type ByColor = Record<Color, string>
 export const focusRing =
   'outline-interactive focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-3'
 
+/*
+ * Forced colors, Windows' contrast themes, take box shadows away and paint every background in
+ * the page color. Nuxt UI draws the edge of a part with ring, a box shadow, and an icon as a mask
+ * over its background, so in forced colors the edges, the icons and the fill of a checked control
+ * are gone. These draw them again in the system's colors, and only in forced colors.
+ */
+
+/** The edge of a control: a border in the button border color, gray when it is disabled. */
+export const forcedControlEdge =
+  'forced-colors:border forced-colors:border-[ButtonBorder] forced-colors:disabled:border-[GrayText] forced-colors:aria-disabled:border-[GrayText]'
+
+/** The edge of a panel or a tag: a border in the text color. */
+export const forcedEdge = 'forced-colors:border forced-colors:border-[CanvasText]'
+
+/**
+ * A checked control's fill: the selection's colors, gray in a disabled control, kept as they are,
+ * so that its mark, painted in the text color, keeps the fill's text color.
+ */
+export const forcedChecked =
+  'forced-colors:bg-[Highlight] forced-colors:text-[HighlightText] forced-colors:forced-color-adjust-none forced-colors:in-disabled:bg-[GrayText] forced-colors:in-disabled:text-[Canvas]'
+
+/**
+ * An icon drawn as a mask, in the text color, gray in a disabled control as its label is. An icon
+ * drawn as an SVG, as Nuxt UI draws them on Vue, already takes the text color, and a fill behind
+ * it would hide it.
+ */
+export const forcedIcon =
+  'forced-colors:not-[svg]:bg-[CanvasText] forced-colors:in-disabled:not-[svg]:bg-[GrayText] forced-colors:in-aria-disabled:not-[svg]:bg-[GrayText]'
+
 /**
  * Color changes on hover and focus, in the fast duration, unless the reader asks for less motion.
  * Nuxt UI puts transition-colors on its controls; this adds it where it does not, and takes it

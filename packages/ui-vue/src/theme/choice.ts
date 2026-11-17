@@ -43,6 +43,12 @@ export const checkedCard: ByColor = {
     'has-data-[state=checked]:border-text has-data-[state=checked]:bg-raised not-has-disabled:has-focus-visible:has-data-[state=checked]:border-text',
 }
 
+/**
+ * A checked card in forced colors: the border in the selection color, which a card without its
+ * control shows its state by alone.
+ */
+export const forcedCheckedCard = 'forced-colors:has-data-[state=checked]:border-[Highlight]'
+
 /** A highlighted control, as with an error, takes its color as the outline. */
 export const highlight: ByColor = {
   primary: 'ring-interactive hover:ring-interactive',

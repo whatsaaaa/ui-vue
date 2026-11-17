@@ -6,16 +6,17 @@ import {
   checkedCard,
   choiceFocus,
   choiceSizes,
+  forcedCheckedCard,
   highlight,
   highlightCard,
 } from './choice.ts'
-import { byColor, transition } from './shared.ts'
+import { byColor, forcedChecked, forcedControlEdge, transition } from './shared.ts'
 
 /* A box with the smallest radius and a tick. */
 export default {
   slots: {
-    base: `rounded-xs ring-field-border bg-bg cursor-pointer hover:ring-text-secondary ${transition}`,
-    indicator: 'flex items-center justify-center size-full',
+    base: `rounded-xs ring-field-border bg-bg cursor-pointer hover:ring-text-secondary ${forcedControlEdge} ${transition}`,
+    indicator: `flex items-center justify-center size-full ${forcedChecked}`,
     label: 'font-sans font-normal text-text cursor-pointer',
     description: 'text-text-secondary text-body-sm',
   },
@@ -29,7 +30,9 @@ export default {
       neutral: { indicator: checked.neutral },
     },
     variant: {
-      card: { root: `border border-border rounded-lg ${cardHoverFill} ${transition}` },
+      card: {
+        root: `border border-border rounded-lg ${cardHoverFill} ${forcedCheckedCard} ${transition}`,
+      },
     },
     indicator: {
       start: { wrapper: 'ms-2.5' },

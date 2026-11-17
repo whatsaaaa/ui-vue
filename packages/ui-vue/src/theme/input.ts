@@ -1,11 +1,11 @@
 import { fieldCompoundVariants, fieldSizes, fieldVariants } from './field.ts'
-import { transition } from './shared.ts'
+import { forcedIcon, transition } from './shared.ts'
 
 export default {
   slots: {
     base: `font-sans placeholder:text-text-faint disabled:text-text-faint disabled:opacity-100 ${transition}`,
-    leadingIcon: 'text-text-secondary',
-    trailingIcon: 'text-text-secondary',
+    leadingIcon: `text-text-secondary ${forcedIcon}`,
+    trailingIcon: `text-text-secondary ${forcedIcon}`,
   },
   variants: {
     size: fieldSizes,
