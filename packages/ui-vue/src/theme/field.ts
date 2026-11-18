@@ -9,8 +9,9 @@ import { type ByColor, byColor, forcedControlEdge } from './shared.ts'
  *
  * The edge is a border, not Nuxt UI's ring, so that forced colors keep it; the ring is taken off.
  * A border takes room, so the field is laid out from its outer edge: the value and an icon start
- * the padding and the rest edge in. The wider edge of an error takes what it adds to the rest
- * width, --field-edge-extra, off the paddings inside it, so nothing moves when it widens.
+ * the padding and the rest edge in. An edge wider than the field's at rest, an error's or a
+ * highlighted bare field's, takes what it adds, --field-edge-extra, off the paddings inside it,
+ * so nothing moves when it changes.
  */
 
 /**
@@ -166,6 +167,18 @@ export const fieldCompoundVariants = [
       'outline-interactive focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-3',
   },
   ...byColor(highlight, { highlight: true }),
+  // The bare field draws no edge at rest: highlighted, it gives back the whole edge it draws.
+  {
+    variant: 'none',
+    highlight: true,
+    class: '[--field-edge-extra:var(--ws-control-border-width-rest)]',
+  },
+  {
+    variant: 'none',
+    highlight: true,
+    color: 'error',
+    class: '[--field-edge-extra:var(--ws-control-border-width-invalid)]',
+  },
   ...iconRoom,
   // Nuxt UI sets the value smaller from md up, where iOS would not zoom: the system keeps one size.
   { fixed: false, size: ['xs', 'sm'], class: 'md:text-body-sm' },
