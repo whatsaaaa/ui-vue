@@ -175,30 +175,27 @@ importers:
       '@tailwindcss/oxide':
         specifier: 4.3.5
         version: 4.3.5
-      '@tsconfig/node24':
-        specifier: ^24.0.6
-        version: 24.0.6
       '@types/node':
         specifier: ^24.19.2
         version: 24.19.2
-      '@vue/eslint-config-typescript':
-        specifier: ^14.9.0
-        version: 14.9.0(eslint-plugin-vue@10.12.1(@typescript-eslint/parser@8.72.2(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3))(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(vue-eslint-parser@10.4.2(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)))(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3)
       '@whatsaaaa/design-system':
         specifier: ^0.8.1
         version: 0.8.1(tailwindcss@4.3.5)(vue@3.5.45(typescript@6.0.3))
+      '@whatsaaaa/eslint-config':
+        specifier: ^1.0.0
+        version: 1.0.0(@typescript-eslint/parser@8.72.2(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3))(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(oxlint@1.93.0)(supports-color@10.2.2)(typescript@6.0.3)
+      '@whatsaaaa/format-config':
+        specifier: ^1.0.0
+        version: 1.0.0(oxfmt@0.78.0)
+      '@whatsaaaa/oxlint-config':
+        specifier: ^1.0.0
+        version: 1.0.0(oxlint@1.93.0)
+      '@whatsaaaa/tsconfig':
+        specifier: ^1.0.0
+        version: 1.0.0(@types/node@24.19.2)(typescript@6.0.3)
       eslint:
         specifier: ^10.14.0
         version: 10.14.0(jiti@2.7.0)(supports-color@10.2.2)
-      eslint-config-prettier:
-        specifier: ^10.1.8
-        version: 10.1.8(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))
-      eslint-plugin-oxlint:
-        specifier: ^1.93.0
-        version: 1.93.0(oxlint@1.93.0)
-      eslint-plugin-vue:
-        specifier: ^10.12.1
-        version: 10.12.1(@typescript-eslint/parser@8.72.2(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3))(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(vue-eslint-parser@10.4.2(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2))
       happy-dom:
         specifier: ^21.0.4
         version: 21.0.4
@@ -246,7 +243,7 @@ importers:
     devDependencies:
       '@nuxt/ui':
         specifier: 4.12.0
-        version: 4.12.0(26d7d00bc6147ef25f87d0658a90d77a)
+        version: 4.12.0(86fb6c26258181d6f5c7059c485990b4)
       '@whatsaaaa/design-system':
         specifier: ^0.8.1
         version: 0.8.1(tailwindcss@4.3.5)(vue@3.5.45(typescript@6.0.3))
@@ -264,7 +261,7 @@ importers:
         version: 1.2.154
       '@nuxt/ui':
         specifier: 4.12.0
-        version: 4.12.0(26d7d00bc6147ef25f87d0658a90d77a)
+        version: 4.12.0(86fb6c26258181d6f5c7059c485990b4)
       '@whatsaaaa/design-system':
         specifier: ^0.8.1
         version: 0.8.1(tailwindcss@4.3.5)(vue@3.5.45(typescript@6.0.3))
@@ -298,7 +295,7 @@ importers:
         version: 1.2.154
       '@nuxt/ui':
         specifier: 4.12.0
-        version: 4.12.0(26d7d00bc6147ef25f87d0658a90d77a)
+        version: 4.12.0(86fb6c26258181d6f5c7059c485990b4)
       '@vueuse/core':
         specifier: ^14.4.0
         version: 14.4.0(vue@3.5.45(typescript@6.0.3))
@@ -2164,6 +2161,9 @@ packages:
       y-protocols: ^1.0.1
       yjs: ^13.6.13
 
+  '@tsconfig/node22@22.0.7':
+    resolution: {integrity: sha512-xnYM5q+HTeLm+jRBIB7Mu61OyOmNpgzPmJuhwPODSyITDPIWVK2TXxn/+O5fJ4n/P0u/gPsgSyPw/Dl3Cz/L4g==}
+
   '@tsconfig/node24@24.0.6':
     resolution: {integrity: sha512-/SK4JuydRQLGSCq7+hbiQ8fdAVR4Suv5EcBvkIAG3zo3GbXQvGoSclz4olL12Ar4OpH8gwGYJ67P4wwQqBRxKw==}
 
@@ -2528,6 +2528,33 @@ packages:
       vitepress:
         optional: true
       vue:
+        optional: true
+
+  '@whatsaaaa/eslint-config@1.0.0':
+    resolution: {integrity: sha512-Vh4mt+43HwAmvNCafd7eLGHdlP4OBeFbUReHCI+gu9bqwLRY2zHkp++AhnjJ6He6FY/3dQUCahj8nfmt7nPA7Q==}
+    engines: {node: ^22.18.0 || >=24.12.0}
+    peerDependencies:
+      eslint: ^10.0.0
+      typescript: '>=5.8.0'
+
+  '@whatsaaaa/format-config@1.0.0':
+    resolution: {integrity: sha512-KUHTZBG9JEDJBe8AsE+Q4k5QJlMxybMSJqhkt/6m6bXyXMrErlXf8HgWNwApFORPTewq7E9sNqLWMd2tWvPVQw==}
+    engines: {node: ^22.18.0 || >=24.12.0}
+    peerDependencies:
+      oxfmt: '>=0.73.0'
+
+  '@whatsaaaa/oxlint-config@1.0.0':
+    resolution: {integrity: sha512-AjqR6Jfu15i1Fdxlyocvh860o6Pn7kL4aGonu8X5q1bIEDUYA8M+360G7NGVjj+Iv0m5b+AquBbQ/b99lTpADQ==}
+    peerDependencies:
+      oxlint: ^1.93.0
+
+  '@whatsaaaa/tsconfig@1.0.0':
+    resolution: {integrity: sha512-mPUjDhbylEewJmlXwtY5c+u28XES5pWX49E7CFu1ksS3/YRLoGQm92ePuyTAGZbQIL35jxmtKHJbMiYoB82x7g==}
+    peerDependencies:
+      '@types/node': '*'
+      typescript: '>=6.0.0'
+    peerDependenciesMeta:
+      '@types/node':
         optional: true
 
   abbrev@3.0.1:
@@ -3106,6 +3133,12 @@ packages:
     peerDependencies:
       oxlint: ~1.93.0
 
+  eslint-plugin-react-hooks@7.1.1:
+    resolution: {integrity: sha512-f2I7Gw6JbvCexzIInuSbZpfdQ44D7iqdWX01FKLvrPgqxoE7oMj8clOfto8U6vYiz4yd5oKu39rRSVOe1zRu0g==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0 || ^9.0.0 || ^10.0.0
+
   eslint-plugin-vue@10.12.1:
     resolution: {integrity: sha512-Z5hmchVWq4EEOCn131J2p/uS4hjkrC+goPV5c/YApTY68xTqV3K5IYqD0mYGupDvZ6iYoTSuhSZUoWN+gZIqZQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
@@ -3385,6 +3418,12 @@ packages:
   hasown@2.0.4:
     resolution: {integrity: sha512-T2UbfbBEF32wiepXIsMlTW9+dDYC6wMh/t/vYA4tuOMKqWz/n3vr1NFSxQiyP+zk2mXsoMA/i/7qV6LKut1t1A==}
     engines: {node: '>= 0.4'}
+
+  hermes-estree@0.25.1:
+    resolution: {integrity: sha512-0wUoCcLp+5Ev5pDW2OriHC2MJCbwLwuRx+gAqMTOkGKJJiBCLjtrvy4PWUGn6MIVefecRpzoOZ/UV6iGdOr+Cw==}
+
+  hermes-parser@0.25.1:
+    resolution: {integrity: sha512-6pEjquH3rqaI6cYAXYPcz9MS4rY6R4ngRgrgfDshRptUZIc3lw0MCIJIGDj9++mfySOuPTHB4nrSW99BCvOPIA==}
 
   hey-listen@1.0.8:
     resolution: {integrity: sha512-COpmrF2NOg4TBWUJ5UVyaCU2A88wEMkUPK4hNqyCkqHbxT92BbvfjoSozkAIIm6XhicGlJHhFdullInrdhwU8Q==}
@@ -5168,6 +5207,15 @@ packages:
     resolution: {integrity: sha512-dSvYKdvLsAHCDqPOhIwk/q5CvuWtTB3Dgpoe0uVEFjTzIOAmsQpprX25InCvrvJsirEbu1OHyy67n/kAj1Sw/w==}
     engines: {node: '>=18'}
 
+  zod-validation-error@4.0.2:
+    resolution: {integrity: sha512-Q6/nZLe6jxuU80qb/4uJ4t5v2VEZ44lzQjPDhYJNztRQ4wyWc6VF3D3Kb/fAuPetZQnhS3hnajCf9CsWesghLQ==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      zod: ^3.25.0 || ^4.0.0
+
+  zod@4.6.7:
+    resolution: {integrity: sha512-g8W2D2kU6a8untc053fX1uVBKzM7yqAxW/3zwk83+6RyF2+SKOuV+c0wBDhUwzV1PaGapmZH+rmcUzPf+3CGwg==}
+
 snapshots:
 
   '@alloc/quick-lru@5.3.0': {}
@@ -6145,7 +6193,7 @@ snapshots:
       rc9: 3.1.0
       std-env: 4.3.0
 
-  '@nuxt/ui@4.12.0(26d7d00bc6147ef25f87d0658a90d77a)':
+  '@nuxt/ui@4.12.0(86fb6c26258181d6f5c7059c485990b4)':
     dependencies:
       '@floating-ui/dom': 1.8.0
       '@iconify/vue': 5.0.5(vue@3.5.45(typescript@6.0.3))
@@ -6215,6 +6263,7 @@ snapshots:
       vue-component-type-helpers: 3.3.14
     optionalDependencies:
       vue-router: 5.5.0(@vue/compiler-sfc@3.5.45)(esbuild@0.28.2)(rolldown@1.2.19)(rollup@4.68.2)(vite@8.3.8(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2))(vue@3.5.45(typescript@6.0.3))
+      zod: 4.6.7
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -7056,6 +7105,8 @@ snapshots:
       y-protocols: 1.0.7(yjs@13.6.33)
       yjs: 13.6.33
 
+  '@tsconfig/node22@22.0.7': {}
+
   '@tsconfig/node24@24.0.6': {}
 
   '@tybys/wasm-util@0.10.4':
@@ -7485,6 +7536,37 @@ snapshots:
     optionalDependencies:
       tailwindcss: 4.3.5
       vue: 3.5.45(typescript@6.0.3)
+
+  '@whatsaaaa/eslint-config@1.0.0(@typescript-eslint/parser@8.72.2(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3))(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(oxlint@1.93.0)(supports-color@10.2.2)(typescript@6.0.3)':
+    dependencies:
+      '@vue/eslint-config-typescript': 14.9.0(eslint-plugin-vue@10.12.1(@typescript-eslint/parser@8.72.2(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3))(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(vue-eslint-parser@10.4.2(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)))(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3)
+      eslint: 10.14.0(jiti@2.7.0)(supports-color@10.2.2)
+      eslint-config-prettier: 10.1.8(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))
+      eslint-plugin-oxlint: 1.93.0(oxlint@1.93.0)
+      eslint-plugin-react-hooks: 7.1.1(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)
+      eslint-plugin-vue: 10.12.1(@typescript-eslint/parser@8.72.2(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3))(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(vue-eslint-parser@10.4.2(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2))
+      typescript: 6.0.3
+      vue-eslint-parser: 10.4.2(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)
+    transitivePeerDependencies:
+      - '@stylistic/eslint-plugin'
+      - '@typescript-eslint/parser'
+      - oxlint
+      - supports-color
+
+  '@whatsaaaa/format-config@1.0.0(oxfmt@0.78.0)':
+    dependencies:
+      oxfmt: 0.78.0
+
+  '@whatsaaaa/oxlint-config@1.0.0(oxlint@1.93.0)':
+    dependencies:
+      oxlint: 1.93.0
+
+  '@whatsaaaa/tsconfig@1.0.0(@types/node@24.19.2)(typescript@6.0.3)':
+    dependencies:
+      '@tsconfig/node22': 22.0.7
+      typescript: 6.0.3
+    optionalDependencies:
+      '@types/node': 24.19.2
 
   abbrev@3.0.1: {}
 
@@ -8014,6 +8096,17 @@ snapshots:
       jsonc-parser: 3.3.1
       oxlint: 1.93.0
 
+  eslint-plugin-react-hooks@7.1.1(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2):
+    dependencies:
+      '@babel/core': 7.29.13(supports-color@10.2.2)
+      '@babel/parser': 7.29.14
+      eslint: 10.14.0(jiti@2.7.0)(supports-color@10.2.2)
+      hermes-parser: 0.25.1
+      zod: 4.6.7
+      zod-validation-error: 4.0.2(zod@4.6.7)
+    transitivePeerDependencies:
+      - supports-color
+
   eslint-plugin-vue@10.12.1(@typescript-eslint/parser@8.72.2(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3))(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(vue-eslint-parser@10.4.2(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)):
     dependencies:
       '@eslint-community/eslint-utils': 4.10.1(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))
@@ -8347,6 +8440,12 @@ snapshots:
   hasown@2.0.4:
     dependencies:
       function-bind: 1.1.2
+
+  hermes-estree@0.25.1: {}
+
+  hermes-parser@0.25.1:
+    dependencies:
+      hermes-estree: 0.25.1
 
   hey-listen@1.0.8: {}
 
@@ -10314,3 +10413,9 @@ snapshots:
       compress-commons: 7.0.1
       normalize-path: 3.0.0
       readable-stream: 4.8.0
+
+  zod-validation-error@4.0.2(zod@4.6.7):
+    dependencies:
+      zod: 4.6.7
+
+  zod@4.6.7: {}

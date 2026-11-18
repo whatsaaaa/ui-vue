@@ -1,27 +1,10 @@
-import { globalIgnores } from 'eslint/config'
-import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
-import pluginVue from 'eslint-plugin-vue'
-import pluginOxlint from 'eslint-plugin-oxlint'
-import skipFormatting from 'eslint-config-prettier/flat'
+import whatsaaaa from '@whatsaaaa/eslint-config'
 
-export default defineConfigWithVueTs(
+export default whatsaaaa(
   {
-    name: 'app/files-to-lint',
-    files: ['**/*.{vue,ts,mts}'],
+    vue: true,
+    ignores: ['**/.nuxt/**', '**/.output/**', '**/auto-imports.d.ts', '**/components.d.ts'],
   },
-
-  globalIgnores([
-    '**/dist/**',
-    '**/.nuxt/**',
-    '**/.output/**',
-    '**/auto-imports.d.ts',
-    '**/components.d.ts',
-    'playwright-report/**',
-    'test-results/**',
-  ]),
-
-  ...pluginVue.configs['flat/recommended'],
-  vueTsConfigs.recommended,
 
   {
     name: 'app/nuxt',
@@ -31,8 +14,4 @@ export default defineConfigWithVueTs(
       'vue/multi-word-component-names': 'off',
     },
   },
-
-  // oxlint runs first and is faster: leave the rules it covers to it
-  ...pluginOxlint.buildFromOxlintConfigFile('.oxlintrc.json'),
-  skipFormatting,
 )
