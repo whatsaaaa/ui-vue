@@ -60,24 +60,64 @@ const specOf = (state: string, size = 'md') =>
       </div>
     </GalleryRow>
 
+    <!-- each size with its icons and without, as the spec's paddings differ on the side of an icon -->
     <GalleryRow label="sizes">
-      <div class="grid w-full gap-x-6 gap-y-6 md:grid-cols-2 xl:grid-cols-3">
-        <UFormField
-          v-for="size in sizes"
-          :key="size"
-          :size="size"
-          label="Email address"
-          :help="`size ${size}`"
-          :data-spec="specOf('rest', size)"
-        >
-          <UInput
-            model-value="maya@example.com"
-            type="email"
-            icon="i-lucide-mail"
-            trailing-icon="i-lucide-circle-check"
-            class="w-full"
-          />
-        </UFormField>
+      <div class="grid w-full gap-x-6 gap-y-6 md:grid-cols-2">
+        <template v-for="size in sizes" :key="size">
+          <UFormField
+            :size="size"
+            label="Email address"
+            :help="`size ${size}`"
+            :data-spec="specOf('rest', size)"
+          >
+            <UInput
+              model-value="maya@example.com"
+              type="email"
+              icon="i-lucide-mail"
+              trailing-icon="i-lucide-circle-check"
+              class="w-full"
+            />
+          </UFormField>
+          <UFormField
+            :size="size"
+            label="Email address"
+            :help="`size ${size}, no icons`"
+            :data-spec="specOf('rest', size)"
+          >
+            <UInput model-value="maya@example.com" type="email" class="w-full" />
+          </UFormField>
+        </template>
+      </div>
+    </GalleryRow>
+
+    <GalleryRow label="invalid sizes">
+      <div class="grid w-full gap-x-6 gap-y-6 md:grid-cols-2">
+        <template v-for="size in sizes" :key="size">
+          <UFormField
+            :size="size"
+            label="Email address"
+            required
+            error="Enter an email address with a domain, such as maya@example.com."
+            :data-spec="specOf('invalid', size)"
+          >
+            <UInput
+              v-model="email"
+              type="email"
+              icon="i-lucide-mail"
+              trailing-icon="i-lucide-circle-x"
+              class="w-full"
+            />
+          </UFormField>
+          <UFormField
+            :size="size"
+            label="Email address"
+            required
+            error="Enter an email address with a domain, such as maya@example.com."
+            :data-spec="specOf('invalid', size)"
+          >
+            <UInput v-model="email" type="email" class="w-full" />
+          </UFormField>
+        </template>
       </div>
     </GalleryRow>
 
