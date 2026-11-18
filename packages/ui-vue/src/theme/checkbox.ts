@@ -44,9 +44,12 @@ export default {
         root: `border border-border rounded-lg ${cardHoverFill} ${forcedCheckedCard} ${transition}`,
       },
     },
+    // Hidden, the box takes no room: Nuxt UI hides it as sr-only, which keeps it out of the
+    // row only while it is not relative.
     indicator: {
       start: { wrapper: 'ms-2.5' },
       end: { wrapper: 'me-2.5' },
+      hidden: { base: 'absolute overflow-hidden' },
     },
     // The tick is drawn at the system's icon size in the twenty pixel box, four fifths of it; in
     // the other boxes at four fifths too, to the even pixel, so it stays centered in the box.

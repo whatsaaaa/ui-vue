@@ -61,9 +61,12 @@ export default {
     orientation: {
       horizontal: { fieldset: 'gap-x-6' },
     },
+    // Hidden, the control takes no room: Nuxt UI hides it as sr-only, which keeps it out of the
+    // row only while it is not relative.
     indicator: {
       start: { wrapper: 'ms-2.5' },
       end: { wrapper: 'me-2.5' },
+      hidden: { base: 'absolute overflow-hidden' },
     },
     size: {
       xs: {
