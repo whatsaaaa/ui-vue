@@ -10,12 +10,22 @@ import { open, playground } from './pages.ts'
  * follows it.
  */
 
-/** The specs the gallery is held to. */
-const specs = ['button', 'input']
+/**
+ * The specs the gallery is held to, and the page of each one's examples. An open list or modal
+ * holds the page it is on, so the select's, the select menu's and the modal's are on a page of
+ * their own.
+ */
+const specs = {
+  button: '/',
+  input: '/',
+  select: '/open',
+  'select-menu': '/open',
+  modal: '/open',
+}
 
-for (const name of specs)
+for (const [name, path] of Object.entries(specs))
   test(`the gallery meets the ${name} spec`, async ({ page }, testInfo) => {
     test.skip(playground(testInfo) !== 'nuxt', 'The examples are in the gallery')
-    await open(page)
+    await open(page, path)
     await expectSpec(page, name, { implementation: 'ui-vue' })
   })

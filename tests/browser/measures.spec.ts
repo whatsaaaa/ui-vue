@@ -146,15 +146,19 @@ test("a bare field's icon starts where its value would, the control's gap from i
   await open(page)
   const gap = await resolveLength(page, 'var(--ws-control-gap-md)')
   const list = page.locator('[data-slot="content"]:has([role="listbox"])')
-  // a select menu's search, a field with no edge of its own: without an icon, and with one
+  // a select menu's search, a field with no edge of its own: with its icon, and one an app
+  // passes without one
   const searches = []
-  for (const help of ["Search by the city's name.", 'Several cities at once.']) {
+  for (const help of [
+    "Search by the city's name.",
+    'Several cities at once, searched without an icon.',
+  ]) {
     await example(page, '#select', help).locator('button[aria-haspopup="listbox"]').click()
     searches.push(await layoutOf(list.locator('input')))
     await page.keyboard.press('Escape')
     await expect(list).toHaveCount(0)
   }
-  const [plain, withIcon] = searches
+  const [withIcon, plain] = searches
   expect(withIcon!.leadingIcon!.start).toBe(plain!.value.start)
   expect(withIcon!.value.start - withIcon!.leadingIcon!.end).toBe(gap)
 })

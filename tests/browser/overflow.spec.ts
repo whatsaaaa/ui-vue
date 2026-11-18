@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { open } from './pages.ts'
+import { open, playground } from './pages.ts'
 
 /**
  * How far the page scrolls sideways, and the elements that stick out of it without a scrolling
@@ -35,6 +35,14 @@ for (const width of [320, 390]) {
 
       test('nothing overflows sideways', async ({ page }) => {
         await open(page)
+        expect(await page.evaluate(measure)).toEqual({ scroll: 0, sticking: [] })
+      })
+
+      test('nothing overflows sideways on the page of open lists and windows', async ({
+        page,
+      }, testInfo) => {
+        test.skip(playground(testInfo) !== 'nuxt', 'The page is in the gallery')
+        await open(page, '/open')
         expect(await page.evaluate(measure)).toEqual({ scroll: 0, sticking: [] })
       })
     })
