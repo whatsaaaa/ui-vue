@@ -19,5 +19,5 @@ jobs:
     uses: whatsaaaa/template/.github/workflows/node-ci.yml@v1
     with:
       # The version of @playwright/test in package.json, which is the tag of the Playwright image
-      # the browser job runs in.
+      # the browser job runs in. tests/playwright-version.test.ts holds the two together.
       playwright-version: 1.65.0

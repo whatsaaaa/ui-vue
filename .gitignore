@@ -1,18 +1,22 @@
-node_modules
 .DS_Store
-dist
-coverage
-*.local
+Thumbs.db
 *.log
-*.tsbuildinfo
-*.tgz
-.eslintcache
-.stylelintcache
+*.local
+.env
+.env.*
+!.env.example
 
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea
+
+node_modules
+dist
+coverage
+*.tsbuildinfo
+*.tgz
+.eslintcache
 
 # Nuxt
 .nuxt

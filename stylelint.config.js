@@ -1,12 +1,11 @@
 /**
- * The stylesheets take every color from a token. A hex value, a named color or a color
- * function is an error, so the design system's tokens stay the one place a color is defined.
- * A variable that nothing defines is an error too, so a token cannot be misspelled.
+ * The stylesheets take every color from a design system token: a hex value, a named color or a
+ * color function is an error, and so is a variable that nothing defines.
  */
 export default {
   extends: ['stylelint-config-standard'],
   plugins: ['stylelint-value-no-unknown-custom-properties'],
-  ignoreFiles: ['**/dist/**', '**/.nuxt/**', '**/.output/**'],
+  ignoreFiles: ['**/dist/**', '**/coverage/**', '**/.nuxt/**', '**/.output/**'],
   rules: {
     'color-no-hex': true,
     'color-named': 'never',
