@@ -130,7 +130,8 @@ test("a field's value and its icons stay where they are when its edge widens in 
     ],
   ] as const) {
     const atRest = await layoutOf(example(page, section, rest).getByRole(role))
-    const inError = await layoutOf(example(page, section, invalid).getByRole(role))
+    // the field of the states row, at the default size, before the sizes of the error
+    const inError = await layoutOf(example(page, section, invalid).getByRole(role).first())
     expect([atRest.edge, inError.edge], section).toEqual(edges)
     expect({ ...inError, edge: undefined }, section).toEqual({ ...atRest, edge: undefined })
   }

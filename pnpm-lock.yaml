@@ -179,8 +179,8 @@ importers:
         specifier: ^24.19.2
         version: 24.19.2
       '@whatsaaaa/design-system':
-        specifier: ^0.10.0
-        version: 0.10.0(@playwright/test@1.65.0)(tailwindcss@4.3.5)(vue@3.5.45(typescript@6.0.3))
+        specifier: ^0.12.0
+        version: 0.12.0(@playwright/test@1.65.0)(stylelint-config-standard@41.0.0(stylelint@18.0.0))(stylelint-value-no-unknown-custom-properties@6.1.1(stylelint@18.0.0))(stylelint@18.0.0)(tailwindcss@4.3.5)(vue@3.5.45(typescript@6.0.3))
       '@whatsaaaa/eslint-config':
         specifier: ^1.0.0
         version: 1.0.0(@typescript-eslint/parser@8.72.2(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3))(eslint@10.14.0(jiti@2.7.0)(supports-color@10.2.2))(oxlint@1.93.0)(supports-color@10.2.2)(typescript@6.0.3)
@@ -245,8 +245,8 @@ importers:
         specifier: 4.12.0
         version: 4.12.0(86fb6c26258181d6f5c7059c485990b4)
       '@whatsaaaa/design-system':
-        specifier: ^0.10.0
-        version: 0.10.0(@playwright/test@1.65.0)(tailwindcss@4.3.5)(vue@3.5.45(typescript@6.0.3))
+        specifier: ^0.12.0
+        version: 0.12.0(@playwright/test@1.65.0)(stylelint-config-standard@41.0.0(stylelint@18.0.0))(stylelint-value-no-unknown-custom-properties@6.1.1(stylelint@18.0.0))(stylelint@18.0.0)(tailwindcss@4.3.5)(vue@3.5.45(typescript@6.0.3))
       tailwindcss:
         specifier: ^4.3.5
         version: 4.3.5
@@ -263,8 +263,8 @@ importers:
         specifier: 4.12.0
         version: 4.12.0(86fb6c26258181d6f5c7059c485990b4)
       '@whatsaaaa/design-system':
-        specifier: ^0.10.0
-        version: 0.10.0(@playwright/test@1.65.0)(tailwindcss@4.3.5)(vue@3.5.45(typescript@6.0.3))
+        specifier: ^0.12.0
+        version: 0.12.0(@playwright/test@1.65.0)(stylelint-config-standard@41.0.0(stylelint@18.0.0))(stylelint-value-no-unknown-custom-properties@6.1.1(stylelint@18.0.0))(stylelint@18.0.0)(tailwindcss@4.3.5)(vue@3.5.45(typescript@6.0.3))
       '@whatsaaaa/ui-vue':
         specifier: workspace:*
         version: link:../../packages/ui-vue
@@ -300,8 +300,8 @@ importers:
         specifier: ^14.4.0
         version: 14.4.0(vue@3.5.45(typescript@6.0.3))
       '@whatsaaaa/design-system':
-        specifier: ^0.10.0
-        version: 0.10.0(@playwright/test@1.65.0)(tailwindcss@4.3.5)(vue@3.5.45(typescript@6.0.3))
+        specifier: ^0.12.0
+        version: 0.12.0(@playwright/test@1.65.0)(stylelint-config-standard@41.0.0(stylelint@18.0.0))(stylelint-value-no-unknown-custom-properties@6.1.1(stylelint@18.0.0))(stylelint@18.0.0)(tailwindcss@4.3.5)(vue@3.5.45(typescript@6.0.3))
       '@whatsaaaa/ui-vue':
         specifier: workspace:*
         version: link:../../packages/ui-vue
@@ -2515,16 +2515,25 @@ packages:
     peerDependencies:
       vue: ^3.5.0
 
-  '@whatsaaaa/design-system@0.10.0':
-    resolution: {integrity: sha512-vwv94/G6KmtUbouh26DDZtno9jCSepG2WlUu2XM/hQgKWwZs/t6hB8yEgkCup151GxCqpHq94LKGxUaOKjzL4Q==}
+  '@whatsaaaa/design-system@0.12.0':
+    resolution: {integrity: sha512-YVt2Rk9gnPD32c2fxzrQS3XVj8Lf/HaJXk76ASJQYSreaLeDSh3aA/oYtZ5jjlaPuUbUWs5alggK4W80cGHMWw==}
     engines: {node: ^22.18.0 || >=24.12.0}
     peerDependencies:
       '@playwright/test': ^1.50.0
+      stylelint: ^18.0.0
+      stylelint-config-standard: ^41.0.0
+      stylelint-value-no-unknown-custom-properties: ^6.1.1
       tailwindcss: ^4.3.5
       vitepress: ^1.6.4
       vue: ^3.5.0
     peerDependenciesMeta:
       '@playwright/test':
+        optional: true
+      stylelint:
+        optional: true
+      stylelint-config-standard:
+        optional: true
+      stylelint-value-no-unknown-custom-properties:
         optional: true
       tailwindcss:
         optional: true
@@ -7533,11 +7542,14 @@ snapshots:
     dependencies:
       vue: 3.5.45(typescript@6.0.3)
 
-  '@whatsaaaa/design-system@0.10.0(@playwright/test@1.65.0)(tailwindcss@4.3.5)(vue@3.5.45(typescript@6.0.3))':
+  '@whatsaaaa/design-system@0.12.0(@playwright/test@1.65.0)(stylelint-config-standard@41.0.0(stylelint@18.0.0))(stylelint-value-no-unknown-custom-properties@6.1.1(stylelint@18.0.0))(stylelint@18.0.0)(tailwindcss@4.3.5)(vue@3.5.45(typescript@6.0.3))':
     dependencies:
       '@terrazzo/token-types': 2.10.0
     optionalDependencies:
       '@playwright/test': 1.65.0
+      stylelint: 18.0.0
+      stylelint-config-standard: 41.0.0(stylelint@18.0.0)
+      stylelint-value-no-unknown-custom-properties: 6.1.1(stylelint@18.0.0)
       tailwindcss: 4.3.5
       vue: 3.5.45(typescript@6.0.3)
 

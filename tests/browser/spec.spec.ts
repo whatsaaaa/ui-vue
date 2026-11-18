@@ -11,7 +11,7 @@ import { open, playground } from './pages.ts'
  */
 
 /** The specs the gallery is held to. */
-const specs = ['button']
+const specs = ['button', 'input']
 
 for (const name of specs)
   test(`the gallery meets the ${name} spec`, async ({ page }, testInfo) => {
