@@ -66,7 +66,13 @@ const menuCities = ref(['Oslo', 'Vienna'])
           />
         </UFormField>
         <UFormField label="Cities" help="Several cities at once.">
-          <USelectMenu v-model="menuCities" :items="cities" multiple class="w-full" />
+          <USelectMenu
+            v-model="menuCities"
+            :items="cities"
+            multiple
+            :search-input="{ icon: 'i-lucide-search' }"
+            class="w-full"
+          />
         </UFormField>
         <UFormField label="City" help="focus, nothing chosen yet">
           <USelectMenu

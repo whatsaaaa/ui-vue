@@ -30,7 +30,8 @@ const name = ref('Maya Collins')
           </template>
           <template #footer>
             <UButton color="neutral" variant="outline" label="Cancel" @click="deleteOpen = false" />
-            <UButton color="error" label="Delete" @click="deleteOpen = false" />
+            <!-- danger is an outline in both themes, as the button spec says -->
+            <UButton color="error" variant="outline" label="Delete" @click="deleteOpen = false" />
           </template>
         </UModal>
       </GalleryItem>

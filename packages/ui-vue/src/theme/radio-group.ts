@@ -89,7 +89,7 @@ export default {
       },
     },
     required: {
-      true: { legend: "after:content-['*'] after:ms-0.5 after:text-brand" },
+      true: { legend: "after:content-['*'] after:ms-0.5 after:text-(--ws-field-required-text)" },
     },
     disabled: {
       true: {

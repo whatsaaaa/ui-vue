@@ -1,93 +1,165 @@
 import { type ByColor, byColor, forcedControlEdge } from './shared.ts'
 
 /*
- * What a text field, a select and a select menu share: the field of the sample apps. Forty
- * pixels tall, the value in Inter, an outline in the field border on the page color, the text
- * color's secondary on hover. With an error the outline is the danger color, two pixels wide.
+ * What a text field, a select and a select menu share: the field of the design system's input
+ * spec, specs/input.spec.json. The control height, the value in Inter, an edge in the field
+ * border on the page color, the text color's secondary on hover. With an error the edge is the
+ * danger color, two pixels wide. They read the component tier by name, --ws-field-* and
+ * --ws-control-*, so a change of the tier reaches them.
+ *
+ * The edge is a border, not Nuxt UI's ring, so that forced colors keep it; the ring is taken off.
+ * A border takes room, so the field is laid out from its outer edge: the value and an icon start
+ * the padding and the rest edge in. An edge wider than the field's at rest, an error's or a
+ * highlighted bare field's, takes what it adds, --field-edge-extra, off the paddings inside it,
+ * so nothing moves when it changes.
  */
 
-/** The heights, paddings and value sizes, for the field and the icons in it. */
+/**
+ * The heights, paddings and value sizes, for the field and the icons in it. An input's icons sit
+ * beside it, not inside its edge: past the padding and the rest edge, where a value starts.
+ */
 export const fieldSizes = {
   xs: {
-    base: 'h-7 px-2 py-0 gap-1.5 text-body-sm',
-    leading: 'ps-2',
-    trailing: 'pe-2',
-    leadingIcon: 'size-icon',
-    trailingIcon: 'size-icon',
+    base: 'h-(--ws-control-height-xs) px-[calc(var(--ws-space-8)-var(--field-edge-extra,0px))] py-0 gap-(--ws-control-gap-xs) text-body-sm',
+    leading: 'ps-[calc(var(--ws-space-8)+var(--ws-control-border-width-rest))]',
+    trailing: 'pe-[calc(var(--ws-space-8)+var(--ws-control-border-width-rest))]',
+    leadingIcon: 'size-(--ws-control-icon-size-xs)',
+    trailingIcon: 'size-(--ws-control-icon-size-xs)',
   },
   sm: {
-    base: 'h-8 px-2.5 py-0 gap-1.5 text-body-sm',
-    leading: 'ps-2.5',
-    trailing: 'pe-2.5',
-    leadingIcon: 'size-icon',
-    trailingIcon: 'size-icon',
+    base: 'h-(--ws-control-height-sm) px-[calc(var(--ws-space-10)-var(--field-edge-extra,0px))] py-0 gap-(--ws-control-gap-sm) text-body-sm',
+    leading: 'ps-[calc(var(--ws-space-10)+var(--ws-control-border-width-rest))]',
+    trailing: 'pe-[calc(var(--ws-space-10)+var(--ws-control-border-width-rest))]',
+    leadingIcon: 'size-(--ws-control-icon-size-sm)',
+    trailingIcon: 'size-(--ws-control-icon-size-sm)',
   },
   md: {
-    base: 'h-control px-3 py-0 gap-2 text-body',
-    leading: 'ps-3',
-    trailing: 'pe-3',
-    leadingIcon: 'size-icon',
-    trailingIcon: 'size-icon',
+    base: 'h-(--ws-control-height-md) px-[calc(var(--ws-space-12)-var(--field-edge-extra,0px))] py-0 gap-(--ws-control-gap-md) text-body',
+    leading: 'ps-[calc(var(--ws-space-12)+var(--ws-control-border-width-rest))]',
+    trailing: 'pe-[calc(var(--ws-space-12)+var(--ws-control-border-width-rest))]',
+    leadingIcon: 'size-(--ws-control-icon-size-md)',
+    trailingIcon: 'size-(--ws-control-icon-size-md)',
   },
   lg: {
-    base: 'h-11 px-3.5 py-0 gap-2 text-body',
-    leading: 'ps-3.5',
-    trailing: 'pe-3.5',
-    leadingIcon: 'size-5',
-    trailingIcon: 'size-5',
+    base: 'h-(--ws-control-height-lg) px-[calc(var(--ws-space-14)-var(--field-edge-extra,0px))] py-0 gap-(--ws-control-gap-lg) text-body',
+    leading: 'ps-[calc(var(--ws-space-14)+var(--ws-control-border-width-rest))]',
+    trailing: 'pe-[calc(var(--ws-space-14)+var(--ws-control-border-width-rest))]',
+    leadingIcon: 'size-(--ws-control-icon-size-lg)',
+    trailingIcon: 'size-(--ws-control-icon-size-lg)',
   },
   xl: {
-    base: 'h-12 px-4 py-0 gap-2.5 text-body',
-    leading: 'ps-4',
-    trailing: 'pe-4',
-    leadingIcon: 'size-5',
-    trailingIcon: 'size-5',
+    base: 'h-(--ws-control-height-xl) px-[calc(var(--ws-space-16)-var(--field-edge-extra,0px))] py-0 gap-(--ws-control-gap-xl) text-body',
+    leading: 'ps-[calc(var(--ws-space-16)+var(--ws-control-border-width-rest))]',
+    trailing: 'pe-[calc(var(--ws-space-16)+var(--ws-control-border-width-rest))]',
+    leadingIcon: 'size-(--ws-control-icon-size-xl)',
+    trailingIcon: 'size-(--ws-control-icon-size-xl)',
   },
-}
-
-/** In forced colors every field but the bare one is outlined, as a field there is. */
-export const fieldVariants = {
-  outline: `text-text bg-bg ring ring-inset ring-field-border ${forcedControlEdge}`,
-  soft: `text-text bg-raised/60 hover:bg-raised focus:bg-raised disabled:bg-transparent ${forcedControlEdge}`,
-  subtle: `text-text bg-raised ring ring-inset ring-field-border ${forcedControlEdge}`,
-  ghost: `text-text bg-transparent hover:bg-raised focus:bg-raised disabled:bg-transparent ${forcedControlEdge}`,
-  none: 'text-text bg-transparent',
-}
-
-/** A highlighted field takes its color as the outline, and keeps it on hover and focus. */
-const highlight: ByColor = {
-  primary: 'ring ring-inset ring-interactive hover:ring-interactive focus-visible:ring-interactive',
-  success: 'ring ring-inset ring-tip hover:ring-tip focus-visible:ring-tip',
-  info: 'ring ring-inset ring-note hover:ring-note focus-visible:ring-note',
-  warning: 'ring ring-inset ring-warning hover:ring-warning focus-visible:ring-warning',
-  error: 'ring-2 ring-inset ring-danger hover:ring-danger focus-visible:ring-danger',
-  neutral: 'ring ring-inset ring-text hover:ring-text focus-visible:ring-text',
 }
 
 /**
- * Text before or after the value starts past the icon: its padding, the icon and a gap as wide
- * as the padding's part of the gap.
+ * The field's edge, of the control's width: transparent where the variant draws none, so that
+ * every field lays out alike, and forced colors draw one there. The bare field, inside another
+ * control, has none: its value starts the padding in, as that control's content does.
  */
+const edge = 'ring-0 border-(length:--ws-control-border-width-rest)'
+
+/** The edge of a field in error, wider: in forced colors too, which draw the control's edge. */
+const invalidEdge =
+  'ring-0 border-(length:--ws-control-border-width-invalid) forced-colors:border-(length:--ws-control-border-width-invalid) [--field-edge-extra:calc(var(--ws-control-border-width-invalid)_-_var(--ws-control-border-width-rest))]'
+
+/** In forced colors every field but the bare one is outlined, as a field there is. */
+export const fieldVariants = {
+  outline: `text-(--ws-field-text-rest) bg-(--ws-field-bg) ${edge} border-(--ws-field-border-rest) ${forcedControlEdge}`,
+  soft: `text-text bg-raised/60 hover:bg-raised focus:bg-raised disabled:bg-transparent ${edge} border-transparent ${forcedControlEdge}`,
+  subtle: `text-text bg-raised ${edge} border-field-border ${forcedControlEdge}`,
+  ghost: `text-text bg-transparent hover:bg-raised focus:bg-raised disabled:bg-transparent ${edge} border-transparent ${forcedControlEdge}`,
+  none: 'text-text bg-transparent',
+}
+
+/**
+ * A highlighted field takes its color as the edge, and keeps it on hover and focus. A field in
+ * error is highlighted in the error color: the invalid edge, wider.
+ */
+const highlight: ByColor = {
+  primary: `${edge} border-interactive hover:border-interactive focus-visible:border-interactive`,
+  success: `${edge} border-tip hover:border-tip focus-visible:border-tip`,
+  info: `${edge} border-note hover:border-note focus-visible:border-note`,
+  warning: `${edge} border-warning hover:border-warning focus-visible:border-warning`,
+  error: `${invalidEdge} border-(--ws-field-border-invalid) hover:border-(--ws-field-border-invalid) focus-visible:border-(--ws-field-border-invalid)`,
+  neutral: `${edge} border-text hover:border-text focus-visible:border-text`,
+}
+
+/** Text before or after the value starts past the icon: the field's padding, the icon and the gap. */
 const iconRoom = [
-  { leading: true, size: 'xs', class: 'ps-7' },
-  { leading: true, size: 'sm', class: 'ps-8' },
-  { leading: true, size: 'md', class: 'ps-9' },
-  { leading: true, size: 'lg', class: 'ps-11' },
-  { leading: true, size: 'xl', class: 'ps-12' },
-  { trailing: true, size: 'xs', class: 'pe-7' },
-  { trailing: true, size: 'sm', class: 'pe-8' },
-  { trailing: true, size: 'md', class: 'pe-9' },
-  { trailing: true, size: 'lg', class: 'pe-11' },
-  { trailing: true, size: 'xl', class: 'pe-12' },
+  {
+    leading: true,
+    size: 'xs',
+    class:
+      'ps-[calc(var(--ws-space-8)+var(--ws-control-icon-size-xs)+var(--ws-control-gap-xs)-var(--field-edge-extra,0px))]',
+  },
+  {
+    leading: true,
+    size: 'sm',
+    class:
+      'ps-[calc(var(--ws-space-10)+var(--ws-control-icon-size-sm)+var(--ws-control-gap-sm)-var(--field-edge-extra,0px))]',
+  },
+  {
+    leading: true,
+    size: 'md',
+    class:
+      'ps-[calc(var(--ws-space-12)+var(--ws-control-icon-size-md)+var(--ws-control-gap-md)-var(--field-edge-extra,0px))]',
+  },
+  {
+    leading: true,
+    size: 'lg',
+    class:
+      'ps-[calc(var(--ws-space-14)+var(--ws-control-icon-size-lg)+var(--ws-control-gap-lg)-var(--field-edge-extra,0px))]',
+  },
+  {
+    leading: true,
+    size: 'xl',
+    class:
+      'ps-[calc(var(--ws-space-16)+var(--ws-control-icon-size-xl)+var(--ws-control-gap-xl)-var(--field-edge-extra,0px))]',
+  },
+  {
+    trailing: true,
+    size: 'xs',
+    class:
+      'pe-[calc(var(--ws-space-8)+var(--ws-control-icon-size-xs)+var(--ws-control-gap-xs)-var(--field-edge-extra,0px))]',
+  },
+  {
+    trailing: true,
+    size: 'sm',
+    class:
+      'pe-[calc(var(--ws-space-10)+var(--ws-control-icon-size-sm)+var(--ws-control-gap-sm)-var(--field-edge-extra,0px))]',
+  },
+  {
+    trailing: true,
+    size: 'md',
+    class:
+      'pe-[calc(var(--ws-space-12)+var(--ws-control-icon-size-md)+var(--ws-control-gap-md)-var(--field-edge-extra,0px))]',
+  },
+  {
+    trailing: true,
+    size: 'lg',
+    class:
+      'pe-[calc(var(--ws-space-14)+var(--ws-control-icon-size-lg)+var(--ws-control-gap-lg)-var(--field-edge-extra,0px))]',
+  },
+  {
+    trailing: true,
+    size: 'xl',
+    class:
+      'pe-[calc(var(--ws-space-16)+var(--ws-control-icon-size-xl)+var(--ws-control-gap-xl)-var(--field-edge-extra,0px))]',
+  },
 ]
 
 export const fieldCompoundVariants = [
-  // The outline lightens on hover, stays as it is on focus, where the ring shows, and fades
-  // when the field is disabled.
+  // The edge lightens on hover, stays as it is on focus, where the ring shows, and fades when
+  // the field is disabled.
   {
     variant: ['outline', 'subtle'],
     class:
-      'hover:ring-text-secondary focus-visible:ring-field-border disabled:ring-text-faint outline-interactive focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-3',
+      'hover:border-(--ws-field-border-hover) focus-visible:border-(--ws-field-border-rest) disabled:border-(--ws-field-border-disabled) outline-interactive focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-3',
   },
   {
     variant: ['soft', 'ghost'],
@@ -95,6 +167,18 @@ export const fieldCompoundVariants = [
       'outline-interactive focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-3',
   },
   ...byColor(highlight, { highlight: true }),
+  // The bare field draws no edge at rest: highlighted, it gives back the whole edge it draws.
+  {
+    variant: 'none',
+    highlight: true,
+    class: '[--field-edge-extra:var(--ws-control-border-width-rest)]',
+  },
+  {
+    variant: 'none',
+    highlight: true,
+    color: 'error',
+    class: '[--field-edge-extra:var(--ws-control-border-width-invalid)]',
+  },
   ...iconRoom,
   // Nuxt UI sets the value smaller from md up, where iOS would not zoom: the system keeps one size.
   { fixed: false, size: ['xs', 'sm'], class: 'md:text-body-sm' },

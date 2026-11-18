@@ -48,7 +48,7 @@ export default {
       xl: { ...choiceSizes.xl, icon: 'size-5' },
     },
     required: {
-      true: { label: "after:content-['*'] after:ms-0.5 after:text-brand" },
+      true: { label: "after:content-['*'] after:ms-0.5 after:text-(--ws-field-required-text)" },
     },
     disabled: {
       true: {

@@ -13,16 +13,20 @@ const kinds = {
 } as const
 const kindNames = Object.keys(kinds) as (keyof typeof kinds)[]
 
-/** A state, drawn by its demo attribute or by its prop. */
+/** A state, drawn by its demo attribute or by its prop, and its name in the spec. */
 const states = {
-  default: {},
-  hover: { 'data-demo': 'hover' },
-  pressed: { 'data-demo': 'active' },
-  focus: { 'data-demo': 'focus' },
-  disabled: { disabled: true },
-  loading: { loading: true },
+  default: { spec: 'rest', attrs: {} },
+  hover: { spec: 'hover', attrs: { 'data-demo': 'hover' } },
+  pressed: { spec: 'active', attrs: { 'data-demo': 'active' } },
+  focus: { spec: 'focus', attrs: { 'data-demo': 'focus' } },
+  disabled: { spec: 'disabled', attrs: { disabled: true } },
+  loading: { spec: 'loading', attrs: { loading: true } },
 } as const
 const stateNames = Object.keys(states) as (keyof typeof states)[]
+
+/** The example of the button spec an example is, by its id: button.primary.hover. */
+const specOf = (kind: string, state: string, size = 'md') =>
+  ['button', kind, state, ...(size === 'md' ? [] : [size])].join('.')
 
 const labels = {
   primary: 'Save',
@@ -53,13 +57,19 @@ const labels = {
 
     <GalleryRow label="sizes">
       <GalleryItem v-for="size in sizes" :key="size" :caption="size">
-        <UButton :size="size" label="Save" />
+        <UButton
+          :size="size"
+          icon="i-lucide-download"
+          trailing-icon="i-lucide-chevron-down"
+          label="Export"
+          :data-spec="specOf('primary', 'rest', size)"
+        />
       </GalleryItem>
     </GalleryRow>
 
     <GalleryRow label="with an icon">
       <GalleryItem caption="leading icon">
-        <UButton icon="i-lucide-send" label="Send" />
+        <UButton icon="i-lucide-send" label="Send" :data-spec="specOf('primary', 'rest')" />
       </GalleryItem>
       <GalleryItem caption="trailing icon">
         <UButton
@@ -67,6 +77,7 @@ const labels = {
           color="neutral"
           variant="outline"
           label="Next"
+          :data-spec="specOf('secondary', 'rest')"
         />
       </GalleryItem>
       <GalleryItem v-for="size in sizes" :key="size" :caption="`icon only, ${size}`">
@@ -93,7 +104,8 @@ const labels = {
           :color="kinds[row].color"
           :variant="kinds[row].variant"
           :label="kinds[row].label"
-          v-bind="states[column]"
+          v-bind="states[column].attrs"
+          :data-spec="specOf(row, states[column].spec)"
         />
       </GalleryMatrix>
     </GalleryRow>
