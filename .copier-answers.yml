@@ -15,5 +15,5 @@ pages: false
 publish: false
 stack: typescript
 starter: false
-visibility: private
+visibility: public
 workspace: monorepo
