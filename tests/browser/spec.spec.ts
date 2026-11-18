@@ -17,7 +17,9 @@ import { open, playground } from './pages.ts'
  */
 const specs = {
   button: '/',
+  checkbox: '/',
   input: '/',
+  'radio-group': '/',
   select: '/open',
   'select-menu': '/open',
   modal: '/open',

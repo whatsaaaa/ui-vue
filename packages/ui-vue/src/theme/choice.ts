@@ -1,14 +1,45 @@
 import type { ByColor } from './shared.ts'
 
 /*
- * What a checkbox and a radio group share: the controls of the sample apps. Twenty pixels, an
- * outline in the field border on the page color, the interactive fill when checked. The label
- * of an option is in Inter, on the line the control sits on. Disabled, all of it is faint.
+ * What a checkbox and a radio group share: the control of the design system's checkbox and radio
+ * group specs, specs/checkbox.spec.json and specs/radio-group.spec.json. Twenty pixels at md, an
+ * edge in the field border on the page color, the interactive fill when checked. The label of an
+ * option is in Inter, on the line the control sits on. Disabled, all of it is faint. They read the
+ * component tier by name, --ws-choice-*, so a change of the tier reaches them.
+ *
+ * The edge is a border, not Nuxt UI's ring, so that forced colors keep it. The fill of a checked
+ * control covers the control, its edge too: it is laid over the control's border box. The control
+ * and its label take the pointer as one, so the edge lightens with the pointer on either: the
+ * option is marked group/choice, which group-hover/choice follows.
  */
 
-/** The fill of a checked control and the color of its mark: the solid fills of the buttons. */
+/** The control at rest: its edge, its fill, and the edge under the pointer. */
+export const control =
+  'relative overflow-visible ring-0 border-thin border-(--ws-choice-control-border-rest) bg-(--ws-choice-control-bg) cursor-pointer hover:border-(--ws-choice-control-border-hover) group-hover/choice:border-(--ws-choice-control-border-hover)'
+
+/** The fill of a checked control, over the control and its edge, in the control's shape. */
+export const indicator = 'absolute -inset-(--ws-border-width-thin) size-auto rounded-[inherit]'
+
+/** The label of an option, and the line about it. */
+export const label = 'font-sans font-normal text-(--ws-choice-label-text-rest) cursor-pointer'
+export const description = 'font-sans text-(--ws-choice-description-text-rest) text-body-sm'
+
+/** A disabled control, its label and its line: faint, and the same under the pointer. */
+export const disabled = {
+  base: 'cursor-not-allowed border-(--ws-choice-control-border-disabled) hover:border-(--ws-choice-control-border-disabled) group-hover/choice:border-(--ws-choice-control-border-disabled)',
+  label: 'cursor-not-allowed text-(--ws-choice-label-text-disabled)',
+  description: 'cursor-not-allowed text-(--ws-choice-description-text-disabled)',
+}
+
+/**
+ * The fill of a checked control and the color of its mark: the solid fills of the buttons. The
+ * spec's color is primary, which reads the tier, the indeterminate box's too. The state picks the
+ * tokens into --choice-fill and --choice-mark, not the fill itself, so that a fill a variant gives
+ * in forced colors or to a disabled box still wins over the indeterminate one.
+ */
 export const checked: ByColor = {
-  primary: 'bg-interactive text-on-interactive',
+  primary:
+    'bg-(--choice-fill) text-(--choice-mark) [--choice-fill:var(--ws-choice-indicator-bg-checked)] [--choice-mark:var(--ws-choice-indicator-icon-checked)] data-[state=indeterminate]:[--choice-fill:var(--ws-choice-indicator-bg-indeterminate)] data-[state=indeterminate]:[--choice-mark:var(--ws-choice-indicator-icon-indeterminate)]',
   success: 'bg-tip-text text-bg',
   info: 'bg-note-text text-bg',
   warning: 'bg-warning-text text-bg',
@@ -50,14 +81,18 @@ export const checkedCard: ByColor = {
  */
 export const forcedCheckedCard = 'forced-colors:has-data-[state=checked]:border-[Highlight]!'
 
-/** A highlighted control, as with an error, takes its color as the outline. */
+/**
+ * A highlighted control takes its color as the edge, and keeps it under the pointer. A control in
+ * error is highlighted in the error color: the tier's invalid edge.
+ */
 export const highlight: ByColor = {
-  primary: 'ring-interactive hover:ring-interactive',
-  success: 'ring-tip hover:ring-tip',
-  info: 'ring-note hover:ring-note',
-  warning: 'ring-warning hover:ring-warning',
-  error: 'ring-danger hover:ring-danger',
-  neutral: 'ring-text hover:ring-text',
+  primary: 'border-interactive hover:border-interactive group-hover/choice:border-interactive',
+  success: 'border-tip hover:border-tip group-hover/choice:border-tip',
+  info: 'border-note hover:border-note group-hover/choice:border-note',
+  warning: 'border-warning hover:border-warning group-hover/choice:border-warning',
+  error:
+    'border-(--ws-choice-control-border-invalid) hover:border-(--ws-choice-control-border-invalid) group-hover/choice:border-(--ws-choice-control-border-invalid)',
+  neutral: 'border-text hover:border-text group-hover/choice:border-text',
 }
 
 /** A highlighted card: the border in its color, focused too, as with checkedCard. */
@@ -80,15 +115,27 @@ export const highlightCard: ByColor = {
  * the control sits centered on it.
  */
 export const choiceSizes = {
-  xs: { base: 'size-3.5', container: 'h-6', wrapper: 'text-body-sm' },
-  sm: { base: 'size-4', container: 'h-6', wrapper: 'text-body-sm' },
-  md: { base: 'size-check', container: 'h-6', wrapper: 'text-body leading-normal' },
-  lg: { base: 'size-5.5', container: 'h-7', wrapper: 'text-lead leading-7' },
-  xl: { base: 'size-6', container: 'h-7', wrapper: 'text-lead leading-7' },
+  xs: { base: 'size-(--ws-choice-control-size-xs)', container: 'h-6', wrapper: 'text-body-sm' },
+  sm: { base: 'size-(--ws-choice-control-size-sm)', container: 'h-6', wrapper: 'text-body-sm' },
+  md: {
+    base: 'size-(--ws-choice-control-size-md)',
+    container: 'h-6',
+    wrapper: 'text-body leading-normal',
+  },
+  lg: {
+    base: 'size-(--ws-choice-control-size-lg)',
+    container: 'h-7',
+    wrapper: 'text-lead leading-7',
+  },
+  xl: {
+    base: 'size-(--ws-choice-control-size-xl)',
+    container: 'h-7',
+    wrapper: 'text-lead leading-7',
+  },
 }
 
 /** The focus ring of the control, three pixels out from it, and of a card, out from the card. */
 export const choiceFocus =
-  'outline-interactive focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-3 focus-visible:ring-field-border'
+  'outline-interactive focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-3'
 export const cardFocus =
   'outline-interactive has-focus-visible:outline-2 has-focus-visible:outline-solid has-focus-visible:outline-offset-3 not-has-disabled:has-focus-visible:border-border'
