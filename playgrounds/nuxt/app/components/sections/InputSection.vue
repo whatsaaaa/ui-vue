@@ -16,7 +16,7 @@ const specOf = (state: string, size = 'md') =>
   <GallerySection
     id="input"
     title="UInput"
-    lead="The field of the sample apps: forty pixels tall, the value in Inter, an outline in the field border. The label is mono, the hint goes under the field, and an error is a word with an icon. No placeholders."
+    lead="One line of text at the control height: the value in Inter, an edge in the field border on the page color. The label is mono, the help goes under the field, and an error takes its place as a word with an icon. The system uses no placeholders; the placeholder row shows one an app passes anyway."
   >
     <GalleryRow label="states">
       <div class="grid w-full gap-x-6 gap-y-6 md:grid-cols-2 xl:grid-cols-3">
