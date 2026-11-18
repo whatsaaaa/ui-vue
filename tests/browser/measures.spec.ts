@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test'
+import { expect, test, type Locator, type Page } from '@playwright/test'
 import { open, playground, resolveColor } from './pages.ts'
 
 /** The length a CSS value resolves to, in pixels. */
@@ -48,6 +48,112 @@ function contrastOf(page: Page, selector: string) {
   })
 }
 
+/** A field of the gallery, by its help or its error: the form field around it. */
+function example(page: Page, section: string, text: string) {
+  return page
+    .locator(`${section} [data-slot="root"]`)
+    .filter({ has: page.getByText(text, { exact: true }) })
+}
+
+/**
+ * Where a field lays out its value and its icons, in pixels in from its outer edges, to the
+ * hundredth: the value from each side, past the edge and the padding, and each icon's near and far
+ * side from its own side of the field. And the edge's width. An input's icons sit beside it, a
+ * select's inside it.
+ */
+function layoutOf(field: Locator) {
+  return field.evaluate((field) => {
+    const round = (pixels: number) => Math.round(pixels * 100) / 100
+    const box = field.getBoundingClientRect()
+    const style = getComputedStyle(field)
+    const around = field.localName === 'input' ? field.parentElement! : field
+    const icon = (slot: string, side: 'leading' | 'trailing') => {
+      const icon = around.querySelector(`[data-slot="${slot}"]`)?.getBoundingClientRect()
+      if (!icon) return undefined
+      return side === 'leading'
+        ? { start: round(icon.left - box.left), end: round(icon.right - box.left) }
+        : { start: round(box.right - icon.right), end: round(box.right - icon.left) }
+    }
+    return {
+      edge: parseFloat(style.borderTopWidth),
+      value: {
+        start: round(parseFloat(style.borderLeftWidth) + parseFloat(style.paddingLeft)),
+        end: round(parseFloat(style.borderRightWidth) + parseFloat(style.paddingRight)),
+      },
+      leadingIcon: icon('leadingIcon', 'leading'),
+      trailingIcon: icon('trailingIcon', 'trailing'),
+    }
+  })
+}
+
+test("a field's icons start where a field's value does, the control's gap from its own value", async ({
+  page,
+}, testInfo) => {
+  test.skip(playground(testInfo) !== 'nuxt', 'The fields are in the gallery')
+  await open(page)
+  for (const size of ['xs', 'sm', 'md', 'lg', 'xl']) {
+    const gap = await resolveLength(page, `var(--ws-control-gap-${size})`)
+    // a text field with an icon on each side, and a select with its chevron and no icon before
+    const input = await layoutOf(example(page, '#input', `size ${size}`).getByRole('textbox'))
+    const select = await layoutOf(example(page, '#select', `size ${size}`).getByRole('combobox'))
+    expect(input.value.start - input.leadingIcon!.end, size).toBe(gap)
+    expect(input.value.end - input.trailingIcon!.end, size).toBe(gap)
+    expect(select.value.end - select.trailingIcon!.end, size).toBe(gap)
+    expect(
+      [input.leadingIcon!.start, input.trailingIcon!.start, select.trailingIcon!.start],
+      size,
+    ).toEqual([select.value.start, select.value.start, select.value.start])
+  }
+})
+
+test("a field's value and its icons stay where they are when its edge widens in an error", async ({
+  page,
+}, testInfo) => {
+  test.skip(playground(testInfo) !== 'nuxt', 'The fields are in the gallery')
+  await open(page)
+  const edges = [
+    await resolveLength(page, 'var(--ws-control-border-width-rest)'),
+    await resolveLength(page, 'var(--ws-control-border-width-invalid)'),
+  ]
+  for (const [section, role, rest, invalid] of [
+    [
+      '#input',
+      'textbox',
+      'As on your ID.',
+      'Enter an email address with a domain, such as maya@example.com.',
+    ],
+    [
+      '#select',
+      'combobox',
+      'Where the conference takes place.',
+      'Choose the day you are registering for.',
+    ],
+  ] as const) {
+    const atRest = await layoutOf(example(page, section, rest).getByRole(role))
+    const inError = await layoutOf(example(page, section, invalid).getByRole(role))
+    expect([atRest.edge, inError.edge], section).toEqual(edges)
+    expect({ ...inError, edge: undefined }, section).toEqual({ ...atRest, edge: undefined })
+  }
+})
+
+test("a field's and a button's corners follow the tier's control radius as it changes", async ({
+  page,
+}, testInfo) => {
+  test.skip(playground(testInfo) !== 'nuxt', 'The fields are in the gallery')
+  await open(page)
+  // a radius no token has, on the page's tier
+  await page.evaluate(() =>
+    document.documentElement.style.setProperty('--ws-control-radius', '7px'),
+  )
+  for (const control of [
+    page.locator('#input').getByRole('textbox').first(),
+    page.locator('#select').getByRole('combobox').first(),
+    page.getByTestId('select-menu'),
+    page.locator('[data-spec="button.primary.rest"]').first(),
+  ])
+    await expect(control).toHaveCSS('border-radius', '7px')
+})
+
 test("a checkbox's tick is drawn at the system's icon size, and at four fifths of each box", async ({
   page,
 }, testInfo) => {
@@ -88,6 +194,25 @@ for (const colorScheme of ['dark', 'light'] as const) {
         await expect(placeholder).toHaveCSS('color', secondary)
       for (const contrast of await contrastOf(page, '#select [data-slot="placeholder"]'))
         expect(contrast).toBeGreaterThanOrEqual(4.5)
+    })
+
+    test("every required mark is the system's red: a field's, a checkbox's and a radio group's", async ({
+      page,
+    }, testInfo) => {
+      test.skip(playground(testInfo) !== 'nuxt', 'The marks are in the gallery')
+      await open(page)
+      const red = await resolveColor(page, 'var(--ws-field-required-text)')
+      for (const section of ['#input', '#select', '#checkbox', '#radio-group']) {
+        // the asterisk after a label or a legend
+        const marks = await page.locator(section).evaluate((section) =>
+          [...section.querySelectorAll('*')]
+            .map((element) => getComputedStyle(element, '::after'))
+            .filter((after) => after.content === '"*"')
+            .map((after) => after.color),
+        )
+        expect(marks.length, section).toBeGreaterThan(0)
+        for (const mark of marks) expect(mark, section).toBe(red)
+      }
     })
   })
 }

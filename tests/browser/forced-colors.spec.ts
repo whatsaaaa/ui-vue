@@ -5,8 +5,9 @@ import { open, playground } from './pages.ts'
  * Forced colors, Windows' contrast themes, take box shadows away and paint every background in
  * the page color. Nuxt UI draws edges with ring, a box shadow, and icons as masks over their
  * background, so the theme draws them again in the system's colors: a part with a ring has a
- * border, a checked control and the current tab are in the selection color, and every icon is
- * painted. These read each part of the pages as the browser draws it in forced colors.
+ * border, a field keeps the border it draws its edge with, a checked control and the current tab
+ * are in the selection color, and every icon is painted. These read each part of the pages as
+ * the browser draws it in forced colors.
  */
 
 declare global {
@@ -16,6 +17,11 @@ declare global {
      * the part of the gallery in the other theme changes.
      */
     systemColor(near: Element, name: string): string
+    /**
+     * Whether an element has an edge: a solid border on every side, in a color other than the
+     * page's.
+     */
+    hasEdge(element: Element): boolean
   }
 }
 
@@ -30,6 +36,16 @@ async function openWithSystemColors(page: Page): Promise<void> {
       const color = getComputedStyle(probe).backgroundColor
       probe.remove()
       return color
+    }
+    window.hasEdge = (element) => {
+      const style = getComputedStyle(element)
+      const page = window.systemColor(element, 'Canvas')
+      return ['top', 'right', 'bottom', 'left'].every(
+        (side) =>
+          parseFloat(style.getPropertyValue(`border-${side}-width`)) >= 1 &&
+          style.getPropertyValue(`border-${side}-style`) === 'solid' &&
+          style.getPropertyValue(`border-${side}-color`) !== page,
+      )
     }
   })
   await open(page)
@@ -52,17 +68,35 @@ function edges(within: Locator): Promise<Findings> {
       if (!/calc\((?!0px)/.test(ring) || /(#0000|transparent)$/.test(ring)) continue
       const box = element.getBoundingClientRect()
       if (box.width <= 2 || box.height <= 2 || !element.checkVisibility()) continue
-      const page = window.systemColor(element, 'Canvas')
-      const drawn = ['top', 'right', 'bottom', 'left'].every(
-        (side) =>
-          parseFloat(style.getPropertyValue(`border-${side}-width`)) >= 1 &&
-          style.getPropertyValue(`border-${side}-style`) === 'solid' &&
-          style.getPropertyValue(`border-${side}-color`) !== page,
-      )
-      if (!drawn)
+      if (!window.hasEdge(element))
         findings.push(
           `${element.dataset.slot} ${element.getAttribute('class')?.slice(0, 60)}: border ${style.borderWidth} ${style.borderStyle} ${style.borderColor}`,
         )
+    }
+    return findings
+  })
+}
+
+/**
+ * Every field has an edge: a text field, and the trigger of a select or a select menu. A field
+ * draws it as a border, not a ring, so the parts with a ring leave it out.
+ */
+function fieldEdges(within: Locator): Promise<Findings> {
+  return within.evaluate((root) => {
+    const findings: string[] = []
+    const fields = root.querySelectorAll<HTMLElement>(
+      'input:not([type=checkbox], [type=radio], [type=hidden]), button[role=combobox], button[aria-haspopup=listbox]',
+    )
+    for (const field of fields) {
+      const box = field.getBoundingClientRect()
+      if (box.width <= 2 || box.height <= 2 || !field.checkVisibility({ opacityProperty: true }))
+        continue
+      if (!window.hasEdge(field)) {
+        const style = getComputedStyle(field)
+        findings.push(
+          `${field.localName} ${field.id}: border ${style.borderWidth} ${style.borderStyle} ${style.borderColor}`,
+        )
+      }
     }
     return findings
   })
@@ -181,10 +215,13 @@ for (const colorScheme of ['dark', 'light'] as const) {
   test.describe(`in forced colors, on a ${colorScheme} system`, () => {
     test.use({ colorScheme, forcedColors: 'active' })
 
-    test('every part with a ring has an edge, and every icon is painted', async ({ page }) => {
+    test('every part with a ring and every field has an edge, and every icon is painted', async ({
+      page,
+    }) => {
       await openWithSystemColors(page)
       const body = page.locator('body')
       expect(await edges(body)).toEqual([])
+      expect(await fieldEdges(body)).toEqual([])
       expect(await icons(body)).toEqual([])
     })
 
@@ -253,6 +290,7 @@ for (const colorScheme of ['dark', 'light'] as const) {
       const modal = page.getByRole('dialog')
       await expect(modal).toBeVisible()
       expect(await edges(modal)).toEqual([])
+      expect(await fieldEdges(modal)).toEqual([])
       expect(await icons(modal)).toEqual([])
       expect(await checked(page)).toEqual([])
     })

@@ -31,13 +31,14 @@ import {
 
 /**
  * A fill, its edge the same color. The primary button takes the system's hover and pressed
- * fills, a step further from the page. A status fill has none of its own: it is already the text
- * color in the light theme, so it lightens toward the page, which keeps the contrast of its label.
+ * fills, a step further from the page, and keeps its rest fill while it loads, the pointer on it
+ * or not. A status fill has none of its own: it is already the text color in the light theme, so
+ * it lightens toward the page, which keeps the contrast of its label.
  */
 const solidFill: ByColor = {
   ...solid,
   primary:
-    'bg-(--ws-button-primary-bg-rest) border-(--ws-button-primary-bg-rest) text-(--ws-button-primary-text-rest)',
+    'bg-(--ws-button-primary-bg-rest) border-(--ws-button-primary-bg-rest) text-(--ws-button-primary-text-rest) disabled:bg-(--ws-button-primary-bg-rest) disabled:border-(--ws-button-primary-bg-rest) aria-disabled:bg-(--ws-button-primary-bg-rest) aria-disabled:border-(--ws-button-primary-bg-rest)',
 }
 
 const solidHover: ByColor = {
@@ -53,7 +54,8 @@ const solidHover: ByColor = {
 /**
  * An edge around text on the page, on no fill, loading too: Nuxt UI fills a disabled neutral
  * outline with the page color. Secondary keeps the lighter edge while it is pressed, as Space
- * presses it without the pointer on it: the field border on the raised fill is under 3:1.
+ * presses it without the pointer on it: the field border on the raised fill is under 3:1. While
+ * it loads it keeps its rest edge, the pointer on it or not.
  */
 const outline: ByColor = {
   primary:
@@ -65,7 +67,7 @@ const outline: ByColor = {
   error:
     'ring-0 border-(--ws-button-danger-border-rest) text-(--ws-button-danger-text-rest) bg-transparent hover:bg-(--ws-button-danger-bg-hover) active:bg-(--ws-button-danger-bg-active)',
   neutral:
-    'ring-0 border-(--ws-button-secondary-border-rest) text-(--ws-button-secondary-text-rest) bg-transparent hover:border-(--ws-button-secondary-border-hover) hover:bg-(--ws-button-secondary-bg-hover) active:border-(--ws-button-secondary-border-active) active:bg-(--ws-button-secondary-bg-active) disabled:bg-transparent aria-disabled:bg-transparent',
+    'ring-0 border-(--ws-button-secondary-border-rest) text-(--ws-button-secondary-text-rest) bg-transparent hover:border-(--ws-button-secondary-border-hover) hover:bg-(--ws-button-secondary-bg-hover) active:border-(--ws-button-secondary-border-active) active:bg-(--ws-button-secondary-bg-active) disabled:bg-transparent disabled:border-(--ws-button-secondary-border-rest) aria-disabled:bg-transparent aria-disabled:border-(--ws-button-secondary-border-rest)',
 }
 
 const softHover: ByColor = {

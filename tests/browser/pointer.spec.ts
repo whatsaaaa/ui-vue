@@ -36,3 +36,18 @@ test('a checkbox card and a radio card or table option raise under the pointer',
     await expect.poll(() => colors(card)).toEqual(raised)
   }
 })
+
+test('a loading button keeps its look under the pointer, the look of the kind at rest', async ({
+  page,
+}, testInfo) => {
+  test.skip(playground(testInfo) !== 'nuxt', 'The buttons are in the gallery')
+  // no transition: what the pointer changes, it changes at once
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await open(page)
+  for (const kind of ['primary', 'secondary', 'ghost', 'danger']) {
+    const rest = await colors(page.locator(`[data-spec="button.${kind}.rest"]`).first())
+    const loading = page.locator(`[data-spec="button.${kind}.loading"]`)
+    await loading.hover()
+    expect(await colors(loading), kind).toEqual(rest)
+  }
+})

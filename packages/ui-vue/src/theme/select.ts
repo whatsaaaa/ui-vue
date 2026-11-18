@@ -10,7 +10,7 @@ import { forcedEdge, forcedIcon, transition } from './shared.ts'
 
 /** What a select and a select menu share. */
 export const selectSlots = {
-  base: `font-sans cursor-pointer disabled:text-text-faint disabled:opacity-100 ${transition}`,
+  base: `rounded-(--ws-control-radius) font-sans cursor-pointer disabled:text-text-faint disabled:opacity-100 ${transition}`,
   // often the only words in the trigger, so in the secondary text color, which reads at 4.5:1;
   // faint with the rest of a disabled trigger
   placeholder: 'truncate text-text-secondary group-disabled:text-text-faint',
@@ -33,11 +33,16 @@ export const selectSlots = {
 export const listMotion =
   'data-[state=open]:animate-[fade-in_var(--ws-motion-duration-fast)_var(--ws-motion-easing-out)] data-[state=closed]:animate-[fade-out_var(--ws-motion-duration-fast)_var(--ws-motion-easing-in)] motion-safe:data-[state=open]:animate-[scale-in_var(--ws-motion-duration-fast)_var(--ws-motion-easing-out)] motion-safe:data-[state=closed]:animate-[scale-out_var(--ws-motion-duration-fast)_var(--ws-motion-easing-in)]'
 
-/** An option's icon is centered on its first line, as the tick is, whatever lines follow. */
+/**
+ * A select's icons sit inside its edge, as its value does. An option's icon is centered on its
+ * first line, as the tick is, whatever lines follow.
+ */
 export const selectVariants = {
   size: {
     xs: {
       ...fieldSizes.xs,
+      leading: 'ps-[calc(var(--ws-space-8)-var(--field-edge-extra,0px))]',
+      trailing: 'pe-[calc(var(--ws-space-8)-var(--field-edge-extra,0px))]',
       label: 'px-1.5 py-1 text-overline',
       item: 'px-1.5 py-1 gap-1.5 text-body-sm',
       itemLeadingIcon: 'size-icon my-[calc((1lh-var(--ws-size-icon))/2)]',
@@ -46,6 +51,8 @@ export const selectVariants = {
     },
     sm: {
       ...fieldSizes.sm,
+      leading: 'ps-[calc(var(--ws-space-10)-var(--field-edge-extra,0px))]',
+      trailing: 'pe-[calc(var(--ws-space-10)-var(--field-edge-extra,0px))]',
       label: 'px-2 py-1 text-overline',
       item: 'px-2 py-1 gap-1.5 text-body-sm',
       itemLeadingIcon: 'size-icon my-[calc((1lh-var(--ws-size-icon))/2)]',
@@ -54,6 +61,8 @@ export const selectVariants = {
     },
     md: {
       ...fieldSizes.md,
+      leading: 'ps-[calc(var(--ws-space-12)-var(--field-edge-extra,0px))]',
+      trailing: 'pe-[calc(var(--ws-space-12)-var(--field-edge-extra,0px))]',
       label: 'px-2 py-1.5 text-overline',
       item: 'px-2 py-1.5 gap-2 text-body',
       itemLeadingIcon: 'size-icon my-[calc((1lh-var(--ws-size-icon))/2)]',
@@ -62,6 +71,8 @@ export const selectVariants = {
     },
     lg: {
       ...fieldSizes.lg,
+      leading: 'ps-[calc(var(--ws-space-14)-var(--field-edge-extra,0px))]',
+      trailing: 'pe-[calc(var(--ws-space-14)-var(--field-edge-extra,0px))]',
       label: 'px-2.5 py-1.5 text-overline',
       item: 'px-2.5 py-2 gap-2 text-body',
       itemLeadingIcon: 'size-5 my-[calc((1lh-1.25rem)/2)]',
@@ -70,6 +81,8 @@ export const selectVariants = {
     },
     xl: {
       ...fieldSizes.xl,
+      leading: 'ps-[calc(var(--ws-space-16)-var(--field-edge-extra,0px))]',
+      trailing: 'pe-[calc(var(--ws-space-16)-var(--field-edge-extra,0px))]',
       label: 'px-3 py-2 text-overline',
       item: 'px-3 py-2 gap-2.5 text-body',
       itemLeadingIcon: 'size-5 my-[calc((1lh-1.25rem)/2)]',
