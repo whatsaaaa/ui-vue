@@ -3,9 +3,10 @@ import { forcedIcon, transition } from './shared.ts'
 
 export default {
   slots: {
-    base: `font-sans placeholder:text-text-faint disabled:text-text-faint disabled:opacity-100 ${transition}`,
-    leadingIcon: `text-text-secondary ${forcedIcon}`,
-    trailingIcon: `text-text-secondary ${forcedIcon}`,
+    // The system uses no placeholders: one an app passes anyway is the secondary text, at 4.5:1.
+    base: `font-sans placeholder:text-text-secondary disabled:text-(--ws-field-text-disabled) disabled:opacity-100 ${transition}`,
+    leadingIcon: `text-(--ws-field-icon) ${forcedIcon}`,
+    trailingIcon: `text-(--ws-field-icon) ${forcedIcon}`,
   },
   variants: {
     size: fieldSizes,

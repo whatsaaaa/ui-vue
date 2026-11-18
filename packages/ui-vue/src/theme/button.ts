@@ -11,17 +11,38 @@ import {
 } from './shared.ts'
 
 /*
- * The button of the sample apps: forty pixels tall, a mono label in semibold, an outline in
- * the field border or a fill of the interactive color. Disabled, every kind is faint.
+ * The button of the design system's spec, specs/button.spec.json: a mono label in semibold, in a
+ * box of the control height, a fill of the interactive color for the one action a view leads to
+ * and an outline for the rest. Its five kinds are Nuxt UI's colors and variants:
+ *
+ *   primary    primary solid
+ *   secondary  neutral outline
+ *   ghost      neutral ghost
+ *   quiet      primary link
+ *   danger     error outline
+ *
+ * They read the component tier by name, --ws-button-* and --ws-control-*, so a change of the
+ * tier reaches them. The other colors and variants keep working on the roles, outside the spec.
+ *
+ * Every kind but the link has an edge, a border of the control's width, transparent where the
+ * kind has none: a border, not Nuxt UI's ring, so that forced colors keep it. The ring is taken
+ * off wherever Nuxt UI draws one.
  */
 
 /**
- * The primary button takes the system's hover and pressed fills, a step further from the page.
- * A status fill has none of its own: it is already the text color in the light theme, so it
- * lightens toward the page, which keeps the contrast of its label.
+ * A fill, its edge the same color. The primary button takes the system's hover and pressed
+ * fills, a step further from the page. A status fill has none of its own: it is already the text
+ * color in the light theme, so it lightens toward the page, which keeps the contrast of its label.
  */
+const solidFill: ByColor = {
+  ...solid,
+  primary:
+    'bg-(--ws-button-primary-bg-rest) border-(--ws-button-primary-bg-rest) text-(--ws-button-primary-text-rest)',
+}
+
 const solidHover: ByColor = {
-  primary: 'hover:bg-interactive-hover active:bg-interactive-active',
+  primary:
+    'hover:bg-(--ws-button-primary-bg-hover) hover:border-(--ws-button-primary-bg-hover) active:bg-(--ws-button-primary-bg-active) active:border-(--ws-button-primary-bg-active)',
   success: 'hover:bg-tip-text/85 active:bg-tip-text/85',
   info: 'hover:bg-note-text/85 active:bg-note-text/85',
   warning: 'hover:bg-warning-text/85 active:bg-warning-text/85',
@@ -29,18 +50,22 @@ const solidHover: ByColor = {
   neutral: 'hover:bg-text/85 active:bg-text/85',
 }
 
+/**
+ * An edge around text on the page, on no fill, loading too: Nuxt UI fills a disabled neutral
+ * outline with the page color. Secondary keeps the lighter edge while it is pressed, as Space
+ * presses it without the pointer on it: the field border on the raised fill is under 3:1.
+ */
 const outline: ByColor = {
   primary:
-    'ring ring-inset ring-interactive text-interactive bg-transparent hover:bg-interactive/10 active:bg-interactive/10 focus-visible:ring-interactive',
-  success:
-    'ring ring-inset ring-tip text-tip-text bg-transparent hover:bg-tip/10 active:bg-tip/10 focus-visible:ring-tip',
-  info: 'ring ring-inset ring-note text-note-text bg-transparent hover:bg-note/10 active:bg-note/10 focus-visible:ring-note',
+    'ring-0 border-interactive text-interactive bg-transparent hover:bg-interactive/10 active:bg-interactive/10',
+  success: 'ring-0 border-tip text-tip-text bg-transparent hover:bg-tip/10 active:bg-tip/10',
+  info: 'ring-0 border-note text-note-text bg-transparent hover:bg-note/10 active:bg-note/10',
   warning:
-    'ring ring-inset ring-warning text-warning-text bg-transparent hover:bg-warning/10 active:bg-warning/10 focus-visible:ring-warning',
+    'ring-0 border-warning text-warning-text bg-transparent hover:bg-warning/10 active:bg-warning/10',
   error:
-    'ring ring-inset ring-danger text-danger-text bg-transparent hover:bg-danger/10 active:bg-danger/10 focus-visible:ring-danger',
+    'ring-0 border-(--ws-button-danger-border-rest) text-(--ws-button-danger-text-rest) bg-transparent hover:bg-(--ws-button-danger-bg-hover) active:bg-(--ws-button-danger-bg-active)',
   neutral:
-    'ring ring-inset ring-field-border text-text bg-transparent hover:ring-text-secondary hover:bg-raised active:bg-raised focus-visible:ring-field-border',
+    'ring-0 border-(--ws-button-secondary-border-rest) text-(--ws-button-secondary-text-rest) bg-transparent hover:border-(--ws-button-secondary-border-hover) hover:bg-(--ws-button-secondary-bg-hover) active:border-(--ws-button-secondary-border-active) active:bg-(--ws-button-secondary-bg-active) disabled:bg-transparent aria-disabled:bg-transparent',
 }
 
 const softHover: ByColor = {
@@ -52,13 +77,18 @@ const softHover: ByColor = {
   neutral: 'hover:bg-accented active:bg-accented',
 }
 
-const subtleRing: ByColor = {
-  primary: 'ring ring-inset ring-interactive/50 focus-visible:ring-interactive/50',
-  success: 'ring ring-inset ring-tip/50 focus-visible:ring-tip/50',
-  info: 'ring ring-inset ring-note/50 focus-visible:ring-note/50',
-  warning: 'ring ring-inset ring-warning/50 focus-visible:ring-warning/50',
-  error: 'ring ring-inset ring-danger/50 focus-visible:ring-danger/50',
-  neutral: 'ring ring-inset ring-border focus-visible:ring-border',
+const subtleEdge: ByColor = {
+  primary: 'ring-0 border-interactive/50',
+  success: 'ring-0 border-tip/50',
+  info: 'ring-0 border-note/50',
+  warning: 'ring-0 border-warning/50',
+  error: 'ring-0 border-danger/50',
+  neutral: 'ring-0 border-border',
+}
+
+const ghost: ByColor = {
+  ...text,
+  neutral: 'text-(--ws-button-ghost-text-rest)',
 }
 
 const ghostHover: ByColor = {
@@ -67,15 +97,16 @@ const ghostHover: ByColor = {
   info: 'hover:bg-note/10 active:bg-note/10',
   warning: 'hover:bg-warning/10 active:bg-warning/10',
   error: 'hover:bg-danger/10 active:bg-danger/10',
-  neutral: 'hover:bg-raised active:bg-raised',
+  neutral: 'hover:bg-(--ws-button-ghost-bg-hover) active:bg-(--ws-button-ghost-bg-active)',
 }
 
 /**
- * A link is the sample apps' quiet button: no box, the regular weight, underlined as links in the
- * system are, the line thicker on hover.
+ * A link is the quiet button: no box, the regular weight, underlined as links in the system are,
+ * the line thicker on hover.
  */
 const link: ByColor = {
-  primary: 'text-interactive hover:text-interactive active:text-interactive',
+  primary:
+    'text-(--ws-button-quiet-text-rest) hover:text-(--ws-button-quiet-text-rest) active:text-(--ws-button-quiet-text-rest)',
   success: 'text-tip-text hover:text-tip-text active:text-tip-text',
   info: 'text-note-text hover:text-note-text active:text-note-text',
   warning: 'text-warning-text hover:text-warning-text active:text-warning-text',
@@ -87,7 +118,7 @@ const kinds = ['solid', 'outline', 'soft', 'subtle', 'ghost']
 
 export default {
   slots: {
-    base: `rounded-md font-mono font-semibold cursor-pointer disabled:opacity-100 aria-disabled:opacity-100 ${transition} ${focusRing}`,
+    base: `rounded-(--ws-control-radius) border-(length:--ws-control-border-width-rest) border-transparent font-mono font-semibold cursor-pointer disabled:opacity-100 aria-disabled:opacity-100 ${transition} ${focusRing}`,
     label: 'truncate',
     leadingIcon: forcedIcon,
     trailingIcon: forcedIcon,
@@ -95,29 +126,29 @@ export default {
   variants: {
     size: {
       xs: {
-        base: 'h-7 px-2.5 py-0 gap-1.5 text-label-sm',
-        leadingIcon: 'size-3.5',
-        trailingIcon: 'size-3.5',
+        base: 'h-(--ws-control-height-xs) px-(--ws-space-10) py-0 gap-(--ws-control-gap-xs) text-label-sm',
+        leadingIcon: 'size-(--ws-control-icon-size-xs)',
+        trailingIcon: 'size-(--ws-control-icon-size-xs)',
       },
       sm: {
-        base: 'h-8 px-3 py-0 gap-1.5 text-label-sm',
-        leadingIcon: 'size-icon',
-        trailingIcon: 'size-icon',
+        base: 'h-(--ws-control-height-sm) px-(--ws-space-12) py-0 gap-(--ws-control-gap-sm) text-label-sm',
+        leadingIcon: 'size-(--ws-control-icon-size-sm)',
+        trailingIcon: 'size-(--ws-control-icon-size-sm)',
       },
       md: {
-        base: 'h-control px-5 py-0 gap-2 text-label',
-        leadingIcon: 'size-icon',
-        trailingIcon: 'size-icon',
+        base: 'h-(--ws-control-height-md) px-(--ws-space-20) py-0 gap-(--ws-control-gap-md) text-label',
+        leadingIcon: 'size-(--ws-control-icon-size-md)',
+        trailingIcon: 'size-(--ws-control-icon-size-md)',
       },
       lg: {
-        base: 'h-11 px-5 py-0 gap-2 text-label',
-        leadingIcon: 'size-4.5',
-        trailingIcon: 'size-4.5',
+        base: 'h-(--ws-control-height-lg) px-(--ws-space-20) py-0 gap-(--ws-control-gap-lg) text-label',
+        leadingIcon: 'size-(--ws-control-icon-size-lg)',
+        trailingIcon: 'size-(--ws-control-icon-size-lg)',
       },
       xl: {
-        base: 'h-12 px-6 py-0 gap-2.5 text-body',
-        leadingIcon: 'size-5',
-        trailingIcon: 'size-5',
+        base: 'h-(--ws-control-height-xl) px-(--ws-space-24) py-0 gap-(--ws-control-gap-xl) text-body',
+        leadingIcon: 'size-(--ws-control-icon-size-xl)',
+        trailingIcon: 'size-(--ws-control-icon-size-xl)',
       },
     },
     block: {
@@ -125,42 +156,42 @@ export default {
     },
   },
   compoundVariants: [
-    ...byColor(solid, { variant: 'solid' }),
+    ...byColor(solidFill, { variant: 'solid' }),
     ...byColor(solidHover, { variant: 'solid' }),
     ...byColor(outline, { variant: 'outline' }),
     ...byColor(tint, { variant: 'soft' }),
     ...byColor(softHover, { variant: 'soft' }),
     ...byColor(tint, { variant: 'subtle' }),
     ...byColor(softHover, { variant: 'subtle' }),
-    ...byColor(subtleRing, { variant: 'subtle' }),
-    ...byColor(text, { variant: 'ghost' }),
+    ...byColor(subtleEdge, { variant: 'subtle' }),
+    ...byColor(ghost, { variant: 'ghost' }),
     ...byColor(ghostHover, { variant: 'ghost' }),
     ...byColor(link, { variant: 'link' }),
     {
       variant: 'link',
       class:
-        'h-auto px-0 font-normal underline decoration-1 underline-offset-[0.2em] hover:decoration-2 active:decoration-2',
+        'h-auto px-0 border-0 font-normal underline decoration-1 underline-offset-[0.2em] hover:decoration-2 active:decoration-2',
     },
-    // Disabled, every kind is faint: an outline of the faint color around faint text. A loading
+    // Disabled, every kind is faint: an edge of the faint color around faint text. A loading
     // button is disabled too, but keeps its look, with the icon turning in it.
     {
       variant: kinds,
       loading: false,
       class:
-        'disabled:bg-transparent disabled:text-text-faint disabled:ring disabled:ring-inset disabled:ring-text-faint aria-disabled:bg-transparent aria-disabled:text-text-faint aria-disabled:ring aria-disabled:ring-inset aria-disabled:ring-text-faint',
+        'disabled:bg-transparent disabled:text-(--ws-button-text-disabled) disabled:border-(--ws-button-border-disabled) aria-disabled:bg-transparent aria-disabled:text-(--ws-button-text-disabled) aria-disabled:border-(--ws-button-border-disabled)',
     },
-    // In forced colors every kind but the link is a box, drawn as a border.
+    // In forced colors the edge of every kind but the link takes the system's button border.
     { variant: kinds, class: forcedControlEdge },
     {
       variant: 'ghost',
       loading: false,
-      class: 'disabled:ring-0 aria-disabled:ring-0',
+      class: 'disabled:border-transparent aria-disabled:border-transparent',
     },
     {
       variant: 'link',
       loading: false,
       class:
-        'disabled:text-text-faint disabled:no-underline aria-disabled:text-text-faint aria-disabled:no-underline',
+        'disabled:text-(--ws-button-text-disabled) disabled:no-underline aria-disabled:text-(--ws-button-text-disabled) aria-disabled:no-underline',
     },
     // Nuxt UI tints the focus outline with the color and widens it: the ring is the system's.
     {
@@ -168,11 +199,11 @@ export default {
         'outline-interactive focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-3',
     },
     // An icon button is as wide as it is tall.
-    { square: true, size: 'xs', class: 'w-7 px-0 justify-center' },
-    { square: true, size: 'sm', class: 'w-8 px-0 justify-center' },
-    { square: true, size: 'md', class: 'w-control px-0 justify-center' },
-    { square: true, size: 'lg', class: 'w-11 px-0 justify-center' },
-    { square: true, size: 'xl', class: 'w-12 px-0 justify-center' },
+    { square: true, size: 'xs', class: 'w-(--ws-control-height-xs) px-0 justify-center' },
+    { square: true, size: 'sm', class: 'w-(--ws-control-height-sm) px-0 justify-center' },
+    { square: true, size: 'md', class: 'w-(--ws-control-height-md) px-0 justify-center' },
+    { square: true, size: 'lg', class: 'w-(--ws-control-height-lg) px-0 justify-center' },
+    { square: true, size: 'xl', class: 'w-(--ws-control-height-xl) px-0 justify-center' },
     // The loading icon turns only for a reader who has not asked for less motion.
     {
       loading: true,

@@ -6,6 +6,10 @@ const variants = ['outline', 'subtle', 'soft', 'ghost'] as const
 
 const name = ref('Maya Collins')
 const email = ref('maya@example')
+
+/** The example of the input spec a field is, by its id: input.outline.hover. */
+const specOf = (state: string, size = 'md') =>
+  ['input', 'outline', state, ...(size === 'md' ? [] : [size])].join('.')
 </script>
 
 <template>
@@ -16,26 +20,35 @@ const email = ref('maya@example')
   >
     <GalleryRow label="states">
       <div class="grid w-full gap-x-6 gap-y-6 md:grid-cols-2 xl:grid-cols-3">
-        <UFormField label="Full name" help="As on your ID.">
+        <UFormField label="Full name" help="As on your ID." :data-spec="specOf('rest')">
           <UInput v-model="name" class="w-full" />
         </UFormField>
-        <UFormField label="Full name" help="hover">
+        <UFormField label="Full name" help="hover" :data-spec="specOf('hover')">
           <UInput v-model="name" class="w-full" data-demo="hover" />
         </UFormField>
-        <UFormField label="Full name" help="focus">
+        <UFormField label="Full name" help="focus" :data-spec="specOf('focus')">
           <UInput v-model="name" class="w-full" data-demo="focus" />
         </UFormField>
-        <UFormField label="Full name" help="Filled in by the organizer.">
+        <UFormField
+          label="Full name"
+          help="Filled in by the organizer."
+          :data-spec="specOf('disabled')"
+        >
           <UInput model-value="Maya Collins" class="w-full" disabled />
         </UFormField>
         <UFormField
           label="Email address"
           required
           error="Enter an email address with a domain, such as maya@example.com."
+          :data-spec="specOf('invalid')"
         >
           <UInput v-model="email" type="email" class="w-full" />
         </UFormField>
-        <UFormField label="Email address" help="Checking whether the address is free.">
+        <UFormField
+          label="Email address"
+          help="Checking whether the address is free."
+          :data-spec="specOf('loading')"
+        >
           <UInput
             model-value="maya@example.com"
             type="email"
@@ -53,10 +66,26 @@ const email = ref('maya@example')
           v-for="size in sizes"
           :key="size"
           :size="size"
-          label="City"
+          label="Email address"
           :help="`size ${size}`"
+          :data-spec="specOf('rest', size)"
         >
-          <UInput model-value="Lisbon" icon="i-lucide-map-pin" class="w-full" />
+          <UInput
+            model-value="maya@example.com"
+            type="email"
+            icon="i-lucide-mail"
+            trailing-icon="i-lucide-circle-check"
+            class="w-full"
+          />
+        </UFormField>
+      </div>
+    </GalleryRow>
+
+    <!-- the system uses none, but one an app passes anyway is the secondary text -->
+    <GalleryRow label="placeholder">
+      <div class="grid w-full gap-x-6 gap-y-6 md:grid-cols-2 xl:grid-cols-3">
+        <UFormField label="Search" help="placeholder" :data-spec="specOf('rest')">
+          <UInput placeholder="Name or email address" class="w-full" />
         </UFormField>
       </div>
     </GalleryRow>
