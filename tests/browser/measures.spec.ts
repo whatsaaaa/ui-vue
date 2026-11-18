@@ -136,6 +136,28 @@ test("a field's value and its icons stay where they are when its edge widens in 
   }
 })
 
+test("a bare field's icon starts where its value would, the control's gap from its value", async ({
+  page,
+}, testInfo) => {
+  test.skip(playground(testInfo) !== 'nuxt', 'The select menus are in the gallery')
+  // a list that does not grow as it opens, to measure in
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await open(page)
+  const gap = await resolveLength(page, 'var(--ws-control-gap-md)')
+  const list = page.locator('[data-slot="content"]:has([role="listbox"])')
+  // a select menu's search, a field with no edge of its own: without an icon, and with one
+  const searches = []
+  for (const help of ["Search by the city's name.", 'Several cities at once.']) {
+    await example(page, '#select', help).locator('button[aria-haspopup="listbox"]').click()
+    searches.push(await layoutOf(list.locator('input')))
+    await page.keyboard.press('Escape')
+    await expect(list).toHaveCount(0)
+  }
+  const [plain, withIcon] = searches
+  expect(withIcon!.leadingIcon!.start).toBe(plain!.value.start)
+  expect(withIcon!.value.start - withIcon!.leadingIcon!.end).toBe(gap)
+})
+
 test("a field's and a button's corners follow the tier's control radius as it changes", async ({
   page,
 }, testInfo) => {
