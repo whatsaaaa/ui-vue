@@ -10,12 +10,12 @@ import { forcedEdge, forcedIcon, transition } from './shared.ts'
 
 /** What a select and a select menu share. */
 export const selectSlots = {
-  base: `rounded-(--ws-control-radius) font-sans cursor-pointer disabled:text-text-faint disabled:opacity-100 ${transition}`,
+  base: `rounded-(--ws-control-radius) font-sans cursor-pointer disabled:text-(--ws-field-text-disabled) disabled:opacity-100 ${transition}`,
   // often the only words in the trigger, so in the secondary text color, which reads at 4.5:1;
   // faint with the rest of a disabled trigger
-  placeholder: 'truncate text-text-secondary group-disabled:text-text-faint',
-  leadingIcon: `text-text-secondary ${forcedIcon}`,
-  trailingIcon: `text-text-secondary ${forcedIcon}`,
+  placeholder: 'truncate text-text-secondary group-disabled:text-(--ws-field-text-disabled)',
+  leadingIcon: `text-(--ws-field-icon) ${forcedIcon}`,
+  trailingIcon: `text-(--ws-field-icon) ${forcedIcon}`,
   arrow: 'fill-surface stroke-border',
   viewport: 'divide-y divide-border',
   empty: 'text-center text-text-secondary',
@@ -92,7 +92,7 @@ export const selectVariants = {
   },
   variant: {
     ...fieldVariants,
-    outline: `${fieldVariants.outline} hover:bg-bg disabled:bg-transparent`,
+    outline: `${fieldVariants.outline} hover:bg-(--ws-field-bg) disabled:bg-transparent`,
     subtle: `${fieldVariants.subtle} hover:bg-raised disabled:bg-transparent`,
   },
   position: {
