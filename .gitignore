@@ -18,6 +18,15 @@ coverage
 *.tgz
 .eslintcache
 
+# Nuxt
+.nuxt
+.output
+.data
+
+# Written by Nuxt UI's Vite plugin when Vite runs
+playgrounds/vue/auto-imports.d.ts
+playgrounds/vue/components.d.ts
+
 # Playwright
 /test-results
 /playwright-report

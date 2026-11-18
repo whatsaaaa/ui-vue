@@ -1,5 +1,12 @@
-// The configs and the tests at the root. Each package has its own.
+// The package, the tests and the configs at the root. Each playground has its own, which
+// type-checks its Vue files.
 {
-  "extends": "@whatsaaaa/tsconfig/node.json",
-  "include": ["tests", "*.config.ts"]
+  "extends": "@whatsaaaa/tsconfig/bundler.json",
+  "compilerOptions": {
+    // the tests and the configs run in Node
+    "types": ["node"],
+    // nothing imports JSON, and the shared config's default would allow it
+    "resolveJsonModule": false
+  },
+  "include": ["packages/ui-vue/src", "tests", "*.config.ts"]
 }

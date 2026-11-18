@@ -5,7 +5,7 @@
 export default {
   extends: ['stylelint-config-standard'],
   plugins: ['stylelint-value-no-unknown-custom-properties'],
-  ignoreFiles: ['**/dist/**', '**/coverage/**'],
+  ignoreFiles: ['**/dist/**', '**/coverage/**', '**/.nuxt/**', '**/.output/**'],
   rules: {
     'color-no-hex': true,
     'color-named': 'never',
@@ -22,9 +22,29 @@ export default {
     ],
     'csstools/value-no-unknown-custom-properties': [
       true,
-      { importFrom: ['node_modules/@whatsaaaa/design-system/dist/tokens.css'] },
+      {
+        // what a stylesheet may read besides its own variables: the design system's tokens
+        // and icons, and Tailwind's theme
+        importFrom: [
+          'packages/ui-vue/node_modules/@whatsaaaa/design-system/dist/tokens.css',
+          'packages/ui-vue/node_modules/@whatsaaaa/design-system/dist/css/icons.css',
+        ],
+      },
     ],
+    // Tailwind's at-rules and functions
+    'at-rule-no-unknown': [
+      true,
+      {
+        ignoreAtRules: ['theme', 'source', 'custom-variant', 'slot', 'utility', 'variant', 'apply'],
+      },
+    ],
+    'at-rule-no-deprecated': [true, { ignoreAtRules: ['apply'] }],
+    // the selector of a variant, which Tailwind puts the utility's in for &
+    'nesting-selector-no-missing-scoping-root': [true, { ignoreAtRules: ['custom-variant'] }],
     'import-notation': 'string',
+    'selector-class-pattern': null,
+    'custom-property-pattern': null,
+    'no-descending-specificity': null,
   },
   overrides: [
     {
