@@ -1,11 +1,13 @@
 import { fieldCompoundVariants, fieldSizes, fieldVariants } from './field.ts'
-import { forcedEdge, forcedIcon, transition } from './shared.ts'
+import { forcedIcon, transition } from './shared.ts'
 
 /*
- * The trigger is a field. The list opens on a panel: the surface, its border and no shadow,
- * the hovered option raised, the chosen one marked in the interactive color. Options are values,
- * so they are in Inter; a group's name is an overline. In forced colors the panel is outlined and
- * the hovered option outlined in the selection color.
+ * The design system's select spec, specs/select.spec.json, and its select menu spec. The trigger
+ * is a field. The list opens on a panel of the overlay, --ws-overlay-*: the surface in the field
+ * border's edge, which reads at 3:1, and no shadow; the highlighted option raised, the chosen one
+ * ticked in the interactive color. Options are values, so they are in Inter; a group's name is an
+ * overline. The edge is a border, so forced colors keep it; there the highlighted option is
+ * outlined in the selection color.
  */
 
 /** What a select and a select menu share. */
@@ -16,12 +18,17 @@ export const selectSlots = {
   placeholder: 'truncate text-text-secondary group-disabled:text-(--ws-field-text-disabled)',
   leadingIcon: `text-(--ws-field-icon) ${forcedIcon}`,
   trailingIcon: `text-(--ws-field-icon) ${forcedIcon}`,
-  arrow: 'fill-surface stroke-border',
+  content:
+    'bg-(--ws-overlay-bg) rounded-(--ws-overlay-list-radius) border-(length:--ws-overlay-border-width) border-(--ws-overlay-border) ring-0 [box-shadow:none]',
+  arrow: 'fill-(--ws-overlay-bg) stroke-(--ws-overlay-border)',
   viewport: 'divide-y divide-border',
+  group: 'p-(--ws-overlay-list-padding)',
   empty: 'text-center text-text-secondary',
-  label: 'font-mono font-bold uppercase text-text-secondary',
-  separator: '-mx-1 my-1 h-px bg-border',
-  item: `cursor-pointer before:rounded-sm data-disabled:opacity-100 data-disabled:text-text-faint text-text data-highlighted:not-data-disabled:text-text data-highlighted:not-data-disabled:before:bg-raised forced-colors:data-highlighted:not-data-disabled:before:border forced-colors:data-highlighted:not-data-disabled:before:border-[Highlight] ${transition} motion-reduce:before:transition-none`,
+  // an overline: mono, in capitals
+  label: 'font-mono font-(--ws-text-overline-font-weight) uppercase text-text-secondary',
+  separator:
+    '-mx-(--ws-overlay-list-padding) my-(--ws-overlay-list-padding) h-(--ws-border-width-thin) bg-border',
+  item: `cursor-pointer font-sans before:rounded-(--ws-radius-sm) data-disabled:opacity-100 data-disabled:text-text-faint text-text data-highlighted:not-data-disabled:text-text data-highlighted:not-data-disabled:before:bg-raised forced-colors:data-highlighted:not-data-disabled:before:border forced-colors:data-highlighted:not-data-disabled:before:border-[Highlight] ${transition} motion-reduce:before:transition-none`,
   itemLeadingIcon: `text-text-secondary group-data-highlighted:not-group-data-disabled:text-text ${forcedIcon} ${transition}`,
   // the chosen option's tick, centered on the option's first line
   itemTrailing: 'h-lh',
@@ -34,8 +41,9 @@ export const listMotion =
   'data-[state=open]:animate-[fade-in_var(--ws-motion-duration-fast)_var(--ws-motion-easing-out)] data-[state=closed]:animate-[fade-out_var(--ws-motion-duration-fast)_var(--ws-motion-easing-in)] motion-safe:data-[state=open]:animate-[scale-in_var(--ws-motion-duration-fast)_var(--ws-motion-easing-out)] motion-safe:data-[state=closed]:animate-[scale-out_var(--ws-motion-duration-fast)_var(--ws-motion-easing-in)]'
 
 /**
- * A select's icons sit inside its edge, as its value does. An option's icon is centered on its
- * first line, as the tick is, whatever lines follow.
+ * A select's icons sit inside its edge, as its value does. In the list an option's icon and its
+ * tick are the control's icon of the size, the icon centered on the option's first line, as the
+ * tick is, whatever lines follow.
  */
 export const selectVariants = {
   size: {
@@ -43,56 +51,61 @@ export const selectVariants = {
       ...fieldSizes.xs,
       leading: 'ps-[calc(var(--ws-space-8)-var(--field-edge-extra,0px))]',
       trailing: 'pe-[calc(var(--ws-space-8)-var(--field-edge-extra,0px))]',
-      label: 'px-1.5 py-1 text-overline',
-      item: 'px-1.5 py-1 gap-1.5 text-body-sm',
-      itemLeadingIcon: 'size-icon my-[calc((1lh-var(--ws-size-icon))/2)]',
-      itemTrailingIcon: 'size-icon',
-      empty: 'p-2 text-body-sm',
+      label: 'px-(--ws-space-6) py-(--ws-space-4) text-overline',
+      item: 'px-(--ws-space-6) py-(--ws-space-4) gap-(--ws-control-gap-xs) text-body-sm',
+      itemLeadingIcon:
+        'size-(--ws-control-icon-size-xs) my-[calc((1lh-var(--ws-control-icon-size-xs))/2)]',
+      itemTrailingIcon: 'size-(--ws-control-icon-size-xs)',
+      empty: 'p-(--ws-space-8) text-body-sm',
     },
     sm: {
       ...fieldSizes.sm,
       leading: 'ps-[calc(var(--ws-space-10)-var(--field-edge-extra,0px))]',
       trailing: 'pe-[calc(var(--ws-space-10)-var(--field-edge-extra,0px))]',
-      label: 'px-2 py-1 text-overline',
-      item: 'px-2 py-1 gap-1.5 text-body-sm',
-      itemLeadingIcon: 'size-icon my-[calc((1lh-var(--ws-size-icon))/2)]',
-      itemTrailingIcon: 'size-icon',
-      empty: 'p-2.5 text-body-sm',
+      label: 'px-(--ws-space-8) py-(--ws-space-4) text-overline',
+      item: 'px-(--ws-space-8) py-(--ws-space-4) gap-(--ws-control-gap-sm) text-body-sm',
+      itemLeadingIcon:
+        'size-(--ws-control-icon-size-sm) my-[calc((1lh-var(--ws-control-icon-size-sm))/2)]',
+      itemTrailingIcon: 'size-(--ws-control-icon-size-sm)',
+      empty: 'p-(--ws-space-10) text-body-sm',
     },
     md: {
       ...fieldSizes.md,
       leading: 'ps-[calc(var(--ws-space-12)-var(--field-edge-extra,0px))]',
       trailing: 'pe-[calc(var(--ws-space-12)-var(--field-edge-extra,0px))]',
-      label: 'px-2 py-1.5 text-overline',
-      item: 'px-2 py-1.5 gap-2 text-body',
-      itemLeadingIcon: 'size-icon my-[calc((1lh-var(--ws-size-icon))/2)]',
-      itemTrailingIcon: 'size-icon',
-      empty: 'p-3 text-body-sm',
+      label: 'px-(--ws-space-8) py-(--ws-space-6) text-overline',
+      item: 'px-(--ws-space-8) py-(--ws-space-6) gap-(--ws-control-gap-md) text-body',
+      itemLeadingIcon:
+        'size-(--ws-control-icon-size-md) my-[calc((1lh-var(--ws-control-icon-size-md))/2)]',
+      itemTrailingIcon: 'size-(--ws-control-icon-size-md)',
+      empty: 'p-(--ws-space-12) text-body-sm',
     },
     lg: {
       ...fieldSizes.lg,
       leading: 'ps-[calc(var(--ws-space-14)-var(--field-edge-extra,0px))]',
       trailing: 'pe-[calc(var(--ws-space-14)-var(--field-edge-extra,0px))]',
-      label: 'px-2.5 py-1.5 text-overline',
-      item: 'px-2.5 py-2 gap-2 text-body',
-      itemLeadingIcon: 'size-5 my-[calc((1lh-1.25rem)/2)]',
-      itemTrailingIcon: 'size-5',
-      empty: 'p-3 text-body',
+      label: 'px-(--ws-space-10) py-(--ws-space-6) text-overline',
+      item: 'px-(--ws-space-10) py-(--ws-space-8) gap-(--ws-control-gap-lg) text-body',
+      itemLeadingIcon:
+        'size-(--ws-control-icon-size-lg) my-[calc((1lh-var(--ws-control-icon-size-lg))/2)]',
+      itemTrailingIcon: 'size-(--ws-control-icon-size-lg)',
+      empty: 'p-(--ws-space-12) text-body',
     },
     xl: {
       ...fieldSizes.xl,
       leading: 'ps-[calc(var(--ws-space-16)-var(--field-edge-extra,0px))]',
       trailing: 'pe-[calc(var(--ws-space-16)-var(--field-edge-extra,0px))]',
-      label: 'px-3 py-2 text-overline',
-      item: 'px-3 py-2 gap-2.5 text-body',
-      itemLeadingIcon: 'size-5 my-[calc((1lh-1.25rem)/2)]',
-      itemTrailingIcon: 'size-5',
-      empty: 'p-3 text-body',
+      label: 'px-(--ws-space-12) py-(--ws-space-8) text-overline',
+      item: 'px-(--ws-space-12) py-(--ws-space-8) gap-(--ws-control-gap-xl) text-body',
+      itemLeadingIcon:
+        'size-(--ws-control-icon-size-xl) my-[calc((1lh-var(--ws-control-icon-size-xl))/2)]',
+      itemTrailingIcon: 'size-(--ws-control-icon-size-xl)',
+      empty: 'p-(--ws-space-12) text-body',
     },
   },
   variant: {
     ...fieldVariants,
-    outline: `${fieldVariants.outline} hover:bg-(--ws-field-bg) disabled:bg-transparent`,
+    outline: `${fieldVariants.outline} hover:bg-(--ws-field-bg) disabled:bg-(--ws-field-bg)`,
     subtle: `${fieldVariants.subtle} hover:bg-raised disabled:bg-transparent`,
   },
   position: {
@@ -101,10 +114,7 @@ export const selectVariants = {
 }
 
 export default {
-  slots: {
-    ...selectSlots,
-    content: `bg-surface ring-border ${forcedEdge}`,
-  },
+  slots: selectSlots,
   variants: selectVariants,
   compoundVariants: fieldCompoundVariants,
 }

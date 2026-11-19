@@ -22,7 +22,7 @@ const menuCities = ref(['Oslo', 'Vienna'])
   <GallerySection
     id="select"
     title="USelect, USelectMenu"
-    lead="The trigger is a field. The list opens on a panel with a border and no shadow: the hovered option is raised, the chosen one marked in the interactive color. USelectMenu adds a search at the top of the list."
+    lead="The trigger is a field. The list opens on a panel with a border and no shadow: the hovered option is raised, the chosen one marked in the interactive color. USelectMenu adds a search at the top of the list. Their specs' examples, with the lists open, are on the open page."
   >
     <GalleryRow label="states">
       <div class="grid w-full gap-x-6 gap-y-6 md:grid-cols-2 xl:grid-cols-3">
@@ -65,12 +65,17 @@ const menuCities = ref(['Oslo', 'Vienna'])
             data-testid="select-menu"
           />
         </UFormField>
-        <UFormField label="Cities" help="Several cities at once.">
+        <!-- a search field the app passes takes the place of the default one: it keeps the icon
+             by passing it with its placeholder -->
+        <UFormField
+          label="Cities"
+          help="Several cities at once, the search naming what it searches."
+        >
           <USelectMenu
             v-model="menuCities"
             :items="cities"
             multiple
-            :search-input="{ icon: 'i-lucide-search' }"
+            :search-input="{ placeholder: 'Search the cities', icon: 'i-lucide-search' }"
             class="w-full"
           />
         </UFormField>

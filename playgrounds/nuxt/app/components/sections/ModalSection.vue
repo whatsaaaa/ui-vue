@@ -7,7 +7,7 @@ const name = ref('Maya Collins')
   <GallerySection
     id="modal"
     title="UModal"
-    lead="A window of the terminal: the surface in a border with the window's radius, no shadow. Its header is a bar as tall as the tab bar, on the page color. The page behind it is dimmed in its own color."
+    lead="A window of the terminal: the surface in a border with the window's radius, no shadow. Its header is a bar as tall as the tab bar, on the page color. The page behind it is dimmed in its own color. Its spec's example, open in place, is on the open page."
   >
     <GalleryRow label="opening">
       <GalleryItem caption="confirmation">

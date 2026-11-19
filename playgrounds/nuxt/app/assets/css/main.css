@@ -31,6 +31,57 @@
 }
 
 /*
+ * An open list highlights the option the focus is on: the chosen one, as it opens. An open list
+ * in the gallery, marked data-demo="open", takes no focus, so its chosen option is drawn
+ * highlighted.
+ */
+@custom-variant data-highlighted {
+  &[data-highlighted] {
+    @slot;
+  }
+
+  &:where([data-demo~='open'] [role='option'][data-state='checked']) {
+    @slot;
+  }
+}
+
+/*
+ * An open list or window, drawn in place by GalleryOpen. Reka places a list under its trigger
+ * over the page, with inline styles, and the modal's window and its dimmed page over the whole
+ * screen. Here they take their place in the example's flow: the list under its trigger, and the
+ * window over its dimmed page, a box around it that stands for the screen.
+ */
+.gallery-open {
+  position: relative;
+}
+
+/* the list is as wide as its trigger: Reka's min-width of its content would widen the column */
+.gallery-open [data-reka-popper-content-wrapper] {
+  position: static !important;
+  min-width: 0 !important;
+  transform: none !important;
+  margin-top: var(--ws-space-8);
+}
+
+.gallery-open:has([role='dialog']) {
+  padding: var(--ws-space-32) var(--ws-space-16);
+}
+
+.gallery-open [data-slot='overlay'] {
+  position: absolute;
+  inset: 0;
+}
+
+/* the window is as wide as the box allows, which is 2rem wider, as the screen would be */
+.gallery-open [role='dialog'] {
+  position: relative;
+  inset: auto;
+  translate: none;
+  width: 100%;
+  margin-inline: auto;
+}
+
+/*
  * The window: on a wide screen it fills the screen and its content scrolls inside it, on a
  * phone it grows with the content and the page scrolls. As on the website.
  */
@@ -68,6 +119,25 @@ body {
 
   .window__main {
     overflow: visible;
+  }
+}
+
+/*
+ * An open list or modal locks the page as it does in an app: Reka takes the pointer and the
+ * scroll from the page while it is open. On a page with one held open, the window keeps both: it
+ * takes the pointer back, and scrolls its content inside itself at every width.
+ */
+body:has(.gallery-open) .window {
+  pointer-events: auto;
+}
+
+@media (width < 64rem) {
+  body:has(.gallery-open) .window {
+    height: calc(100dvh - 2 * var(--ws-space-12));
+  }
+
+  body:has(.gallery-open) .window__main {
+    overflow: auto;
   }
 }
 

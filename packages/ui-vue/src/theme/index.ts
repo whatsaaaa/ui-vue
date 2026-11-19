@@ -45,6 +45,10 @@ const textStyles = [
 /** The sizes, as spacing: h-control, size-check, max-w-content. */
 const sizes = [
   'check',
+  'check-xs',
+  'check-sm',
+  'check-lg',
+  'check-xl',
   'content',
   'control',
   'control-xs',
@@ -59,6 +63,8 @@ const sizes = [
   'status-line',
   'step',
   'tab-bar',
+  'tick-sm',
+  'tick-lg',
 ]
 
 /**

@@ -145,18 +145,23 @@ test("a bare field's icon starts where its value would, the control's gap from i
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await open(page)
   const gap = await resolveLength(page, 'var(--ws-control-gap-md)')
+  // where a bare field's value starts: its padding, with no edge before it
+  const padding = await resolveLength(page, 'var(--ws-space-12)')
   const list = page.locator('[data-slot="content"]:has([role="listbox"])')
-  // a select menu's search, a field with no edge of its own: without an icon, and with one
-  const searches = []
-  for (const help of ["Search by the city's name.", 'Several cities at once.']) {
+  // a select menu's search, a field with no edge of its own: the default one, and one an app
+  // passes with its placeholder and the icon
+  for (const help of [
+    "Search by the city's name.",
+    'Several cities at once, the search naming what it searches.',
+  ]) {
     await example(page, '#select', help).locator('button[aria-haspopup="listbox"]').click()
-    searches.push(await layoutOf(list.locator('input')))
+    const search = await layoutOf(list.locator('input'))
+    expect(search.leadingIcon, help).toBeDefined()
+    expect(search.leadingIcon!.start, help).toBe(padding)
+    expect(search.value.start - search.leadingIcon!.end, help).toBe(gap)
     await page.keyboard.press('Escape')
     await expect(list).toHaveCount(0)
   }
-  const [plain, withIcon] = searches
-  expect(withIcon!.leadingIcon!.start).toBe(plain!.value.start)
-  expect(withIcon!.value.start - withIcon!.leadingIcon!.end).toBe(gap)
 })
 
 test("a field's and a button's corners follow the tier's control radius as it changes", async ({

@@ -17,9 +17,9 @@ export function reportsOf(page: Page): string[] {
   return reports
 }
 
-/** Opens the page and waits for the app. */
-export async function open(page: Page): Promise<void> {
-  await page.goto('/')
+/** Opens a page of the playground, the gallery unless another is named, and waits for the app. */
+export async function open(page: Page, path = '/'): Promise<void> {
+  await page.goto(path)
   await waitForApp(page)
 }
 
