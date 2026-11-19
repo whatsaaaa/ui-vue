@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@iconify-json/lucide": "^1.2.154",
-    "@nuxt/ui": "4.12.0",
+    "@nuxt/ui": "4.13.0",
     "@vueuse/core": "^14.4.0",
     "@whatsaaaa/design-system": "^0.14.0",
     "@whatsaaaa/ui-vue": "workspace:*",
