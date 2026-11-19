@@ -1,16 +1,20 @@
 import { type ByColor, byColor, forcedEdge, forcedIcon, transition } from './shared.ts'
 
 /*
- * Tabs read like the tabs of the frame: mono labels, the idle ones in the secondary text color.
- * A pill is a bar on the page color whose current tab is raised, the current item of the system.
- * A link is a row over a divider whose current tab is marked in the brand color, as the frame
- * marks its current tab. The focus ring is drawn inside the tab, as the frame draws it.
+ * Tabs read like the tabs of the frame, as the design system's tabs spec, specs/tabs.spec.json,
+ * draws them: a row of mono labels over a line, the idle ones in the secondary text color, whose
+ * current tab is marked in the brand color, as the frame marks its current tab. That is the link,
+ * and tabs are links unless they ask for a pill: a bar on the page color whose current tab is
+ * raised, which the spec leaves to the system's segmented control. The focus ring is drawn inside
+ * the tab, as the frame draws it. A tab is as tall as a control, and reads the control tier by
+ * name, --ws-control-*, so a change of the tier reaches it; a pill's tab is shorter, inside its
+ * bar.
  *
  * Until the indicator is in the page, as in the HTML from the server, the current tab draws it
  * itself: the classes that start with in-[[data-slot=list]...] do that.
  *
  * A tab keeps its whole label: tabs that do not fit their row scroll inside it, as a table does,
- * and the marker of a link is drawn inside the row, over its divider.
+ * and the marker of a link is drawn inside the row, over its line.
  *
  * In forced colors the current tab is marked in the selection color: a pill's outlined, a link's
  * underlined, and the bar of the pills is outlined.
@@ -97,11 +101,31 @@ export default {
       },
     },
     size: {
-      xs: { trigger: 'h-6 px-2 gap-1.5 text-label-sm', leadingIcon: 'size-3.5' },
-      sm: { trigger: 'h-7 px-2.5 gap-1.5 text-label-sm', leadingIcon: 'size-icon' },
-      md: { trigger: 'h-8 px-3.5 gap-2 text-label', leadingIcon: 'size-icon' },
-      lg: { trigger: 'h-9 px-4 gap-2 text-label', leadingIcon: 'size-icon' },
-      xl: { trigger: 'h-10 px-4 gap-2.5 text-label', leadingIcon: 'size-4.5' },
+      xs: {
+        trigger:
+          'h-(--ws-control-height-xs) px-(--ws-space-8) gap-(--ws-control-gap-xs) text-label-sm',
+        leadingIcon: 'size-(--ws-control-icon-size-xs)',
+      },
+      sm: {
+        trigger:
+          'h-(--ws-control-height-sm) px-(--ws-space-10) gap-(--ws-control-gap-sm) text-label-sm',
+        leadingIcon: 'size-(--ws-control-icon-size-sm)',
+      },
+      md: {
+        trigger:
+          'h-(--ws-control-height-md) px-(--ws-space-14) gap-(--ws-control-gap-md) text-label',
+        leadingIcon: 'size-(--ws-control-icon-size-md)',
+      },
+      lg: {
+        trigger:
+          'h-(--ws-control-height-lg) px-(--ws-space-16) gap-(--ws-control-gap-lg) text-label',
+        leadingIcon: 'size-(--ws-control-icon-size-lg)',
+      },
+      xl: {
+        trigger:
+          'h-(--ws-control-height-xl) px-(--ws-space-16) gap-(--ws-control-gap-xl) text-label',
+        leadingIcon: 'size-(--ws-control-icon-size-xl)',
+      },
     },
   },
   compoundVariants: [
@@ -111,32 +135,38 @@ export default {
     ...byColor(pillIndicator, { variant: 'pill' }, 'indicator'),
     ...byColor(link, { variant: 'link' }, 'trigger'),
     ...byColor(linkIndicator, { variant: 'link' }, 'indicator'),
-    // A link's tabs are as tall as a field, and its marker is two pixels, just over the divider.
-    { variant: 'link', size: 'xs', class: { trigger: 'h-7' } },
-    { variant: 'link', size: 'sm', class: { trigger: 'h-8' } },
-    { variant: 'link', size: 'md', class: { trigger: 'h-10' } },
-    { variant: 'link', size: 'lg', class: { trigger: 'h-11' } },
-    { variant: 'link', size: 'xl', class: { trigger: 'h-12' } },
+    // A pill's tab is inside its bar, which has a padding of 4 pixels.
+    { variant: 'pill', size: 'xs', class: { trigger: 'h-6' } },
+    { variant: 'pill', size: 'sm', class: { trigger: 'h-7' } },
+    { variant: 'pill', size: 'md', class: { trigger: 'h-8' } },
+    { variant: 'pill', size: 'lg', class: { trigger: 'h-9' } },
+    { variant: 'pill', size: 'xl', class: { trigger: 'h-10' } },
+    // A link's marker is a medium border wide, just over the line.
     {
       orientation: 'horizontal',
       variant: 'link',
       class: {
-        indicator: 'bottom-0 h-0.5',
+        list: 'border-b-thin',
+        indicator: 'bottom-0 h-(--ws-border-width-medium)',
         trigger:
-          'in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:after:bottom-0 in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:after:h-0.5',
+          'in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:after:bottom-0 in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:after:h-(--ws-border-width-medium)',
       },
     },
     {
       orientation: 'vertical',
       variant: 'link',
       class: {
-        indicator: 'start-0 w-0.5',
+        list: 'border-s-thin',
+        indicator: 'start-0 w-(--ws-border-width-medium)',
         trigger:
-          'justify-start in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:after:start-0 in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:after:w-0.5',
+          'justify-start in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:after:start-0 in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:after:w-(--ws-border-width-medium)',
       },
     },
     // Nuxt UI tints the focus outline of a tab and of its panel with the color: the ring is the
     // system's.
     { class: { trigger: focus, content: 'outline-interactive' } },
   ],
+  defaultVariants: {
+    variant: 'link',
+  },
 }

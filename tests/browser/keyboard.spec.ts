@@ -143,6 +143,31 @@ test.describe('the gallery', () => {
     await expect(tabs.getByRole('tab', { name: 'Overview' })).toBeFocused()
   })
 
+  test("a table's rows are chosen by their checkboxes, and a row is no stop of its own", async ({
+    page,
+  }) => {
+    const table = page.locator('[data-spec="table.selectable.rest"]')
+    const all = table.getByRole('checkbox', { name: 'Choose every registration' })
+    const maya = table.getByRole('checkbox', { name: 'Choose Maya Collins' })
+    await all.focus()
+    await page.keyboard.press('Tab')
+    await expect(maya).toBeFocused()
+    await page.keyboard.press('Space')
+    await expect(maya).toHaveAttribute('aria-checked', 'true')
+    await expect(table.locator('tbody tr').first()).toHaveAttribute('data-selected', 'true')
+    await expect(all).toHaveAttribute('aria-checked', 'mixed')
+    await page.keyboard.press('Tab')
+    await expect(table.getByRole('checkbox', { name: 'Choose Daniel Brooks' })).toBeFocused()
+    // the head's checkbox chooses every row, and lets them all go
+    await all.focus()
+    await page.keyboard.press('Space')
+    for (const checkbox of await table.getByRole('checkbox').all())
+      await expect(checkbox).toHaveAttribute('aria-checked', 'true')
+    await page.keyboard.press('Space')
+    for (const checkbox of await table.getByRole('checkbox').all())
+      await expect(checkbox).toHaveAttribute('aria-checked', 'false')
+  })
+
   test('a card keeps the border of its state with the focus: checked, or in error', async ({
     page,
   }) => {
