@@ -9,8 +9,14 @@ const payments = [
 const tickets = ['One day', 'Two days', 'All three days']
 const sessions = ['Morning', 'Afternoon', 'Evening']
 
+// none is checked to begin with, as the content rules of the spec ask
+const method = ref<string>()
 const payment = ref('card')
 const ticket = ref('All three days')
+
+/** The example of the radio group spec a group is, by its id: radio-group.list.hover. */
+const specOf = (state: string, size = 'md') =>
+  ['radio-group', 'list', state, ...(size === 'md' ? [] : [size])].join('.')
 </script>
 
 <template>
@@ -19,21 +25,54 @@ const ticket = ref('All three days')
     title="URadioGroup"
     lead="A circle with a dot, checked in the interactive color. The group's name is a field label in mono, its options are in Inter."
   >
+    <!--
+      the examples of a state show the same group, so that only the state tells them apart; the
+      pointer and the focus are on one option at a time, so the examples of them have one
+    -->
     <GalleryRow label="states" align="start">
-      <GalleryItem caption="default">
-        <URadioGroup v-model="payment" legend="Payment" :items="payments" />
+      <GalleryItem caption="rest">
+        <URadioGroup
+          v-model="method"
+          legend="Payment"
+          :items="payments"
+          :data-spec="specOf('rest')"
+        />
       </GalleryItem>
       <GalleryItem caption="hover">
-        <URadioGroup legend="Ticket" :items="['One day']" data-demo="hover" />
+        <URadioGroup
+          legend="Payment"
+          :items="payments.slice(0, 1)"
+          data-demo="hover"
+          :data-spec="specOf('hover')"
+        />
       </GalleryItem>
       <GalleryItem caption="focus">
-        <URadioGroup legend="Ticket" :items="['One day']" data-demo="focus" />
+        <URadioGroup
+          legend="Payment"
+          :items="payments.slice(0, 1)"
+          data-demo="focus"
+          :data-spec="specOf('focus')"
+        />
+      </GalleryItem>
+      <GalleryItem caption="checked">
+        <URadioGroup
+          model-value="card"
+          legend="Payment"
+          :items="payments"
+          :data-spec="specOf('checked')"
+        />
       </GalleryItem>
       <GalleryItem caption="disabled">
-        <URadioGroup model-value="Two days" legend="Ticket" :items="tickets" disabled />
+        <URadioGroup
+          model-value="transfer"
+          legend="Payment"
+          :items="payments"
+          disabled
+          :data-spec="specOf('disabled')"
+        />
       </GalleryItem>
-      <GalleryItem caption="error">
-        <UFormField name="ticket" error="Choose a ticket.">
+      <GalleryItem caption="invalid">
+        <UFormField name="ticket" error="Choose a ticket." :data-spec="specOf('invalid')">
           <URadioGroup legend="Ticket" :items="tickets" required />
         </UFormField>
       </GalleryItem>
@@ -65,12 +104,21 @@ const ticket = ref('All three days')
 
     <GalleryRow label="sizes" align="start">
       <GalleryItem v-for="size in sizes" :key="size" :caption="size">
-        <URadioGroup
-          :size="size"
-          model-value="Two days"
-          :legend="`Ticket, ${size}`"
-          :items="tickets.slice(0, 2)"
-        />
+        <div class="flex flex-col gap-5">
+          <URadioGroup
+            :size="size"
+            :legend="`Ticket, ${size}`"
+            :items="tickets.slice(0, 2)"
+            :data-spec="specOf('rest', size)"
+          />
+          <URadioGroup
+            :size="size"
+            model-value="Two days"
+            :legend="`Ticket, ${size}`"
+            :items="tickets.slice(0, 2)"
+            :data-spec="specOf('checked', size)"
+          />
+        </div>
       </GalleryItem>
     </GalleryRow>
   </GallerySection>

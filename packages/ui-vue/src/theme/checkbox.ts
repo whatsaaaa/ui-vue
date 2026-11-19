@@ -6,19 +6,28 @@ import {
   checkedCard,
   choiceFocus,
   choiceSizes,
+  control,
+  description,
+  disabled,
   forcedCheckedCard,
   highlight,
   highlightCard,
+  indicator,
+  label,
 } from './choice.ts'
 import { byColor, forcedChecked, forcedControlEdge, transition } from './shared.ts'
 
-/* A box with the smallest radius and a tick. */
+/*
+ * A box with the smallest radius and a tick, as the design system's checkbox spec draws it. The
+ * fill shows only while the box is checked or indeterminate, so a disabled box takes the faint
+ * fill from the disabled variant alone: Nuxt UI passes its theme no checked variant.
+ */
 export default {
   slots: {
-    base: `rounded-xs ring-field-border bg-bg cursor-pointer hover:ring-text-secondary ${forcedControlEdge} ${transition}`,
-    indicator: `flex items-center justify-center size-full ${forcedChecked}`,
-    label: 'font-sans font-normal text-text cursor-pointer',
-    description: 'text-text-secondary text-body-sm',
+    base: `rounded-xs ${control} ${forcedControlEdge} ${transition}`,
+    indicator: `${indicator} flex items-center justify-center ${forcedChecked}`,
+    label,
+    description,
   },
   variants: {
     color: {
@@ -34,28 +43,32 @@ export default {
         root: `border border-border rounded-lg ${cardHoverFill} ${forcedCheckedCard} ${transition}`,
       },
     },
+    // Hidden, the box takes no room: Nuxt UI hides it as sr-only, which keeps it out of the
+    // row only while it is not relative.
     indicator: {
       start: { wrapper: 'ms-2.5' },
       end: { wrapper: 'me-2.5' },
+      hidden: { base: 'absolute overflow-hidden' },
     },
     // The tick is drawn at the system's icon size in the twenty pixel box, four fifths of it; in
     // the other boxes at four fifths too, to the even pixel, so it stays centered in the box.
     size: {
-      xs: { ...choiceSizes.xs, icon: 'size-3' },
-      sm: { ...choiceSizes.sm, icon: 'size-3' },
+      xs: { ...choiceSizes.xs, icon: 'size-tick-sm' },
+      sm: { ...choiceSizes.sm, icon: 'size-tick-sm' },
       md: { ...choiceSizes.md, icon: 'size-icon' },
-      lg: { ...choiceSizes.lg, icon: 'size-4.5' },
-      xl: { ...choiceSizes.xl, icon: 'size-5' },
+      lg: { ...choiceSizes.lg, icon: 'size-tick-lg' },
+      xl: { ...choiceSizes.xl, icon: 'size-icon-lg' },
     },
     required: {
       true: { label: "after:content-['*'] after:ms-0.5 after:text-(--ws-field-required-text)" },
     },
     disabled: {
       true: {
+        ...disabled,
         root: 'opacity-100',
-        base: 'cursor-not-allowed ring-text-faint hover:ring-text-faint',
-        label: 'cursor-not-allowed text-text-faint',
-        description: 'cursor-not-allowed text-text-faint',
+        // A disabled box that is checked or indeterminate keeps its mark, on the faint fill.
+        indicator:
+          'bg-(--ws-choice-indicator-bg-disabled) text-(--ws-choice-indicator-icon-disabled)',
       },
     },
   },
@@ -71,7 +84,5 @@ export default {
     ...byColor(checkedCard, { variant: 'card' }, 'root'),
     ...byColor(highlight, { highlight: true }, 'base'),
     ...byColor(highlightCard, { indicator: 'hidden', highlight: true }, 'root'),
-    // A disabled box that is checked keeps its tick, in the faint color.
-    { disabled: true, checked: true, class: { indicator: 'bg-text-faint text-bg' } },
   ],
 }

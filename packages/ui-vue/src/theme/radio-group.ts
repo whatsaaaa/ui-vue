@@ -5,20 +5,28 @@ import {
   checkedCard,
   choiceFocus,
   choiceSizes,
+  control,
+  description,
+  disabled,
   forcedCheckedCard,
   highlight,
   highlightCard,
+  indicator,
+  label,
 } from './choice.ts'
 import { type ByColor, byColor, forcedChecked, forcedControlEdge, transition } from './shared.ts'
 
 /*
- * A round control with a dot. The group's name is a field label, in mono, and its options are
- * apart by the sample apps' gap.
+ * A round control with a dot, as the design system's radio group spec draws it. The group's name
+ * is a field label, in mono, and its options are apart by the sample apps' gap.
  */
 
-/** The checked fill and the dot on it: the dot is the color of a checkbox's tick. */
+/**
+ * The checked fill and the dot on it: the dot is the color of a checkbox's tick. The spec's color
+ * is primary, which reads the tier.
+ */
 const checked: ByColor = {
-  primary: 'bg-interactive after:bg-on-interactive',
+  primary: 'bg-(--ws-choice-indicator-bg-checked) after:bg-(--ws-choice-indicator-icon-checked)',
   success: 'bg-tip-text after:bg-bg',
   info: 'bg-note-text after:bg-bg',
   warning: 'bg-warning-text after:bg-bg',
@@ -28,11 +36,11 @@ const checked: ByColor = {
 
 export default {
   slots: {
-    legend: 'font-mono font-normal text-text',
-    base: `ring-field-border bg-bg cursor-pointer hover:ring-text-secondary ${forcedControlEdge} ${transition}`,
-    indicator: `${forcedChecked} forced-colors:after:bg-[HighlightText] forced-colors:in-disabled:after:bg-[Canvas]`,
-    label: 'font-sans font-normal text-text cursor-pointer',
-    description: 'text-text-secondary text-body-sm',
+    legend: 'font-mono font-normal text-(--ws-field-label-text)',
+    base: `rounded-(--ws-radius-full) ${control} ${forcedControlEdge} ${transition}`,
+    indicator: `${indicator} ${forcedChecked} forced-colors:after:bg-[HighlightText] forced-colors:in-disabled:after:bg-[Canvas]`,
+    label,
+    description,
   },
   variants: {
     color: {
@@ -52,40 +60,43 @@ export default {
     orientation: {
       horizontal: { fieldset: 'gap-x-6' },
     },
+    // Hidden, the control takes no room: Nuxt UI hides it as sr-only, which keeps it out of the
+    // row only while it is not relative.
     indicator: {
       start: { wrapper: 'ms-2.5' },
       end: { wrapper: 'me-2.5' },
+      hidden: { base: 'absolute overflow-hidden' },
     },
     size: {
       xs: {
         ...choiceSizes.xs,
         legend: 'mb-2 text-label-sm',
         fieldset: 'gap-y-2',
-        indicator: 'after:size-1.5',
+        indicator: 'after:size-(--ws-space-6)',
       },
       sm: {
         ...choiceSizes.sm,
         legend: 'mb-2 text-label-sm',
         fieldset: 'gap-y-2',
-        indicator: 'after:size-1.5',
+        indicator: 'after:size-(--ws-space-6)',
       },
       md: {
         ...choiceSizes.md,
         legend: 'mb-2.5 text-label',
         fieldset: 'gap-y-2.5',
-        indicator: 'after:size-2',
+        indicator: 'after:size-(--ws-space-8)',
       },
       lg: {
         ...choiceSizes.lg,
         legend: 'mb-2.5 text-label',
         fieldset: 'gap-y-2.5',
-        indicator: 'after:size-2',
+        indicator: 'after:size-(--ws-space-8)',
       },
       xl: {
         ...choiceSizes.xl,
         legend: 'mb-3 text-label',
         fieldset: 'gap-y-3',
-        indicator: 'after:size-2.5',
+        indicator: 'after:size-(--ws-space-10)',
       },
     },
     required: {
@@ -93,11 +104,11 @@ export default {
     },
     disabled: {
       true: {
+        ...disabled,
         item: 'opacity-100',
-        base: 'cursor-not-allowed ring-text-faint hover:ring-text-faint',
-        indicator: 'bg-text-faint after:bg-bg',
-        label: 'cursor-not-allowed text-text-faint',
-        description: 'cursor-not-allowed text-text-faint',
+        // A disabled group that has an answer keeps it: the dot, on the faint fill.
+        indicator:
+          'bg-(--ws-choice-indicator-bg-disabled) after:bg-(--ws-choice-indicator-icon-disabled)',
       },
     },
   },

@@ -1,50 +1,75 @@
 <script setup lang="ts">
 const sizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const
-const terms = ref(true)
 const news = ref(false)
-const all = ref<boolean | 'indeterminate'>('indeterminate')
+
+/** The example of the checkbox spec an option is, by its id: checkbox.list.hover. */
+const specOf = (state: string, size = 'md') =>
+  ['checkbox', 'list', state, ...(size === 'md' ? [] : [size])].join('.')
+
+// The examples of a state show the same option, so that only the state tells them apart.
+const option = {
+  label: 'Send me news',
+  description: 'One email a month, about new workshops.',
+}
 </script>
 
 <template>
   <GallerySection
     id="checkbox"
     title="UCheckbox"
-    lead="A twenty pixel box in the smallest radius, outlined in the field border, filled with the interactive color when checked. Its label is an option, so it is in Inter, on the line the box sits on."
+    lead="A twenty pixel box in the smallest radius, edged in the field border, filled with the interactive color when checked. Its label is an option, so it is in Inter, on the line the box sits on."
   >
-    <GalleryRow label="states">
-      <GalleryItem caption="unchecked">
-        <UCheckbox v-model="news" label="Send me news" />
-      </GalleryItem>
-      <GalleryItem caption="checked">
-        <UCheckbox v-model="terms" label="I accept the terms of use" />
-      </GalleryItem>
-      <GalleryItem caption="indeterminate">
-        <UCheckbox v-model="all" label="All days" />
+    <GalleryRow label="states" align="start">
+      <GalleryItem caption="rest">
+        <div :data-spec="specOf('rest')">
+          <UCheckbox v-model="news" v-bind="option" />
+        </div>
       </GalleryItem>
       <GalleryItem caption="hover">
-        <UCheckbox label="Send me news" data-demo="hover" />
+        <div :data-spec="specOf('hover')" data-demo="hover">
+          <UCheckbox v-bind="option" />
+        </div>
       </GalleryItem>
       <GalleryItem caption="focus">
-        <UCheckbox label="Send me news" data-demo="focus" />
+        <div :data-spec="specOf('focus')" data-demo="focus">
+          <UCheckbox v-bind="option" />
+        </div>
+      </GalleryItem>
+      <GalleryItem caption="checked">
+        <div :data-spec="specOf('checked')">
+          <UCheckbox :model-value="true" v-bind="option" />
+        </div>
+      </GalleryItem>
+      <GalleryItem caption="indeterminate">
+        <div :data-spec="specOf('indeterminate')">
+          <UCheckbox model-value="indeterminate" v-bind="option" />
+        </div>
       </GalleryItem>
       <GalleryItem caption="disabled">
-        <UCheckbox label="Send me news" disabled />
+        <div :data-spec="specOf('disabled')">
+          <UCheckbox v-bind="option" disabled />
+        </div>
       </GalleryItem>
       <GalleryItem caption="disabled, checked">
-        <UCheckbox :model-value="true" label="I accept the terms" disabled />
+        <div :data-spec="specOf('disabled')">
+          <UCheckbox :model-value="true" v-bind="option" disabled />
+        </div>
+      </GalleryItem>
+      <GalleryItem caption="disabled, indeterminate">
+        <div :data-spec="specOf('disabled')">
+          <UCheckbox model-value="indeterminate" v-bind="option" disabled />
+        </div>
       </GalleryItem>
     </GalleryRow>
 
-    <GalleryRow label="with a description and an error">
-      <div class="grid w-full gap-x-6 gap-y-6 md:grid-cols-2">
-        <UCheckbox
-          label="I need accommodation"
-          description="We will get back to you with hotels nearby."
-        />
-        <UFormField name="terms" required error="You can register once you accept the terms.">
-          <UCheckbox label="I accept the terms of use" required />
-        </UFormField>
-      </div>
+    <GalleryRow label="invalid">
+      <UFormField
+        name="terms"
+        error="Accept the terms of use to register."
+        :data-spec="specOf('invalid')"
+      >
+        <UCheckbox label="I accept the terms of use" required />
+      </UFormField>
     </GalleryRow>
 
     <GalleryRow label="card">
@@ -65,7 +90,14 @@ const all = ref<boolean | 'indeterminate'>('indeterminate')
 
     <GalleryRow label="sizes">
       <GalleryItem v-for="size in sizes" :key="size" :caption="size">
-        <UCheckbox :size="size" :model-value="true" label="I accept" />
+        <div class="flex flex-col gap-3">
+          <div :data-spec="specOf('rest', size)">
+            <UCheckbox :size="size" label="I accept" />
+          </div>
+          <div :data-spec="specOf('checked', size)">
+            <UCheckbox :size="size" :model-value="true" label="I accept" />
+          </div>
+        </div>
       </GalleryItem>
     </GalleryRow>
   </GallerySection>

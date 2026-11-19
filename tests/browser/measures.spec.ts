@@ -205,6 +205,31 @@ test("a checkbox's tick is drawn at the system's icon size, and at four fifths o
   }
 })
 
+test('a card without its control centers its label in the card: the hidden control takes no room', async ({
+  page,
+}, testInfo) => {
+  test.skip(playground(testInfo) !== 'nuxt', 'The cards are in the gallery')
+  await open(page)
+  // the cards of the radio group without the circle, each label's block from the card's padding
+  const cards = page
+    .locator('#radio-group fieldset')
+    .filter({ has: page.getByText('Session', { exact: true }) })
+    .locator('[data-slot="item"]')
+  await expect(cards).toHaveCount(3)
+  const insets = await cards.evaluateAll((cards) =>
+    cards.map((card) => {
+      const round = (pixels: number) => Math.round(pixels * 100) / 100
+      const box = card.getBoundingClientRect()
+      const style = getComputedStyle(card)
+      const left = box.left + parseFloat(style.borderLeftWidth) + parseFloat(style.paddingLeft)
+      const right = box.right - parseFloat(style.borderRightWidth) - parseFloat(style.paddingRight)
+      const wrapper = card.querySelector('[data-slot="wrapper"]')!.getBoundingClientRect()
+      return { start: round(wrapper.left - left), end: round(right - wrapper.right) }
+    }),
+  )
+  expect(insets).toEqual(insets.map(() => ({ start: 0, end: 0 })))
+})
+
 for (const colorScheme of ['dark', 'light'] as const) {
   test.describe(`on a ${colorScheme} system`, () => {
     test.use({ colorScheme })
