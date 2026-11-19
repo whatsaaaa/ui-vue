@@ -84,8 +84,7 @@ describe('the components config', () => {
     const unknown: string[] = []
     for (const name of names) {
       const next = compiler.build([name])
-      // a group, such as group/choice, only names an element for group-hover/choice to match
-      if (next.length === built.length && !/^group(\/[\w-]+)?$/.test(name)) unknown.push(name)
+      if (next.length === built.length) unknown.push(name)
       built = next
     }
     expect(unknown).toEqual([])

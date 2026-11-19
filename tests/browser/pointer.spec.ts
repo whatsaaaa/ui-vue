@@ -104,6 +104,45 @@ test('a checkbox and a radio group take the choice colors from the tier as it ch
     await expect(indicator).toHaveCSS('background-color', tier['--ws-choice-indicator-bg-disabled'])
 })
 
+test("a checkbox's box and a radio's circle lighten with the pointer on them or their label, not on the line about them", async ({
+  page,
+}, testInfo) => {
+  test.skip(playground(testInfo) !== 'nuxt', 'The examples are in the gallery')
+  // no transition: what the pointer changes, it changes at once
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await open(page)
+  // the design system's edge of a control at rest and under the pointer
+  const edge = {
+    rest: await resolveColor(page, 'var(--ws-choice-control-border-rest)'),
+    hover: await resolveColor(page, 'var(--ws-choice-control-border-hover)'),
+  }
+  expect(edge.hover).not.toEqual(edge.rest)
+  // an option of each in the list: Send me news, and Bank transfer
+  const options = [
+    page.locator('[data-spec="checkbox.list.rest"]').first(),
+    page
+      .locator('[data-spec="radio-group.list.rest"]')
+      .first()
+      .locator('[data-slot="item"]')
+      .nth(1),
+  ]
+  for (const option of options) {
+    const control = option.locator('[data-slot="base"]')
+    const label = option.locator('[data-slot="label"]')
+    const description = option.locator('[data-slot="description"]')
+    const pointer: [Locator, string][] = [
+      [description, edge.rest],
+      [label, edge.hover],
+      [description, edge.rest],
+      [control, edge.hover],
+    ]
+    for (const [target, color] of pointer) {
+      await target.hover()
+      await expect(control).toHaveCSS('border-color', color)
+    }
+  }
+})
+
 test("a select's trigger takes the field's colors from the tier as it changes, under the pointer too", async ({
   page,
 }, testInfo) => {

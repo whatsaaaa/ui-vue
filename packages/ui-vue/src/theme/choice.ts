@@ -9,13 +9,13 @@ import type { ByColor } from './shared.ts'
  *
  * The edge is a border, not Nuxt UI's ring, so that forced colors keep it. The fill of a checked
  * control covers the control, its edge too: it is laid over the control's border box. The control
- * and its label take the pointer as one, so the edge lightens with the pointer on either: the
- * option is marked group/choice, which group-hover/choice follows.
+ * and its label take the pointer as one: HTML has a label's control under the pointer while the
+ * label is, so the control's own hover lightens the edge on either, and not on the line about it.
  */
 
 /** The control at rest: its edge, its fill, and the edge under the pointer. */
 export const control =
-  'relative overflow-visible ring-0 border-thin border-(--ws-choice-control-border-rest) bg-(--ws-choice-control-bg) cursor-pointer hover:border-(--ws-choice-control-border-hover) group-hover/choice:border-(--ws-choice-control-border-hover)'
+  'relative overflow-visible ring-0 border-thin border-(--ws-choice-control-border-rest) bg-(--ws-choice-control-bg) cursor-pointer hover:border-(--ws-choice-control-border-hover)'
 
 /** The fill of a checked control, over the control and its edge, in the control's shape. */
 export const indicator = 'absolute -inset-(--ws-border-width-thin) size-auto rounded-[inherit]'
@@ -26,7 +26,7 @@ export const description = 'font-sans text-(--ws-choice-description-text-rest) t
 
 /** A disabled control, its label and its line: faint, and the same under the pointer. */
 export const disabled = {
-  base: 'cursor-not-allowed border-(--ws-choice-control-border-disabled) hover:border-(--ws-choice-control-border-disabled) group-hover/choice:border-(--ws-choice-control-border-disabled)',
+  base: 'cursor-not-allowed border-(--ws-choice-control-border-disabled) hover:border-(--ws-choice-control-border-disabled)',
   label: 'cursor-not-allowed text-(--ws-choice-label-text-disabled)',
   description: 'cursor-not-allowed text-(--ws-choice-description-text-disabled)',
 }
@@ -86,13 +86,13 @@ export const forcedCheckedCard = 'forced-colors:has-data-[state=checked]:border-
  * error is highlighted in the error color: the tier's invalid edge.
  */
 export const highlight: ByColor = {
-  primary: 'border-interactive hover:border-interactive group-hover/choice:border-interactive',
-  success: 'border-tip hover:border-tip group-hover/choice:border-tip',
-  info: 'border-note hover:border-note group-hover/choice:border-note',
-  warning: 'border-warning hover:border-warning group-hover/choice:border-warning',
+  primary: 'border-interactive hover:border-interactive',
+  success: 'border-tip hover:border-tip',
+  info: 'border-note hover:border-note',
+  warning: 'border-warning hover:border-warning',
   error:
-    'border-(--ws-choice-control-border-invalid) hover:border-(--ws-choice-control-border-invalid) group-hover/choice:border-(--ws-choice-control-border-invalid)',
-  neutral: 'border-text hover:border-text group-hover/choice:border-text',
+    'border-(--ws-choice-control-border-invalid) hover:border-(--ws-choice-control-border-invalid)',
+  neutral: 'border-text hover:border-text',
 }
 
 /** A highlighted card: the border in its color, focused too, as with checkedCard. */

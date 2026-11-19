@@ -24,7 +24,6 @@ import { byColor, forcedChecked, forcedControlEdge, transition } from './shared.
  */
 export default {
   slots: {
-    root: 'group/choice',
     base: `rounded-xs ${control} ${forcedControlEdge} ${transition}`,
     indicator: `${indicator} flex items-center justify-center ${forcedChecked}`,
     label,
