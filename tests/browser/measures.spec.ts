@@ -182,6 +182,39 @@ test("a field's and a button's corners follow the tier's control radius as it ch
     await expect(control).toHaveCSS('border-radius', '7px')
 })
 
+test("a badge takes the tag's colors, room and radius from the tier as it changes", async ({
+  page,
+}, testInfo) => {
+  test.skip(playground(testInfo) !== 'nuxt', 'The badges are in the gallery')
+  await open(page)
+  // values no token has, on the page's tier
+  const tier = {
+    '--ws-tag-success-bg': 'rgb(1, 2, 3)',
+    '--ws-tag-danger-text': 'rgb(4, 5, 6)',
+    '--ws-tag-outline-text': 'rgb(7, 8, 9)',
+    '--ws-tag-radius': '7px',
+    '--ws-tag-padding-inline-md': '11px',
+    '--ws-tag-outline-padding-block-md': '9px',
+  }
+  await page.evaluate((tier) => {
+    for (const [name, value] of Object.entries(tier))
+      document.documentElement.style.setProperty(name, value)
+  }, tier)
+  const example = (id: string) => page.locator(`[data-spec="${id}"]`).first()
+
+  await expect(example('badge.success.rest')).toHaveCSS(
+    'background-color',
+    tier['--ws-tag-success-bg'],
+  )
+  await expect(example('badge.danger.rest')).toHaveCSS('color', tier['--ws-tag-danger-text'])
+  await expect(example('badge.outline.rest')).toHaveCSS('color', tier['--ws-tag-outline-text'])
+  await expect(example('badge.primary.rest')).toHaveCSS('padding-inline', '11px')
+  // the outlined tag's edge is inside its padding-block
+  await expect(example('badge.outline.rest')).toHaveCSS('padding-block', '8px')
+  for (const id of ['badge.primary.rest', 'badge.outline.rest.xl'])
+    await expect(example(id), id).toHaveCSS('border-radius', '7px')
+})
+
 test("a checkbox's tick is drawn at the system's icon size, and at four fifths of each box", async ({
   page,
 }, testInfo) => {

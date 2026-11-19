@@ -1,12 +1,15 @@
 <script setup lang="ts">
 const variants = ['outline', 'subtle', 'soft', 'solid'] as const
+
+/** The example of the card spec a card is: its one kind, outline, at rest. */
+const specOf = (variant: string) => (variant === 'outline' ? 'card.outline.rest' : undefined)
 </script>
 
 <template>
   <GallerySection
     id="card"
     title="UCard"
-    lead="A panel of the system: the surface, a border and the large radius, its parts apart by a divider. Its title is a minor heading in mono."
+    lead="A panel of the system: the surface, a border and the large radius, its parts apart by a line. Its title is a minor heading in mono."
   >
     <GalleryRow label="variants">
       <div class="grid w-full gap-6 md:grid-cols-2">
@@ -14,9 +17,13 @@ const variants = ['outline', 'subtle', 'soft', 'solid'] as const
           v-for="variant in variants"
           :key="variant"
           :variant="variant"
-          title="Harbour Conf 2027"
           :description="`Lisbon, May 10 to 12, 2027. The ${variant} variant.`"
+          :data-spec="specOf(variant)"
         >
+          <!-- The title is a heading, so the card is a section of the page's outline. -->
+          <template #title>
+            <h4>Harbour Conf 2027</h4>
+          </template>
           <p class="text-body-sm">
             Three days of talks and workshops in Lisbon, from May 10 to 12, 2027. Registration is
             open until April 1.
@@ -34,7 +41,7 @@ const variants = ['outline', 'subtle', 'soft', 'solid'] as const
 
     <GalleryRow label="body only">
       <div class="w-full max-w-md">
-        <UCard>
+        <UCard data-spec="card.outline.rest">
           <p class="text-body-sm">
             A card without a header or a footer has only its body, the same distance from its edges.
           </p>

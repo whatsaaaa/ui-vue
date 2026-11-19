@@ -55,7 +55,10 @@ const terms = ref(true)
         data-testid="color-mode"
       />
 
-      <UCard title="Registration" description="Harbour Conf 2027, Lisbon.">
+      <UCard description="Harbour Conf 2027, Lisbon.">
+        <template #title>
+          <h2>Registration</h2>
+        </template>
         <div class="flex flex-col gap-6">
           <UFormField label="Full name" help="As on your ID.">
             <UInput v-model="name" class="w-full" />

@@ -37,7 +37,10 @@ const updates = ref(true)
           class="{{ part.theme }}", in the <span class="light:hidden">dark</span
           ><span class="dark:hidden">light</span> theme
         </p>
-        <UCard class="mt-4" title="Delivery address" description="Order 2027-0412, to Serbia.">
+        <UCard class="mt-4" description="Order 2027-0412, to Serbia.">
+          <template #title>
+            <h3>Delivery address</h3>
+          </template>
           <div class="flex flex-col gap-6">
             <UFormField label="Full name">
               <UInput v-model="name" class="w-full" />
