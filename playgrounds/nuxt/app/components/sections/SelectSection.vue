@@ -65,13 +65,17 @@ const menuCities = ref(['Oslo', 'Vienna'])
             data-testid="select-menu"
           />
         </UFormField>
-        <!-- a search field the app passes takes the place of the one with the icon -->
-        <UFormField label="Cities" help="Several cities at once, searched without an icon.">
+        <!-- a search field the app passes takes the place of the default one: it keeps the icon
+             by passing it with its placeholder -->
+        <UFormField
+          label="Cities"
+          help="Several cities at once, the search naming what it searches."
+        >
           <USelectMenu
             v-model="menuCities"
             :items="cities"
             multiple
-            :search-input="{ placeholder: 'Search the cities' }"
+            :search-input="{ placeholder: 'Search the cities', icon: 'i-lucide-search' }"
             class="w-full"
           />
         </UFormField>

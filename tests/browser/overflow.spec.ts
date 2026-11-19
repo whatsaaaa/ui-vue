@@ -44,6 +44,10 @@ for (const width of [320, 390]) {
         test.skip(playground(testInfo) !== 'nuxt', 'The page is in the gallery')
         await open(page, '/open')
         expect(await page.evaluate(measure)).toEqual({ scroll: 0, sticking: [] })
+        // the window scrolls its content inside itself here: an open list or window wider than
+        // its column would scroll it sideways
+        const main = page.locator('.window__main')
+        expect(await main.evaluate((main) => main.scrollWidth - main.clientWidth)).toBe(0)
       })
     })
   }
