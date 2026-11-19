@@ -102,7 +102,7 @@ const specOf = (state: string, size = 'md') =>
       </UFormField>
     </GalleryRow>
 
-    <GalleryRow label="sizes">
+    <GalleryRow label="sizes" align="start">
       <GalleryItem v-for="size in sizes" :key="size" :caption="size">
         <div class="flex flex-col gap-5">
           <URadioGroup
