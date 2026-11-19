@@ -1,19 +1,47 @@
-import { type ByColor, byColor, forcedEdge, forcedIcon, solid, tint } from './shared.ts'
+import { type ByColor, byColor, forcedEdge, forcedIcon, solid } from './shared.ts'
 
 /*
- * A badge is the system's tag: a mono label on a tint, in the small radius. The tag is the soft
- * variant, so soft is the default. Outlined and neutral, it is the outlined tag.
+ * The badge of the design system's spec, specs/badge.spec.json: the system's tag, a mono label on
+ * a tint of its color, in the small radius. The tag is the soft variant, so soft is the default.
+ * Its kinds are Nuxt UI's colors and variants:
+ *
+ *   primary, success, info, warning, neutral  that color, soft
+ *   danger                                    error, soft
+ *   outline                                   neutral, outline
+ *
+ * They read the component tier by name, --ws-tag-*, so a change of the tier reaches them. The
+ * other colors and variants keep working on the roles, outside the spec.
+ *
+ * The outlined tag's edge is a border, not Nuxt UI's ring, so that forced colors keep it, and it
+ * is roomier than a tag on a tint: its padding-inline is inside the edge, and its padding-block
+ * holds the edge, as .ws-tag--outline draws it. Its icons are the system's icon size at every
+ * size: a tag does not grow its icon as a control does.
  */
 
-const outline: ByColor = {
-  primary: 'ring ring-inset ring-interactive text-interactive',
-  success: 'ring ring-inset ring-tip text-tip-text',
-  info: 'ring ring-inset ring-note text-note-text',
-  warning: 'ring ring-inset ring-warning text-warning-text',
-  error: 'ring ring-inset ring-danger text-danger-text',
-  neutral: 'ring ring-inset ring-border text-text',
+/** A tint of the color under its text color: the tag, at every color of the tier. */
+const tag: ByColor = {
+  primary: 'bg-(--ws-tag-primary-bg) text-(--ws-tag-primary-text)',
+  success: 'bg-(--ws-tag-success-bg) text-(--ws-tag-success-text)',
+  info: 'bg-(--ws-tag-info-bg) text-(--ws-tag-info-text)',
+  warning: 'bg-(--ws-tag-warning-bg) text-(--ws-tag-warning-text)',
+  error: 'bg-(--ws-tag-danger-bg) text-(--ws-tag-danger-text)',
+  neutral: 'bg-(--ws-tag-neutral-bg) text-(--ws-tag-neutral-text)',
 }
 
+/**
+ * The outlined tag: the edge of a card, in the text color, on no fill. In another color the edge
+ * and the word are that color's.
+ */
+const outline: ByColor = {
+  primary: 'ring-0 bg-transparent border-interactive text-interactive',
+  success: 'ring-0 bg-transparent border-tip text-tip-text',
+  info: 'ring-0 bg-transparent border-note text-note-text',
+  warning: 'ring-0 bg-transparent border-warning text-warning-text',
+  error: 'ring-0 bg-transparent border-danger text-danger-text',
+  neutral: 'ring-0 bg-transparent border-border text-(--ws-tag-outline-text)',
+}
+
+/** The edge of a subtle badge, over its tint. */
 const subtleRing: ByColor = {
   primary: 'ring ring-inset ring-interactive/50',
   success: 'ring ring-inset ring-tip/50',
@@ -23,10 +51,13 @@ const subtleRing: ByColor = {
   neutral: 'ring ring-inset ring-border',
 }
 
+/** The icon of the system's text, at every size. */
+const icon = { leadingIcon: 'size-icon', trailingIcon: 'size-icon' }
+
 export default {
   slots: {
     // in forced colors every tag is outlined
-    base: `rounded-sm font-mono font-normal whitespace-nowrap ${forcedEdge}`,
+    base: `rounded-(--ws-tag-radius) font-mono font-normal whitespace-nowrap ${forcedEdge}`,
     label: 'truncate',
     leadingIcon: forcedIcon,
     trailingIcon: forcedIcon,
@@ -34,38 +65,66 @@ export default {
   variants: {
     size: {
       xs: {
-        base: 'rounded-sm px-1.5 py-0 gap-1 text-caption',
-        leadingIcon: 'size-3',
-        trailingIcon: 'size-3',
+        base: 'rounded-(--ws-tag-radius) px-(--ws-tag-padding-inline-xs) py-0 gap-(--ws-space-4) text-caption',
+        ...icon,
       },
       sm: {
-        base: 'rounded-sm px-1.5 py-0.5 gap-1 text-caption',
-        leadingIcon: 'size-3',
-        trailingIcon: 'size-3',
+        base: 'rounded-(--ws-tag-radius) px-(--ws-tag-padding-inline-sm) py-(--ws-tag-padding-block-sm) gap-(--ws-space-4) text-caption',
+        ...icon,
       },
       md: {
-        base: 'rounded-sm px-2 py-0.5 gap-1.5 text-label-sm',
-        leadingIcon: 'size-3.5',
-        trailingIcon: 'size-3.5',
+        base: 'rounded-(--ws-tag-radius) px-(--ws-tag-padding-inline-md) py-(--ws-tag-padding-block-md) gap-(--ws-space-6) text-label-sm',
+        ...icon,
       },
       lg: {
-        base: 'rounded-sm px-2.5 py-1 gap-1.5 text-label',
-        leadingIcon: 'size-icon',
-        trailingIcon: 'size-icon',
+        base: 'rounded-(--ws-tag-radius) px-(--ws-tag-padding-inline-lg) py-(--ws-tag-padding-block-lg) gap-(--ws-space-6) text-label',
+        ...icon,
       },
       xl: {
-        base: 'rounded-sm px-3 py-1.5 gap-2 text-label',
-        leadingIcon: 'size-icon',
-        trailingIcon: 'size-icon',
+        base: 'rounded-(--ws-tag-radius) px-(--ws-tag-padding-inline-xl) py-(--ws-tag-padding-block-xl) gap-(--ws-space-8) text-label',
+        ...icon,
       },
     },
   },
   compoundVariants: [
     ...byColor(solid, { variant: 'solid' }),
     ...byColor(outline, { variant: 'outline' }),
-    ...byColor(tint, { variant: 'soft' }),
-    ...byColor(tint, { variant: 'subtle' }),
+    ...byColor(tag, { variant: 'soft' }),
+    ...byColor(tag, { variant: 'subtle' }),
     ...byColor(subtleRing, { variant: 'subtle' }),
+    // the outlined tag's edge, and its room: the edge is outside its padding-inline and inside its
+    // padding-block
+    { variant: 'outline', class: 'border-(length:--ws-border-width-thin) border-solid' },
+    {
+      variant: 'outline',
+      size: 'xs',
+      class:
+        'px-(--ws-tag-outline-padding-inline-xs) py-[calc(var(--ws-tag-outline-padding-block-xs)_-_var(--ws-border-width-thin))]',
+    },
+    {
+      variant: 'outline',
+      size: 'sm',
+      class:
+        'px-(--ws-tag-outline-padding-inline-sm) py-[calc(var(--ws-tag-outline-padding-block-sm)_-_var(--ws-border-width-thin))]',
+    },
+    {
+      variant: 'outline',
+      size: 'md',
+      class:
+        'px-(--ws-tag-outline-padding-inline-md) py-[calc(var(--ws-tag-outline-padding-block-md)_-_var(--ws-border-width-thin))]',
+    },
+    {
+      variant: 'outline',
+      size: 'lg',
+      class:
+        'px-(--ws-tag-outline-padding-inline-lg) py-[calc(var(--ws-tag-outline-padding-block-lg)_-_var(--ws-border-width-thin))]',
+    },
+    {
+      variant: 'outline',
+      size: 'xl',
+      class:
+        'px-(--ws-tag-outline-padding-inline-xl) py-[calc(var(--ws-tag-outline-padding-block-xl)_-_var(--ws-border-width-thin))]',
+    },
     { size: ['xs', 'sm'], square: true, class: 'p-0.5' },
     { size: ['md', 'lg', 'xl'], square: true, class: 'p-1' },
   ],

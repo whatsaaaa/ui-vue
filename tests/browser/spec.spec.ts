@@ -16,7 +16,9 @@ import { open, playground } from './pages.ts'
  * their own.
  */
 const specs = {
+  badge: '/',
   button: '/',
+  card: '/',
   checkbox: '/',
   input: '/',
   'radio-group': '/',
