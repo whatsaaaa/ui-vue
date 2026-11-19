@@ -25,6 +25,8 @@ const specs = {
   select: '/open',
   'select-menu': '/open',
   modal: '/open',
+  table: '/',
+  tabs: '/',
 }
 
 for (const [name, path] of Object.entries(specs))

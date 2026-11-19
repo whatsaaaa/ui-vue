@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { TableColumn, TableRow } from '@nuxt/ui'
+import type { TableColumn } from '@nuxt/ui'
 
 interface Registration {
   name: string
@@ -10,14 +10,20 @@ interface Registration {
 }
 
 const data: Registration[] = [
-  { name: 'Maya Collins', city: 'Lisbon', ticket: 'All three days', fee: '€420', status: 'paid' },
-  { name: 'Daniel Brooks', city: 'Berlin', ticket: 'Two days', fee: '€320', status: 'pending' },
-  { name: 'Priya Shah', city: 'Dublin', ticket: 'One day', fee: '€180', status: 'paid' },
+  {
+    name: 'Maya Collins',
+    city: 'Lisbon',
+    ticket: 'All three days',
+    fee: '€420.00',
+    status: 'paid',
+  },
+  { name: 'Daniel Brooks', city: 'Berlin', ticket: 'Two days', fee: '€320.00', status: 'pending' },
+  { name: 'Priya Shah', city: 'Dublin', ticket: 'One day', fee: '€180.00', status: 'paid' },
   {
     name: 'Tom Fischer',
     city: 'Vienna',
     ticket: 'All three days',
-    fee: '€420',
+    fee: '€420.00',
     status: 'cancelled',
   },
 ]
@@ -29,16 +35,19 @@ const statusColor = {
 } as const
 
 const UBadge = resolveComponent('UBadge')
+const UButton = resolveComponent('UButton')
+const UCheckbox = resolveComponent('UCheckbox')
 
 const columns: TableColumn<Registration>[] = [
   { accessorKey: 'name', header: 'Full name' },
   { accessorKey: 'city', header: 'City' },
   { accessorKey: 'ticket', header: 'Ticket' },
-  // an amount, at the right edge in figures of one width
+  // an amount, at the end of its column in figures of one width, under its name
   {
     accessorKey: 'fee',
     header: 'Fee',
     meta: { class: { th: 'text-end', td: 'text-end tabular-nums' } },
+    cell: ({ row }) => h('span', { 'data-slot': 'amount' }, row.original.fee),
   },
   {
     accessorKey: 'status',
@@ -48,49 +57,150 @@ const columns: TableColumn<Registration>[] = [
   },
 ]
 
-// A table whose rows are chosen by a click, Enter or Space. The second row starts selected.
-const selection = ref<Record<string, boolean>>({ 1: true })
-
-function toggle(_event: Event, row: TableRow<Registration>) {
-  row.toggleSelected()
+/**
+ * The columns of a table whose rows are chosen: a checkbox in each row's first cell, named for
+ * the row, and one in the head that chooses every row. The checkbox of the row at the index
+ * focused shows the focus with data-demo, and the row draws its ring around it: marked on the
+ * example, every checkbox and the frame would show it too.
+ */
+function choosing(focused?: number): TableColumn<Registration>[] {
+  return [
+    {
+      id: 'select',
+      header: ({ table }) =>
+        h(UCheckbox, {
+          modelValue: table.getIsSomePageRowsSelected()
+            ? 'indeterminate'
+            : table.getIsAllPageRowsSelected(),
+          'onUpdate:modelValue': (value: boolean | 'indeterminate') =>
+            table.toggleAllPageRowsSelected(!!value),
+          'aria-label': 'Choose every registration',
+        }),
+      cell: ({ row }) =>
+        h(UCheckbox, {
+          modelValue: row.getIsSelected(),
+          'onUpdate:modelValue': (value: boolean | 'indeterminate') => row.toggleSelected(!!value),
+          'aria-label': `Choose ${row.original.name}`,
+          ...(row.index === focused && { 'data-demo': 'focus' }),
+        }),
+    },
+    ...columns,
+  ]
 }
 
-/*
- * Its first row shows hover and its third focus, as the other examples do with data-demo. The
- * table draws its rows itself, so the attribute is set on them once they are there.
- */
-const selectable = useTemplateRef<{ $el: HTMLElement }>('selectable')
-onMounted(() => {
-  const rows = selectable.value?.$el.querySelectorAll('tbody > tr')
-  rows?.[0]?.setAttribute('data-demo', 'hover')
-  rows?.[2]?.setAttribute('data-demo', 'focus')
-})
+// built once: columns built again on each render would draw every cell again, and take the focus
+// from the checkbox that changed
+const choosable = choosing()
+const choosableFocused = choosing(0)
+
+// a row's own action at its end, a stop of its own, which rings itself and not its row
+const choosableWithAction: TableColumn<Registration>[] = [
+  ...choosable,
+  {
+    id: 'action',
+    header: 'Action',
+    cell: ({ row }) =>
+      h(UButton, {
+        color: 'primary',
+        variant: 'link',
+        size: 'sm',
+        label: 'Edit',
+        'aria-label': `Edit ${row.original.name}`,
+      }),
+  },
+]
+
+const rows = data.slice(0, 3)
+
+// Each example chooses its own rows: the selected one its first, the others none.
+const selection = {
+  rest: ref<Record<string, boolean>>({}),
+  hover: ref<Record<string, boolean>>({}),
+  focus: ref<Record<string, boolean>>({}),
+  selected: ref<Record<string, boolean>>({ 0: true }),
+  action: ref<Record<string, boolean>>({}),
+}
 </script>
 
 <template>
   <GallerySection
     id="table"
     title="UTable"
-    lead="The table of the system's prose: in a border with the large radius, scrolling inside itself. The head is on the surface, as an overline; a cell is small body text, and an amount sits at the right edge in figures of one width. A selected row is raised, and a row that can be chosen is half raised under the pointer and ringed inside when focused."
+    lead="The table of the system's prose: in a border with the large radius, scrolling inside itself. The head is on the surface, as an overline; a cell is small body text, and an amount sits at the end of its column in figures of one width. A row is chosen by the checkbox in its first cell: it is raised under the pointer, takes the selection color once chosen, and is ringed inside while its checkbox has the focus."
   >
-    <GalleryRow label="data">
-      <UTable :data="data" :columns="columns" class="w-full" />
+    <GalleryRow label="rest">
+      <UTable data-spec="table.plain.rest" :data="data" :columns="columns" class="w-full" />
     </GalleryRow>
 
-    <GalleryRow label="selectable: hover, selected, focus">
+    <GalleryRow label="focus">
       <UTable
-        ref="selectable"
-        v-model:row-selection="selection"
-        :data="data.slice(0, 3)"
+        data-spec="table.plain.focus"
+        data-demo="focus"
+        :data="rows"
         :columns="columns"
         class="w-full"
-        @select="toggle"
+      />
+    </GalleryRow>
+
+    <GalleryRow label="selectable">
+      <UTable
+        v-model:row-selection="selection.rest.value"
+        data-spec="table.selectable.rest"
+        :data="rows"
+        :columns="choosable"
+        class="w-full"
+      />
+    </GalleryRow>
+
+    <GalleryRow label="selectable: hover">
+      <UTable
+        v-model:row-selection="selection.hover.value"
+        data-spec="table.selectable.hover"
+        data-demo="hover"
+        :data="rows"
+        :columns="choosable"
+        class="w-full"
+      />
+    </GalleryRow>
+
+    <GalleryRow label="selectable: focus">
+      <UTable
+        v-model:row-selection="selection.focus.value"
+        data-spec="table.selectable.focus"
+        :data="rows"
+        :columns="choosableFocused"
+        class="w-full"
+      />
+    </GalleryRow>
+
+    <GalleryRow label="selectable: selected">
+      <UTable
+        v-model:row-selection="selection.selected.value"
+        data-spec="table.selectable.selected"
+        :data="rows"
+        :columns="choosable"
+        class="w-full"
+      />
+    </GalleryRow>
+
+    <GalleryRow label="selectable, with an action">
+      <UTable
+        v-model:row-selection="selection.action.value"
+        :data="rows"
+        :columns="choosableWithAction"
+        class="w-full"
       />
     </GalleryRow>
 
     <GalleryRow label="loading, empty">
       <div class="grid w-full gap-6 lg:grid-cols-2">
-        <UTable :data="data.slice(0, 2)" :columns="columns.slice(0, 3)" loading class="w-full" />
+        <UTable
+          data-spec="table.plain.loading"
+          :data="data.slice(0, 2)"
+          :columns="columns.slice(0, 3)"
+          loading
+          class="w-full"
+        />
         <UTable
           :data="[]"
           :columns="columns.slice(0, 3)"

@@ -143,6 +143,84 @@ test.describe('the gallery', () => {
     await expect(tabs.getByRole('tab', { name: 'Overview' })).toBeFocused()
   })
 
+  test("a table's rows are chosen by their checkboxes, and a row is no stop of its own", async ({
+    page,
+  }) => {
+    const table = page.locator('[data-spec="table.selectable.rest"]')
+    const all = table.getByRole('checkbox', { name: 'Choose every registration' })
+    const maya = table.getByRole('checkbox', { name: 'Choose Maya Collins' })
+    await all.focus()
+    await page.keyboard.press('Tab')
+    await expect(maya).toBeFocused()
+    await page.keyboard.press('Space')
+    await expect(maya).toHaveAttribute('aria-checked', 'true')
+    await expect(table.locator('tbody tr').first()).toHaveAttribute('data-selected', 'true')
+    await expect(all).toHaveAttribute('aria-checked', 'mixed')
+    await page.keyboard.press('Tab')
+    await expect(table.getByRole('checkbox', { name: 'Choose Daniel Brooks' })).toBeFocused()
+    // the head's checkbox chooses every row, and lets them all go
+    await all.focus()
+    await page.keyboard.press('Space')
+    for (const checkbox of await table.getByRole('checkbox').all())
+      await expect(checkbox).toHaveAttribute('aria-checked', 'true')
+    await page.keyboard.press('Space')
+    for (const checkbox of await table.getByRole('checkbox').all())
+      await expect(checkbox).toHaveAttribute('aria-checked', 'false')
+  })
+
+  test('a row is ringed inside while its checkbox has the focus, not while another control in it has', async ({
+    page,
+  }) => {
+    const table = page
+      .getByRole('table')
+      .filter({ has: page.getByRole('button', { name: 'Edit Maya Collins' }) })
+    const row = table.locator('tbody tr').first()
+    await table.getByRole('checkbox', { name: 'Choose every registration' }).focus()
+    await page.keyboard.press('Tab')
+    await expect(row.getByRole('checkbox', { name: 'Choose Maya Collins' })).toBeFocused()
+    // the table spec's ring of a row: two pixels of the interactive color, inside the row
+    await expect(row).toHaveCSS('outline-style', 'solid')
+    await expect(row).toHaveCSS('outline-width', '2px')
+    await expect(row).toHaveCSS(
+      'outline-color',
+      await resolveColor(page, 'var(--ws-color-interactive)'),
+    )
+    await expect(row).toHaveCSS('outline-offset', '-2px')
+    // the row's action rings itself alone
+    await page.keyboard.press('Tab')
+    await expect(row.getByRole('button', { name: 'Edit Maya Collins' })).toBeFocused()
+    await expect(row).toHaveCSS('outline-style', 'none')
+  })
+
+  test('a row Nuxt UI makes a stop of its own, with a handler for its rows, is ringed inside and keeps its selection color under the pointer', async ({
+    page,
+  }) => {
+    const table = page.locator('[data-spec="table.selectable.selected"]')
+    // what Nuxt UI puts on each row of a table with a handler for its rows, such as @select
+    await table.locator('tbody tr').evaluateAll((rows: HTMLElement[]) => {
+      for (const row of rows) {
+        row.dataset.selectable = 'true'
+        row.tabIndex = 0
+      }
+    })
+    const chosen = table.locator('tbody tr').first()
+    await table.getByRole('checkbox', { name: 'Choose every registration' }).focus()
+    await page.keyboard.press('Tab')
+    await expect(chosen).toBeFocused()
+    await expect(chosen).toHaveCSS('outline-style', 'solid')
+    await expect(chosen).toHaveCSS('outline-width', '2px')
+    await expect(chosen).toHaveCSS(
+      'outline-color',
+      await resolveColor(page, 'var(--ws-color-interactive)'),
+    )
+    await expect(chosen).toHaveCSS('outline-offset', '-2px')
+    await chosen.getByText('Lisbon').hover()
+    await expect(chosen).toHaveCSS(
+      'background-color',
+      await resolveColor(page, 'var(--ws-table-row-bg-selected)'),
+    )
+  })
+
   test('a card keeps the border of its state with the focus: checked, or in error', async ({
     page,
   }) => {

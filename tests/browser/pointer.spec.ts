@@ -14,8 +14,7 @@ test('a checkbox card and a radio card or table option raise under the pointer',
 }, testInfo) => {
   test.skip(playground(testInfo) !== 'nuxt', 'The cards are in the gallery')
   await open(page)
-  // the design system's color of a hovered item, at half, as on a hovered row of a table, and
-  // the outline of a field
+  // the design system's color of a hovered item, at half, and the outline of a field
   const raised = {
     fill: await resolveColor(page, 'color-mix(in oklab, var(--ws-color-raised) 50%, transparent)'),
     border: await resolveColor(page, 'var(--ws-color-field-border)'),
@@ -102,6 +101,40 @@ test('a checkbox and a radio group take the choice colors from the tier as it ch
   await expect(disabled).toHaveCount(2)
   for (const indicator of await disabled.all())
     await expect(indicator).toHaveCSS('background-color', tier['--ws-choice-indicator-bg-disabled'])
+})
+
+test("a table's rows take the table colors from the tier as it changes: raised under the pointer, and chosen by their checkbox", async ({
+  page,
+}, testInfo) => {
+  test.skip(playground(testInfo) !== 'nuxt', 'The tables are in the gallery')
+  // no transition: what the pointer changes, it changes at once
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await open(page)
+  // colors and a padding no token has, on the page's tier
+  const tier = {
+    '--ws-table-head-bg': 'rgb(1, 2, 3)',
+    '--ws-table-row-bg-hover': 'rgb(4, 5, 6)',
+    '--ws-table-row-bg-selected': 'rgb(7, 8, 9)',
+    '--ws-table-cell-padding-inline': '13px',
+  }
+  await page.evaluate((tier) => {
+    for (const [name, value] of Object.entries(tier))
+      document.documentElement.style.setProperty(name, value)
+  }, tier)
+  const table = page.locator('[data-spec="table.selectable.rest"]')
+  await expect(table.locator('th').first()).toHaveCSS(
+    'background-color',
+    tier['--ws-table-head-bg'],
+  )
+  await expect(table.locator('td').first()).toHaveCSS('padding-inline-start', '13px')
+  const row = table.locator('tbody tr').first()
+  await expect(row).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)')
+  await row.getByText('Lisbon').hover()
+  await expect(row).toHaveCSS('background-color', tier['--ws-table-row-bg-hover'])
+  // chosen, the row keeps the selection color under the pointer
+  await row.getByRole('checkbox').click()
+  await row.getByText('Lisbon').hover()
+  await expect(row).toHaveCSS('background-color', tier['--ws-table-row-bg-selected'])
 })
 
 test("a checkbox's box and a radio's circle lighten with the pointer on them or their label, not on the line about them", async ({
