@@ -35,6 +35,7 @@ const statusColor = {
 } as const
 
 const UBadge = resolveComponent('UBadge')
+const UButton = resolveComponent('UButton')
 const UCheckbox = resolveComponent('UCheckbox')
 
 const columns: TableColumn<Registration>[] = [
@@ -92,6 +93,23 @@ function choosing(focused?: number): TableColumn<Registration>[] {
 const choosable = choosing()
 const choosableFocused = choosing(0)
 
+// a row's own action at its end, a stop of its own, which rings itself and not its row
+const choosableWithAction: TableColumn<Registration>[] = [
+  ...choosable,
+  {
+    id: 'action',
+    header: 'Action',
+    cell: ({ row }) =>
+      h(UButton, {
+        color: 'primary',
+        variant: 'link',
+        size: 'sm',
+        label: 'Edit',
+        'aria-label': `Edit ${row.original.name}`,
+      }),
+  },
+]
+
 const rows = data.slice(0, 3)
 
 // Each example chooses its own rows: the selected one its first, the others none.
@@ -100,6 +118,7 @@ const selection = {
   hover: ref<Record<string, boolean>>({}),
   focus: ref<Record<string, boolean>>({}),
   selected: ref<Record<string, boolean>>({ 0: true }),
+  action: ref<Record<string, boolean>>({}),
 }
 </script>
 
@@ -160,6 +179,15 @@ const selection = {
         data-spec="table.selectable.selected"
         :data="rows"
         :columns="choosable"
+        class="w-full"
+      />
+    </GalleryRow>
+
+    <GalleryRow label="selectable, with an action">
+      <UTable
+        v-model:row-selection="selection.action.value"
+        :data="rows"
+        :columns="choosableWithAction"
         class="w-full"
       />
     </GalleryRow>
