@@ -55,8 +55,10 @@
   position: relative;
 }
 
+/* the list is as wide as its trigger: Reka's min-width of its content would widen the column */
 .gallery-open [data-reka-popper-content-wrapper] {
   position: static !important;
+  min-width: 0 !important;
   transform: none !important;
   margin-top: var(--ws-space-8);
 }
