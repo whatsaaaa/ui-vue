@@ -38,6 +38,13 @@ const focus =
 const cell =
   'px-(--ws-table-cell-padding-inline) py-(--ws-table-cell-padding-block) [&:has([role=checkbox])]:pe-(--ws-table-cell-padding-inline) first:[&:has([role=checkbox])]:w-px'
 
+/**
+ * A pinned cell hides what scrolls under it: on the page color, or its row's fill, raised under
+ * the pointer where the row is, or chosen.
+ */
+const pinnedCell =
+  'sticky bg-bg z-1 [@media(hover:hover)]:[tr:has(>td:first-child_[role=checkbox]):hover>&]:bg-(--ws-table-row-bg-hover) [@media(hover:hover)]:[tr[data-selectable=true]:hover>&]:bg-(--ws-table-row-bg-hover) in-data-[selected=true]:bg-(--ws-table-row-bg-selected)! forced-colors:in-data-[selected=true]:bg-[Highlight]!'
+
 export default {
   slots: {
     root: `rounded-lg border-thin border-border bg-bg ${focusRing}`,
@@ -53,11 +60,7 @@ export default {
   },
   variants: {
     pinned: {
-      // A pinned cell hides what scrolls under it: on the page color, or a chosen row's fill.
-      true: {
-        th: 'sticky bg-(--ws-table-head-bg) z-1',
-        td: 'sticky bg-bg z-1 in-data-[selected=true]:bg-(--ws-table-row-bg-selected) forced-colors:in-data-[selected=true]:bg-[Highlight]',
-      },
+      true: { th: 'sticky bg-(--ws-table-head-bg) z-1', td: pinnedCell },
     },
     sticky: {
       true: {
