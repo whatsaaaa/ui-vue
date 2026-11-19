@@ -211,6 +211,39 @@ function currentTabs(page: Page): Promise<Findings> {
   })
 }
 
+/**
+ * The contrast of a text as the browser paints it, by WCAG's formula: between the lightest and
+ * the darkest pixels inside the box of its characters, a pixel in from its edges. Forced colors
+ * draw a backplate in the page color behind text; text in that color on it has none.
+ */
+async function paintedContrast(page: Page, text: Locator): Promise<number> {
+  const box = await text.evaluate((element) => {
+    const range = document.createRange()
+    range.selectNodeContents(element)
+    return range.getBoundingClientRect().toJSON() as DOMRect
+  })
+  const png = await page.screenshot({
+    clip: { x: box.x + 1, y: box.y + 1, width: box.width - 2, height: box.height - 2 },
+  })
+  return page.evaluate(async (png) => {
+    const bytes = Uint8Array.from(atob(png), (character) => character.charCodeAt(0))
+    const image = await createImageBitmap(new Blob([bytes], { type: 'image/png' }))
+    const canvas = new OffscreenCanvas(image.width, image.height).getContext('2d')!
+    canvas.drawImage(image, 0, 0)
+    const pixels = canvas.getImageData(0, 0, image.width, image.height).data
+    const linear = (channel: number) =>
+      channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4
+    let [lightest, darkest] = [0, 1]
+    for (let i = 0; i < pixels.length; i += 4) {
+      const [r, g, b] = [pixels[i]!, pixels[i + 1]!, pixels[i + 2]!].map((c) => linear(c / 255))
+      const luminance = 0.2126 * r! + 0.7152 * g! + 0.0722 * b!
+      lightest = Math.max(lightest, luminance)
+      darkest = Math.min(darkest, luminance)
+    }
+    return (lightest + 0.05) / (darkest + 0.05)
+  }, png.toString('base64'))
+}
+
 for (const colorScheme of ['dark', 'light'] as const) {
   test.describe(`in forced colors, on a ${colorScheme} system`, () => {
     test.use({ colorScheme, forcedColors: 'active' })
@@ -229,6 +262,35 @@ for (const colorScheme of ['dark', 'light'] as const) {
       await openWithSystemColors(page)
       expect(await checked(page)).toEqual([])
       expect(await currentTabs(page)).toEqual([])
+    })
+
+    test('a chosen row of a table is in the selection colors, and its text reads on them', async ({
+      page,
+    }, testInfo) => {
+      test.skip(playground(testInfo) !== 'nuxt', 'The tables are in the gallery')
+      await openWithSystemColors(page)
+      const row = page.locator('[data-spec="table.selectable.selected"] tbody tr').first()
+      await row.scrollIntoViewIfNeeded()
+      // the table spec's chosen row in forced colors: Highlight under HighlightText
+      await expect(row).toHaveCSS(
+        'background-color',
+        await row.evaluate((row) => window.systemColor(row, 'Highlight')),
+      )
+      // its fields and its status, a tag, at the WCAG's 4.5:1 for text
+      for (const text of ['Maya Collins', 'Lisbon', 'All three days', '€420.00', 'paid'])
+        expect(
+          await paintedContrast(page, row.getByText(text, { exact: true })),
+          `${text} reads on the row`,
+        ).toBeGreaterThanOrEqual(4.5)
+
+      // a row's action, a button, once its row is chosen
+      const edit = page.getByRole('button', { name: 'Edit Maya Collins' })
+      await page
+        .locator('tbody tr', { has: edit })
+        .getByRole('checkbox', { name: 'Choose Maya Collins' })
+        .click()
+      await expect(page.locator('tbody tr', { has: edit })).toHaveAttribute('data-selected', 'true')
+      expect(await paintedContrast(page, edit), 'Edit reads on the row').toBeGreaterThanOrEqual(4.5)
     })
 
     test('a card without its control shows it is checked, in an error and with the focus', async ({
