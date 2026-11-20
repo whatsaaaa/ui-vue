@@ -153,12 +153,6 @@ body:has(.gallery-open) .window {
   padding-inline: var(--ws-space-8);
 }
 
-/* The name of the theme is the last item, in the window's corner: its ring follows the curve. */
-.ws-status-line__theme:focus-visible {
-  border-radius: var(--ws-radius-sm) var(--ws-radius-sm)
-    calc(var(--ws-radius-xl) - var(--ws-border-width-thin)) var(--ws-radius-sm);
-}
-
 :is(.ws-status-line__keys button, .ws-status-line__theme):disabled {
   color: var(--ws-color-text-faint);
   cursor: not-allowed;
