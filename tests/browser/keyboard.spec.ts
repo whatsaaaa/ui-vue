@@ -8,6 +8,7 @@ import {
   themeKey,
   themeSwitch,
   waitForApp,
+  waitForPage,
 } from './pages.ts'
 
 /**
@@ -285,7 +286,7 @@ test.describe('the gallery', () => {
 
   test('the number of a tab opens it, and the keys stay on there', async ({ page }) => {
     await page.keyboard.press('2')
-    await expect(page).toHaveURL(/\/dark$/)
+    await waitForPage(page, /\/dark$/)
     await expect(page.getByRole('switch', { name: 'Shortcut keys' })).toHaveAttribute(
       'aria-checked',
       'true',
@@ -293,7 +294,7 @@ test.describe('the gallery', () => {
     await expect(themeKey(page)).toBeVisible()
 
     await page.keyboard.press('1')
-    await expect(page).toHaveURL(/\/$/)
+    await waitForPage(page, /\/$/)
     await waitForApp(page)
     await expect(page.getByRole('switch', { name: 'Shortcut keys' })).toHaveAttribute(
       'aria-checked',
@@ -333,7 +334,7 @@ test.describe('the gallery', () => {
     const gallery = await boxes()
 
     await page.keyboard.press('2')
-    await expect(page).toHaveURL(/\/dark$/)
+    await waitForPage(page, /\/dark$/)
     await expect(hint).toBeDisabled()
     await expect(themeSwitch(page, 'nuxt')).toBeDisabled()
     // in the same places as on the gallery
@@ -342,7 +343,7 @@ test.describe('the gallery', () => {
 
     // back in the gallery the choice is the one made there, and the switch works again
     await page.keyboard.press('1')
-    await expect(page).toHaveURL(/\/$/)
+    await waitForPage(page, /\/$/)
     await waitForApp(page)
     await expect(colorModeOption(page, 'dark')).toBeChecked()
     expect(await stored()).toBe('dark')

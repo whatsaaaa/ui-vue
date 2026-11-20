@@ -34,9 +34,24 @@ const APP_WAIT = 30_000
  * the test's, so a test that loads the gallery more than once has the time for each load.
  */
 export async function waitForApp(page: Page): Promise<void> {
+  allowAppWait()
+  await expect(colorMode(page)).toBeVisible({ timeout: APP_WAIT })
+}
+
+/**
+ * Waits for the page a tab of the gallery opens, by its URL, which the app changes once it has
+ * the page. Between the gallery and another page that takes the app seconds on a busy machine,
+ * more than an expectation waits by default. This wait adds its time to the test's too.
+ */
+export async function waitForPage(page: Page, url: RegExp): Promise<void> {
+  allowAppWait()
+  await expect(page).toHaveURL(url, { timeout: APP_WAIT })
+}
+
+/** Gives the test the time of one more wait for the app. */
+function allowAppWait(): void {
   const testInfo = test.info()
   if (testInfo.timeout) testInfo.setTimeout(testInfo.timeout + APP_WAIT)
-  await expect(colorMode(page)).toBeVisible({ timeout: APP_WAIT })
 }
 
 /** Nuxt UI's color mode: a radio group bound to it, on both pages. */
