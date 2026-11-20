@@ -75,13 +75,13 @@ export interface KnownFailure {
 }
 
 /**
- * Why the gallery does not show a component: it draws nothing of its own, or it is an internal
- * part, which cannot stand alone and is drawn by the component it belongs to.
+ * Why the gallery does not show a component: it draws nothing of its own, so no check runs on it,
+ * or it is an internal part, which cannot stand alone. A part is drawn by the component named, in
+ * that component's example, and checked through that component's checks.
  */
-export interface Unshown {
-  why: 'nothing' | 'part'
-  note: string
-}
+export type Unshown =
+  | { why: 'nothing'; note: string }
+  | { why: 'part'; drawnBy: string; note: string }
 
 export interface ComponentLevels {
   family: Family
@@ -518,26 +518,34 @@ export const components = {
     family: 'internal',
     today: 1,
     target: 2,
-    unshown: { why: 'part', note: 'The list of the context menu, which draws it' },
+    unshown: {
+      why: 'part',
+      drawnBy: 'UContextMenu',
+      note: 'The list of the context menu, which draws it',
+    },
   },
   UDropdownMenuContent: {
     family: 'internal',
     today: 1,
     target: 3,
-    unshown: { why: 'part', note: 'The list of the dropdown menu, which draws it' },
+    unshown: {
+      why: 'part',
+      drawnBy: 'UDropdownMenu',
+      note: 'The list of the dropdown menu, which draws it',
+    },
   },
   ULinkBase: {
     family: 'internal',
     today: 1,
     target: 1,
-    unshown: { why: 'part', note: 'The element of the link, which draws it' },
+    unshown: { why: 'part', drawnBy: 'ULink', note: 'The element of the link, which draws it' },
   },
   UOverlayProvider: {
     family: 'internal',
     today: 1,
     target: 1,
     unshown: {
-      why: 'part',
+      why: 'nothing',
       note: 'Inside UApp: it renders the overlays an app opens from code, and draws nothing of its own',
     },
   },
@@ -547,6 +555,7 @@ export const components = {
     target: 3,
     unshown: {
       why: 'part',
+      drawnBy: 'UToast',
       note: "Inside UApp: it places the toasts, which the toast's example shows",
     },
   },

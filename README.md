@@ -108,24 +108,26 @@ The tables below are drawn from the file by `pnpm levels`.
 
 <!-- levels:start -->
 
-| Family         | Components | Level 3 today | Level 2 today | Level 1 today | Pass every level 1 check | Fail a level 1 check | Level 3 for 1.0.0 | Level 2 for 1.0.0 | Level 1 for 1.0.0 |
-| -------------- | ---------- | ------------- | ------------- | ------------- | ------------------------ | -------------------- | ----------------- | ----------------- | ----------------- |
-| Element        | 19         | 3             | 0             | 16            | 15                       | 4                    | 6                 | 10                | 3                 |
-| Form           | 21         | 6             | 0             | 15            | 17                       | 4                    | 11                | 7                 | 3                 |
-| Data           | 10         | 1             | 0             | 9             | 9                        | 1                    | 2                 | 4                 | 4                 |
-| Navigation     | 8          | 1             | 0             | 7             | 8                        | 0                    | 3                 | 4                 | 1                 |
-| Overlay        | 8          | 1             | 0             | 7             | 6                        | 2                    | 6                 | 2                 | 0                 |
-| Layout         | 9          | 0             | 0             | 9             | 9                        | 0                    | 0                 | 3                 | 6                 |
-| Page           | 23         | 0             | 0             | 23            | 23                       | 0                    | 0                 | 13                | 10                |
-| Dashboard      | 10         | 0             | 0             | 10            | 10                       | 0                    | 0                 | 0                 | 10                |
-| Chat           | 9          | 0             | 0             | 9             | 9                        | 0                    | 0                 | 0                 | 9                 |
-| Editor         | 6          | 0             | 0             | 6             | 6                        | 0                    | 0                 | 0                 | 6                 |
-| Content        | 5          | 0             | 0             | 5             | 5                        | 0                    | 0                 | 0                 | 5                 |
-| Color mode     | 5          | 0             | 0             | 5             | 5                        | 0                    | 0                 | 0                 | 5                 |
-| Locale         | 1          | 0             | 0             | 1             | 1                        | 0                    | 0                 | 0                 | 1                 |
-| Prose          | 47         | 0             | 0             | 47            | 43                       | 4                    | 0                 | 0                 | 47                |
-| Internal parts | 5          | 0             | 0             | 5             | 5                        | 0                    | 2                 | 1                 | 2                 |
-| **All**        | 186        | 12            | 0             | 174           | 171                      | 15                   | 30                | 44                | 112               |
+| Family         | Components | Level 3 today | Level 2 today | Level 1 today | Pass every level 1 check | Fail a level 1 check | Not in the gallery | Level 3 for 1.0.0 | Level 2 for 1.0.0 | Level 1 for 1.0.0 |
+| -------------- | ---------- | ------------- | ------------- | ------------- | ------------------------ | -------------------- | ------------------ | ----------------- | ----------------- | ----------------- |
+| Element        | 19         | 3             | 0             | 16            | 15                       | 4                    | 0                  | 6                 | 10                | 3                 |
+| Form           | 21         | 6             | 0             | 15            | 17                       | 4                    | 0                  | 11                | 7                 | 3                 |
+| Data           | 10         | 1             | 0             | 9             | 9                        | 1                    | 0                  | 2                 | 4                 | 4                 |
+| Navigation     | 8          | 1             | 0             | 7             | 8                        | 0                    | 0                  | 3                 | 4                 | 1                 |
+| Overlay        | 8          | 1             | 0             | 7             | 6                        | 2                    | 0                  | 6                 | 2                 | 0                 |
+| Layout         | 9          | 0             | 0             | 9             | 8                        | 0                    | 1                  | 0                 | 3                 | 6                 |
+| Page           | 23         | 0             | 0             | 23            | 23                       | 0                    | 0                  | 0                 | 13                | 10                |
+| Dashboard      | 10         | 0             | 0             | 10            | 10                       | 0                    | 0                  | 0                 | 0                 | 10                |
+| Chat           | 9          | 0             | 0             | 9             | 9                        | 0                    | 0                  | 0                 | 0                 | 9                 |
+| Editor         | 6          | 0             | 0             | 6             | 6                        | 0                    | 0                  | 0                 | 0                 | 6                 |
+| Content        | 5          | 0             | 0             | 5             | 5                        | 0                    | 0                  | 0                 | 0                 | 5                 |
+| Color mode     | 5          | 0             | 0             | 5             | 5                        | 0                    | 0                  | 0                 | 0                 | 5                 |
+| Locale         | 1          | 0             | 0             | 1             | 1                        | 0                    | 0                  | 0                 | 0                 | 1                 |
+| Prose          | 47         | 0             | 0             | 47            | 42                       | 4                    | 1                  | 0                 | 0                 | 47                |
+| Internal parts | 5          | 0             | 0             | 5             | 0                        | 0                    | 5                  | 2                 | 1                 | 2                 |
+| **All**        | 186        | 12            | 0             | 174           | 164                      | 15                   | 7                  | 30                | 44                | 112               |
+
+A component that is not in the gallery is counted apart from the ones that pass or fail: one that draws nothing of its own is not checked, and an internal part is checked through the component that draws it.
 
 The components that do not pass level 1 yet, with each check they fail:
 
@@ -152,194 +154,194 @@ The components that do not pass level 1 yet, with each check they fail:
 
 <summary>Every component</summary>
 
-| Component                   | Family         | Today | For 1.0.0 | In the gallery       | Passes level 1   |
-| --------------------------- | -------------- | ----- | --------- | -------------------- | ---------------- |
-| `UAlert`                    | Element        | 1     | 3         | Others               | No: contrast     |
-| `UAvatar`                   | Element        | 1     | 2         | Others               | Yes              |
-| `UAvatarGroup`              | Element        | 1     | 2         | Others               | Yes              |
-| `UBadge`                    | Element        | 3     | 3         | Gallery              | Yes              |
-| `UBanner`                   | Element        | 1     | 2         | Others               | No: contrast     |
-| `UButton`                   | Element        | 3     | 3         | Gallery              | Yes              |
-| `UCalendar`                 | Element        | 1     | 2         | Others               | Yes              |
-| `UCard`                     | Element        | 3     | 3         | Gallery              | Yes              |
-| `UChip`                     | Element        | 1     | 2         | Others               | Yes              |
-| `UCollapsible`              | Element        | 1     | 1         | Others               | Yes              |
-| `UFieldGroup`               | Element        | 1     | 2         | Others               | Yes              |
-| `UIcon`                     | Element        | 1     | 1         | Others               | Yes              |
-| `UKbd`                      | Element        | 1     | 3         | Others               | Yes              |
-| `UProgress`                 | Element        | 1     | 2         | Others               | Yes              |
-| `UProgressGroup`            | Element        | 1     | 1         | Others               | Yes              |
-| `USeparator`                | Element        | 1     | 2         | Others               | Yes              |
-| `USkeleton`                 | Element        | 1     | 2         | Others               | Yes              |
-| `UToggle`                   | Element        | 1     | 2         | Others               | No: forced-state |
-| `UToggleGroup`              | Element        | 1     | 3         | Others               | No: forced-state |
-| `UCheckbox`                 | Form           | 3     | 3         | Gallery              | No: contrast     |
-| `UCheckboxGroup`            | Form           | 1     | 3         | Others               | Yes              |
-| `UColorPicker`              | Form           | 1     | 1         | Others               | Yes              |
-| `UFileUpload`               | Form           | 1     | 2         | Others               | Yes              |
-| `UForm`                     | Form           | 1     | 1         | Others               | Yes              |
-| `UFormField`                | Form           | 3     | 3         | Gallery              | Yes              |
-| `UInput`                    | Form           | 3     | 3         | Gallery              | Yes              |
-| `UInputDate`                | Form           | 1     | 2         | Others               | Yes              |
-| `UInputMenu`                | Form           | 1     | 2         | Others               | Yes              |
-| `UInputNumber`              | Form           | 1     | 3         | Others               | Yes              |
-| `UInputRating`              | Form           | 1     | 1         | Others               | No: forced-state |
-| `UInputTags`                | Form           | 1     | 2         | Others               | Yes              |
-| `UInputTime`                | Form           | 1     | 2         | Others               | Yes              |
-| `UListbox`                  | Form           | 1     | 2         | Others               | Yes              |
-| `UPinInput`                 | Form           | 1     | 2         | Others               | Yes              |
-| `URadioGroup`               | Form           | 3     | 3         | Gallery              | No: contrast     |
-| `USelect`                   | Form           | 3     | 3         | Gallery              | Yes              |
-| `USelectMenu`               | Form           | 3     | 3         | Gallery              | Yes              |
-| `USlider`                   | Form           | 1     | 3         | Others               | Yes              |
-| `USwitch`                   | Form           | 1     | 3         | Others               | No: forced-state |
-| `UTextarea`                 | Form           | 1     | 3         | Others               | Yes              |
-| `UAccordion`                | Data           | 1     | 3         | Others               | Yes              |
-| `UCarousel`                 | Data           | 1     | 1         | Others               | Yes              |
-| `UChart`                    | Data           | 1     | 1         | Others               | Yes              |
-| `UEmpty`                    | Data           | 1     | 2         | Others               | Yes              |
-| `UMarquee`                  | Data           | 1     | 1         | Others               | Yes              |
-| `UScrollArea`               | Data           | 1     | 1         | Others               | Yes              |
-| `UTable`                    | Data           | 3     | 3         | Gallery              | No: contrast     |
-| `UTimeline`                 | Data           | 1     | 2         | Others               | Yes              |
-| `UTree`                     | Data           | 1     | 2         | Others               | Yes              |
-| `UUser`                     | Data           | 1     | 2         | Others               | Yes              |
-| `UBreadcrumb`               | Navigation     | 1     | 3         | Others               | Yes              |
-| `UCommandPalette`           | Navigation     | 1     | 2         | Others               | Yes              |
-| `UFooterColumns`            | Navigation     | 1     | 1         | Others               | Yes              |
-| `ULink`                     | Navigation     | 1     | 2         | Others               | Yes              |
-| `UNavigationMenu`           | Navigation     | 1     | 2         | Others               | Yes              |
-| `UPagination`               | Navigation     | 1     | 2         | Others               | Yes              |
-| `UStepper`                  | Navigation     | 1     | 3         | Others               | Yes              |
-| `UTabs`                     | Navigation     | 3     | 3         | Gallery              | Yes              |
-| `UContextMenu`              | Overlay        | 1     | 2         | Others               | No: forced-edge  |
-| `UDrawer`                   | Overlay        | 1     | 2         | Others               | Yes              |
-| `UDropdownMenu`             | Overlay        | 1     | 3         | Others               | No: forced-edge  |
-| `UModal`                    | Overlay        | 3     | 3         | Gallery              | Yes              |
-| `UPopover`                  | Overlay        | 1     | 3         | Others               | Yes              |
-| `USlideover`                | Overlay        | 1     | 3         | Others               | Yes              |
-| `UToast`                    | Overlay        | 1     | 3         | Others               | Yes              |
-| `UTooltip`                  | Overlay        | 1     | 3         | Others               | Yes              |
-| `UApp`                      | Layout         | 1     | 1         | No: draws nothing    | Yes              |
-| `UContainer`                | Layout         | 1     | 2         | Others               | Yes              |
-| `UError`                    | Layout         | 1     | 2         | Others               | Yes              |
-| `UFooter`                   | Layout         | 1     | 1         | Others               | Yes              |
-| `UHeader`                   | Layout         | 1     | 2         | Others               | Yes              |
-| `UMain`                     | Layout         | 1     | 1         | Others               | Yes              |
-| `USidebar`                  | Layout         | 1     | 1         | Others               | Yes              |
-| `USplitter`                 | Layout         | 1     | 1         | Others               | Yes              |
-| `UTheme`                    | Layout         | 1     | 1         | Others               | Yes              |
-| `UAuthForm`                 | Page           | 1     | 2         | Others               | Yes              |
-| `UBlogPost`                 | Page           | 1     | 2         | Others               | Yes              |
-| `UBlogPosts`                | Page           | 1     | 1         | Others               | Yes              |
-| `UChangelogVersion`         | Page           | 1     | 2         | Others               | Yes              |
-| `UChangelogVersions`        | Page           | 1     | 1         | Others               | Yes              |
-| `UPage`                     | Page           | 1     | 1         | Others               | Yes              |
-| `UPageAnchors`              | Page           | 1     | 2         | Others               | Yes              |
-| `UPageAside`                | Page           | 1     | 1         | Others               | Yes              |
-| `UPageBody`                 | Page           | 1     | 1         | Others               | Yes              |
-| `UPageCTA`                  | Page           | 1     | 2         | Others               | Yes              |
-| `UPageCard`                 | Page           | 1     | 2         | Others               | Yes              |
-| `UPageColumns`              | Page           | 1     | 1         | Others               | Yes              |
-| `UPageFeature`              | Page           | 1     | 2         | Others               | Yes              |
-| `UPageGrid`                 | Page           | 1     | 1         | Others               | Yes              |
-| `UPageHeader`               | Page           | 1     | 2         | Others               | Yes              |
-| `UPageHero`                 | Page           | 1     | 2         | Others               | Yes              |
-| `UPageLinks`                | Page           | 1     | 2         | Others               | Yes              |
-| `UPageList`                 | Page           | 1     | 1         | Others               | Yes              |
-| `UPageLogos`                | Page           | 1     | 1         | Others               | Yes              |
-| `UPageSection`              | Page           | 1     | 2         | Others               | Yes              |
-| `UPricingPlan`              | Page           | 1     | 2         | Others               | Yes              |
-| `UPricingPlans`             | Page           | 1     | 1         | Others               | Yes              |
-| `UPricingTable`             | Page           | 1     | 2         | Others               | Yes              |
-| `UDashboardGroup`           | Dashboard      | 1     | 1         | Others               | Yes              |
-| `UDashboardNavbar`          | Dashboard      | 1     | 1         | Others               | Yes              |
-| `UDashboardPanel`           | Dashboard      | 1     | 1         | Others               | Yes              |
-| `UDashboardResizeHandle`    | Dashboard      | 1     | 1         | Others               | Yes              |
-| `UDashboardSearch`          | Dashboard      | 1     | 1         | Others               | Yes              |
-| `UDashboardSearchButton`    | Dashboard      | 1     | 1         | Others               | Yes              |
-| `UDashboardSidebar`         | Dashboard      | 1     | 1         | Others               | Yes              |
-| `UDashboardSidebarCollapse` | Dashboard      | 1     | 1         | Others               | Yes              |
-| `UDashboardSidebarToggle`   | Dashboard      | 1     | 1         | Others               | Yes              |
-| `UDashboardToolbar`         | Dashboard      | 1     | 1         | Others               | Yes              |
-| `UChatAttachment`           | Chat           | 1     | 1         | Others               | Yes              |
-| `UChatMessage`              | Chat           | 1     | 1         | Others               | Yes              |
-| `UChatMessages`             | Chat           | 1     | 1         | Others               | Yes              |
-| `UChatPalette`              | Chat           | 1     | 1         | Others               | Yes              |
-| `UChatPrompt`               | Chat           | 1     | 1         | Others               | Yes              |
-| `UChatPromptSubmit`         | Chat           | 1     | 1         | Others               | Yes              |
-| `UChatReasoning`            | Chat           | 1     | 1         | Others               | Yes              |
-| `UChatShimmer`              | Chat           | 1     | 1         | Others               | Yes              |
-| `UChatTool`                 | Chat           | 1     | 1         | Others               | Yes              |
-| `UEditor`                   | Editor         | 1     | 1         | Others               | Yes              |
-| `UEditorDragHandle`         | Editor         | 1     | 1         | Others               | Yes              |
-| `UEditorEmojiMenu`          | Editor         | 1     | 1         | Others               | Yes              |
-| `UEditorMentionMenu`        | Editor         | 1     | 1         | Others               | Yes              |
-| `UEditorSuggestionMenu`     | Editor         | 1     | 1         | Others               | Yes              |
-| `UEditorToolbar`            | Editor         | 1     | 1         | Others               | Yes              |
-| `UContentNavigation`        | Content        | 1     | 1         | Others               | Yes              |
-| `UContentSearch`            | Content        | 1     | 1         | Others               | Yes              |
-| `UContentSearchButton`      | Content        | 1     | 1         | Others               | Yes              |
-| `UContentSurround`          | Content        | 1     | 1         | Others               | Yes              |
-| `UContentToc`               | Content        | 1     | 1         | Others               | Yes              |
-| `UColorModeAvatar`          | Color mode     | 1     | 1         | Others               | Yes              |
-| `UColorModeButton`          | Color mode     | 1     | 1         | Others               | Yes              |
-| `UColorModeImage`           | Color mode     | 1     | 1         | Others               | Yes              |
-| `UColorModeSelect`          | Color mode     | 1     | 1         | Others               | Yes              |
-| `UColorModeSwitch`          | Color mode     | 1     | 1         | Others               | Yes              |
-| `ULocaleSelect`             | Locale         | 1     | 1         | Others               | Yes              |
-| `ProseA`                    | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseAccordion`            | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseAccordionItem`        | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseBadge`                | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseBlockquote`           | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseCallout`              | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseCard`                 | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseCardGroup`            | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseCaution`              | Prose          | 1     | 1         | Others               | No: contrast     |
-| `ProseCode`                 | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseCodeCollapse`         | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseCodeGroup`            | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseCodeIcon`             | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseCodePreview`          | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseCodeTree`             | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseCollapsible`          | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseEm`                   | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseField`                | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseFieldGroup`           | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseH1`                   | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseH2`                   | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseH3`                   | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseH4`                   | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseHr`                   | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseIcon`                 | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseImg`                  | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseKbd`                  | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseLi`                   | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseNote`                 | Prose          | 1     | 1         | Others               | No: contrast     |
-| `ProseOl`                   | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseP`                    | Prose          | 1     | 1         | Others               | Yes              |
-| `ProsePre`                  | Prose          | 1     | 1         | Others               | Yes              |
-| `ProsePrompt`               | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseScript`               | Prose          | 1     | 1         | No: draws nothing    | Yes              |
-| `ProseSteps`                | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseStrong`               | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseTable`                | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseTabs`                 | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseTabsItem`             | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseTbody`                | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseTd`                   | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseTh`                   | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseThead`                | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseTip`                  | Prose          | 1     | 1         | Others               | No: contrast     |
-| `ProseTr`                   | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseUl`                   | Prose          | 1     | 1         | Others               | Yes              |
-| `ProseWarning`              | Prose          | 1     | 1         | Others               | No: contrast     |
-| `UContextMenuContent`       | Internal parts | 1     | 2         | No: an internal part | Yes              |
-| `UDropdownMenuContent`      | Internal parts | 1     | 3         | No: an internal part | Yes              |
-| `ULinkBase`                 | Internal parts | 1     | 1         | No: an internal part | Yes              |
-| `UOverlayProvider`          | Internal parts | 1     | 1         | No: an internal part | Yes              |
-| `UToaster`                  | Internal parts | 1     | 3         | No: an internal part | Yes              |
+| Component                   | Family         | Today | For 1.0.0 | In the gallery       | Passes level 1                                    |
+| --------------------------- | -------------- | ----- | --------- | -------------------- | ------------------------------------------------- |
+| `UAlert`                    | Element        | 1     | 3         | Others               | No: contrast                                      |
+| `UAvatar`                   | Element        | 1     | 2         | Others               | Yes                                               |
+| `UAvatarGroup`              | Element        | 1     | 2         | Others               | Yes                                               |
+| `UBadge`                    | Element        | 3     | 3         | Gallery              | Yes                                               |
+| `UBanner`                   | Element        | 1     | 2         | Others               | No: contrast                                      |
+| `UButton`                   | Element        | 3     | 3         | Gallery              | Yes                                               |
+| `UCalendar`                 | Element        | 1     | 2         | Others               | Yes                                               |
+| `UCard`                     | Element        | 3     | 3         | Gallery              | Yes                                               |
+| `UChip`                     | Element        | 1     | 2         | Others               | Yes                                               |
+| `UCollapsible`              | Element        | 1     | 1         | Others               | Yes                                               |
+| `UFieldGroup`               | Element        | 1     | 2         | Others               | Yes                                               |
+| `UIcon`                     | Element        | 1     | 1         | Others               | Yes                                               |
+| `UKbd`                      | Element        | 1     | 3         | Others               | Yes                                               |
+| `UProgress`                 | Element        | 1     | 2         | Others               | Yes                                               |
+| `UProgressGroup`            | Element        | 1     | 1         | Others               | Yes                                               |
+| `USeparator`                | Element        | 1     | 2         | Others               | Yes                                               |
+| `USkeleton`                 | Element        | 1     | 2         | Others               | Yes                                               |
+| `UToggle`                   | Element        | 1     | 2         | Others               | No: forced-state                                  |
+| `UToggleGroup`              | Element        | 1     | 3         | Others               | No: forced-state                                  |
+| `UCheckbox`                 | Form           | 3     | 3         | Gallery              | No: contrast                                      |
+| `UCheckboxGroup`            | Form           | 1     | 3         | Others               | Yes                                               |
+| `UColorPicker`              | Form           | 1     | 1         | Others               | Yes                                               |
+| `UFileUpload`               | Form           | 1     | 2         | Others               | Yes                                               |
+| `UForm`                     | Form           | 1     | 1         | Others               | Yes                                               |
+| `UFormField`                | Form           | 3     | 3         | Gallery              | Yes                                               |
+| `UInput`                    | Form           | 3     | 3         | Gallery              | Yes                                               |
+| `UInputDate`                | Form           | 1     | 2         | Others               | Yes                                               |
+| `UInputMenu`                | Form           | 1     | 2         | Others               | Yes                                               |
+| `UInputNumber`              | Form           | 1     | 3         | Others               | Yes                                               |
+| `UInputRating`              | Form           | 1     | 1         | Others               | No: forced-state                                  |
+| `UInputTags`                | Form           | 1     | 2         | Others               | Yes                                               |
+| `UInputTime`                | Form           | 1     | 2         | Others               | Yes                                               |
+| `UListbox`                  | Form           | 1     | 2         | Others               | Yes                                               |
+| `UPinInput`                 | Form           | 1     | 2         | Others               | Yes                                               |
+| `URadioGroup`               | Form           | 3     | 3         | Gallery              | No: contrast                                      |
+| `USelect`                   | Form           | 3     | 3         | Gallery              | Yes                                               |
+| `USelectMenu`               | Form           | 3     | 3         | Gallery              | Yes                                               |
+| `USlider`                   | Form           | 1     | 3         | Others               | Yes                                               |
+| `USwitch`                   | Form           | 1     | 3         | Others               | No: forced-state                                  |
+| `UTextarea`                 | Form           | 1     | 3         | Others               | Yes                                               |
+| `UAccordion`                | Data           | 1     | 3         | Others               | Yes                                               |
+| `UCarousel`                 | Data           | 1     | 1         | Others               | Yes                                               |
+| `UChart`                    | Data           | 1     | 1         | Others               | Yes                                               |
+| `UEmpty`                    | Data           | 1     | 2         | Others               | Yes                                               |
+| `UMarquee`                  | Data           | 1     | 1         | Others               | Yes                                               |
+| `UScrollArea`               | Data           | 1     | 1         | Others               | Yes                                               |
+| `UTable`                    | Data           | 3     | 3         | Gallery              | No: contrast                                      |
+| `UTimeline`                 | Data           | 1     | 2         | Others               | Yes                                               |
+| `UTree`                     | Data           | 1     | 2         | Others               | Yes                                               |
+| `UUser`                     | Data           | 1     | 2         | Others               | Yes                                               |
+| `UBreadcrumb`               | Navigation     | 1     | 3         | Others               | Yes                                               |
+| `UCommandPalette`           | Navigation     | 1     | 2         | Others               | Yes                                               |
+| `UFooterColumns`            | Navigation     | 1     | 1         | Others               | Yes                                               |
+| `ULink`                     | Navigation     | 1     | 2         | Others               | Yes                                               |
+| `UNavigationMenu`           | Navigation     | 1     | 2         | Others               | Yes                                               |
+| `UPagination`               | Navigation     | 1     | 2         | Others               | Yes                                               |
+| `UStepper`                  | Navigation     | 1     | 3         | Others               | Yes                                               |
+| `UTabs`                     | Navigation     | 3     | 3         | Gallery              | Yes                                               |
+| `UContextMenu`              | Overlay        | 1     | 2         | Others               | No: forced-edge                                   |
+| `UDrawer`                   | Overlay        | 1     | 2         | Others               | Yes                                               |
+| `UDropdownMenu`             | Overlay        | 1     | 3         | Others               | No: forced-edge                                   |
+| `UModal`                    | Overlay        | 3     | 3         | Gallery              | Yes                                               |
+| `UPopover`                  | Overlay        | 1     | 3         | Others               | Yes                                               |
+| `USlideover`                | Overlay        | 1     | 3         | Others               | Yes                                               |
+| `UToast`                    | Overlay        | 1     | 3         | Others               | Yes                                               |
+| `UTooltip`                  | Overlay        | 1     | 3         | Others               | Yes                                               |
+| `UApp`                      | Layout         | 1     | 1         | No: draws nothing    | Not checked: draws nothing                        |
+| `UContainer`                | Layout         | 1     | 2         | Others               | Yes                                               |
+| `UError`                    | Layout         | 1     | 2         | Others               | Yes                                               |
+| `UFooter`                   | Layout         | 1     | 1         | Others               | Yes                                               |
+| `UHeader`                   | Layout         | 1     | 2         | Others               | Yes                                               |
+| `UMain`                     | Layout         | 1     | 1         | Others               | Yes                                               |
+| `USidebar`                  | Layout         | 1     | 1         | Others               | Yes                                               |
+| `USplitter`                 | Layout         | 1     | 1         | Others               | Yes                                               |
+| `UTheme`                    | Layout         | 1     | 1         | Others               | Yes                                               |
+| `UAuthForm`                 | Page           | 1     | 2         | Others               | Yes                                               |
+| `UBlogPost`                 | Page           | 1     | 2         | Others               | Yes                                               |
+| `UBlogPosts`                | Page           | 1     | 1         | Others               | Yes                                               |
+| `UChangelogVersion`         | Page           | 1     | 2         | Others               | Yes                                               |
+| `UChangelogVersions`        | Page           | 1     | 1         | Others               | Yes                                               |
+| `UPage`                     | Page           | 1     | 1         | Others               | Yes                                               |
+| `UPageAnchors`              | Page           | 1     | 2         | Others               | Yes                                               |
+| `UPageAside`                | Page           | 1     | 1         | Others               | Yes                                               |
+| `UPageBody`                 | Page           | 1     | 1         | Others               | Yes                                               |
+| `UPageCTA`                  | Page           | 1     | 2         | Others               | Yes                                               |
+| `UPageCard`                 | Page           | 1     | 2         | Others               | Yes                                               |
+| `UPageColumns`              | Page           | 1     | 1         | Others               | Yes                                               |
+| `UPageFeature`              | Page           | 1     | 2         | Others               | Yes                                               |
+| `UPageGrid`                 | Page           | 1     | 1         | Others               | Yes                                               |
+| `UPageHeader`               | Page           | 1     | 2         | Others               | Yes                                               |
+| `UPageHero`                 | Page           | 1     | 2         | Others               | Yes                                               |
+| `UPageLinks`                | Page           | 1     | 2         | Others               | Yes                                               |
+| `UPageList`                 | Page           | 1     | 1         | Others               | Yes                                               |
+| `UPageLogos`                | Page           | 1     | 1         | Others               | Yes                                               |
+| `UPageSection`              | Page           | 1     | 2         | Others               | Yes                                               |
+| `UPricingPlan`              | Page           | 1     | 2         | Others               | Yes                                               |
+| `UPricingPlans`             | Page           | 1     | 1         | Others               | Yes                                               |
+| `UPricingTable`             | Page           | 1     | 2         | Others               | Yes                                               |
+| `UDashboardGroup`           | Dashboard      | 1     | 1         | Others               | Yes                                               |
+| `UDashboardNavbar`          | Dashboard      | 1     | 1         | Others               | Yes                                               |
+| `UDashboardPanel`           | Dashboard      | 1     | 1         | Others               | Yes                                               |
+| `UDashboardResizeHandle`    | Dashboard      | 1     | 1         | Others               | Yes                                               |
+| `UDashboardSearch`          | Dashboard      | 1     | 1         | Others               | Yes                                               |
+| `UDashboardSearchButton`    | Dashboard      | 1     | 1         | Others               | Yes                                               |
+| `UDashboardSidebar`         | Dashboard      | 1     | 1         | Others               | Yes                                               |
+| `UDashboardSidebarCollapse` | Dashboard      | 1     | 1         | Others               | Yes                                               |
+| `UDashboardSidebarToggle`   | Dashboard      | 1     | 1         | Others               | Yes                                               |
+| `UDashboardToolbar`         | Dashboard      | 1     | 1         | Others               | Yes                                               |
+| `UChatAttachment`           | Chat           | 1     | 1         | Others               | Yes                                               |
+| `UChatMessage`              | Chat           | 1     | 1         | Others               | Yes                                               |
+| `UChatMessages`             | Chat           | 1     | 1         | Others               | Yes                                               |
+| `UChatPalette`              | Chat           | 1     | 1         | Others               | Yes                                               |
+| `UChatPrompt`               | Chat           | 1     | 1         | Others               | Yes                                               |
+| `UChatPromptSubmit`         | Chat           | 1     | 1         | Others               | Yes                                               |
+| `UChatReasoning`            | Chat           | 1     | 1         | Others               | Yes                                               |
+| `UChatShimmer`              | Chat           | 1     | 1         | Others               | Yes                                               |
+| `UChatTool`                 | Chat           | 1     | 1         | Others               | Yes                                               |
+| `UEditor`                   | Editor         | 1     | 1         | Others               | Yes                                               |
+| `UEditorDragHandle`         | Editor         | 1     | 1         | Others               | Yes                                               |
+| `UEditorEmojiMenu`          | Editor         | 1     | 1         | Others               | Yes                                               |
+| `UEditorMentionMenu`        | Editor         | 1     | 1         | Others               | Yes                                               |
+| `UEditorSuggestionMenu`     | Editor         | 1     | 1         | Others               | Yes                                               |
+| `UEditorToolbar`            | Editor         | 1     | 1         | Others               | Yes                                               |
+| `UContentNavigation`        | Content        | 1     | 1         | Others               | Yes                                               |
+| `UContentSearch`            | Content        | 1     | 1         | Others               | Yes                                               |
+| `UContentSearchButton`      | Content        | 1     | 1         | Others               | Yes                                               |
+| `UContentSurround`          | Content        | 1     | 1         | Others               | Yes                                               |
+| `UContentToc`               | Content        | 1     | 1         | Others               | Yes                                               |
+| `UColorModeAvatar`          | Color mode     | 1     | 1         | Others               | Yes                                               |
+| `UColorModeButton`          | Color mode     | 1     | 1         | Others               | Yes                                               |
+| `UColorModeImage`           | Color mode     | 1     | 1         | Others               | Yes                                               |
+| `UColorModeSelect`          | Color mode     | 1     | 1         | Others               | Yes                                               |
+| `UColorModeSwitch`          | Color mode     | 1     | 1         | Others               | Yes                                               |
+| `ULocaleSelect`             | Locale         | 1     | 1         | Others               | Yes                                               |
+| `ProseA`                    | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseAccordion`            | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseAccordionItem`        | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseBadge`                | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseBlockquote`           | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseCallout`              | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseCard`                 | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseCardGroup`            | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseCaution`              | Prose          | 1     | 1         | Others               | No: contrast                                      |
+| `ProseCode`                 | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseCodeCollapse`         | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseCodeGroup`            | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseCodeIcon`             | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseCodePreview`          | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseCodeTree`             | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseCollapsible`          | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseEm`                   | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseField`                | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseFieldGroup`           | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseH1`                   | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseH2`                   | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseH3`                   | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseH4`                   | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseHr`                   | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseIcon`                 | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseImg`                  | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseKbd`                  | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseLi`                   | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseNote`                 | Prose          | 1     | 1         | Others               | No: contrast                                      |
+| `ProseOl`                   | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseP`                    | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProsePre`                  | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProsePrompt`               | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseScript`               | Prose          | 1     | 1         | No: draws nothing    | Not checked: draws nothing                        |
+| `ProseSteps`                | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseStrong`               | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseTable`                | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseTabs`                 | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseTabsItem`             | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseTbody`                | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseTd`                   | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseTh`                   | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseThead`                | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseTip`                  | Prose          | 1     | 1         | Others               | No: contrast                                      |
+| `ProseTr`                   | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseUl`                   | Prose          | 1     | 1         | Others               | Yes                                               |
+| `ProseWarning`              | Prose          | 1     | 1         | Others               | No: contrast                                      |
+| `UContextMenuContent`       | Internal parts | 1     | 2         | No: an internal part | No: forced-edge (checked through `UContextMenu`)  |
+| `UDropdownMenuContent`      | Internal parts | 1     | 3         | No: an internal part | No: forced-edge (checked through `UDropdownMenu`) |
+| `ULinkBase`                 | Internal parts | 1     | 1         | No: an internal part | Yes (checked through `ULink`)                     |
+| `UOverlayProvider`          | Internal parts | 1     | 1         | No: draws nothing    | Not checked: draws nothing                        |
+| `UToaster`                  | Internal parts | 1     | 3         | No: an internal part | Yes (checked through `UToast`)                    |
 
 </details>
 

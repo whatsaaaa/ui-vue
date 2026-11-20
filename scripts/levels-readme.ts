@@ -39,6 +39,7 @@ const titles: Record<Family, string> = {
 }
 
 const entries = Object.entries(components) as [string, ComponentLevels][]
+const byName: Record<string, ComponentLevels> = components
 
 /** A Markdown table as the formatter writes it: every column as wide as its widest cell. */
 function table(head: string[], rows: string[][]): string {
@@ -56,7 +57,8 @@ const count = (of: ComponentLevels[], when: 'today' | 'target', level: Level) =>
 
 /**
  * One row for each family, and one for all of them. A component that fails a level 1 check is
- * counted apart from the ones that pass them all, whatever its level today.
+ * counted apart from the ones that pass them all, whatever its level today, and one the gallery
+ * does not show apart from both: no check runs on it on its own.
  */
 function summary(): string {
   const row = (title: string, of: ComponentLevels[]) => [
@@ -65,8 +67,9 @@ function summary(): string {
     count(of, 'today', 3),
     count(of, 'today', 2),
     count(of, 'today', 1),
-    String(of.filter((component) => !component.fails).length),
+    String(of.filter((component) => !component.unshown && !component.fails).length),
     String(of.filter((component) => component.fails).length),
+    String(of.filter((component) => component.unshown).length),
     count(of, 'target', 3),
     count(of, 'target', 2),
     count(of, 'target', 1),
@@ -80,6 +83,7 @@ function summary(): string {
       'Level 1 today',
       'Pass every level 1 check',
       'Fail a level 1 check',
+      'Not in the gallery',
       'Level 3 for 1.0.0',
       'Level 2 for 1.0.0',
       'Level 1 for 1.0.0',
@@ -128,8 +132,14 @@ function shown(component: ComponentLevels): string {
   return { gallery: 'Gallery', others: 'Others' }[shownOn(component)!]
 }
 
-/** Whether a component passes the level 1 checks, and the ones it fails where it does not. */
-function passes({ fails }: ComponentLevels): string {
+/**
+ * Whether a component passes the level 1 checks, and the ones it fails where it does not. One
+ * that draws nothing is not checked, and a part is checked through the component that draws it.
+ */
+function passes({ fails, unshown }: ComponentLevels): string {
+  if (unshown?.why === 'nothing') return 'Not checked: draws nothing'
+  if (unshown?.why === 'part')
+    return `${passes(byName[unshown.drawnBy]!)} (checked through \`${unshown.drawnBy}\`)`
   if (!fails) return 'Yes'
   return `No: ${[...new Set(fails.map(({ check }) => check))].sort().join(', ')}`
 }
@@ -157,6 +167,7 @@ function all(): string {
 export function levelsTables(): string {
   return [
     summary(),
+    'A component that is not in the gallery is counted apart from the ones that pass or fail: one that draws nothing of its own is not checked, and an internal part is checked through the component that draws it.',
     'The components that do not pass level 1 yet, with each check they fail:',
     failing(),
     '<details>',

@@ -43,8 +43,12 @@ const headings = [
   </OthersSample>
 
   <OthersSample name="UContentSearch" :with="['UContentSearchButton']">
-    <UContentSearchButton :collapsed="false" data-testid="open-UContentSearch" />
-    <UContentSearch :links="pages" />
+    <UContentSearchButton
+      :collapsed="false"
+      :kbds="['meta', 'j']"
+      data-testid="open-UContentSearch"
+    />
+    <UContentSearch :links="pages" shortcut="meta_j" />
   </OthersSample>
 
   <OthersSample name="UContentSurround">

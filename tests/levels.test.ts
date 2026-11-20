@@ -63,6 +63,15 @@ describe('the levels file', () => {
       }
   })
 
+  test('names for an internal part the component that draws it, which the gallery shows', () => {
+    const byName: Record<string, ComponentLevels> = components
+    for (const [name, { unshown }] of entries)
+      if (unshown?.why === 'part') {
+        expect(Object.keys(components), name).toContain(unshown.drawnBy)
+        expect(byName[unshown.drawnBy]!.unshown, name).toBeUndefined()
+      }
+  })
+
   test('lists a known failure only with a component the gallery shows, with its themes and parts', () => {
     for (const [name, component] of entries)
       for (const failure of component.fails ?? []) {
@@ -87,5 +96,30 @@ describe("the README's coverage tables", () => {
   test('are the ones scripts/levels-readme.ts draws from the levels file: pnpm levels', () => {
     const readme = readFileSync(README, 'utf8')
     expect(withLevelsTables(readme)).toBe(readme)
+  })
+
+  test('say no component passes level 1 that no check ran on: a part has the result of the component that draws it', () => {
+    const readme = readFileSync(README, 'utf8')
+    // the table of every component: its name and whether it passes level 1
+    const passes = new Map(
+      readme
+        .slice(readme.indexOf('<summary>Every component</summary>'), readme.indexOf('</details>'))
+        .split('\n')
+        .filter((line) => line.startsWith('| `'))
+        .map((line) => line.split('|').map((cell) => cell.trim()))
+        .map((cells): [string, string] => [cells[1]!.replaceAll('`', ''), cells[6]!]),
+    )
+    for (const [name, { unshown }] of entries) {
+      if (unshown?.why === 'nothing')
+        expect(passes.get(name), name).toBe('Not checked: draws nothing')
+      if (unshown?.why === 'part')
+        expect(passes.get(name), name).toBe(
+          `${passes.get(unshown.drawnBy)} (checked through \`${unshown.drawnBy}\`)`,
+        )
+    }
+    // the list the context menu draws fails where the menu does
+    expect(passes.get('UContextMenuContent')).toBe(
+      'No: forced-edge (checked through `UContextMenu`)',
+    )
   })
 })
