@@ -45,7 +45,10 @@ function known(check: Check, theme: Theme, on: 'others' | 'gallery' = 'others'):
     .sort()
 }
 
-/** The component a section of the gallery shows, by the section's id: URadioGroup for radio-group. */
+/**
+ * The component a section of the gallery shows, by the section's id: URadioGroup for
+ * radio-group.
+ */
 const inGallery = (finding: Finding): Finding => ({
   ...finding,
   where: `U${(finding.where ?? '').replaceAll(/(^|-)(\w)/g, (_, _dash, letter: string) => letter.toUpperCase())}`,

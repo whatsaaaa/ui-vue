@@ -40,7 +40,8 @@ function fieldEdges(within: Locator): Promise<Findings> {
 /**
  * A checkbox or a radio that is checked, or a checkbox that is indeterminate, is filled with the
  * selection color, gray when it is disabled, its mark in the selection's text color, the page
- * color when it is disabled. One that is not has no fill. A card without its control shows the state by its border, in the selection color.
+ * color when it is disabled. One that is not has no fill. A card without its control shows the
+ * state by its border, in the selection color.
  */
 function checked(page: Page): Promise<Findings> {
   return page.evaluate(() => {
