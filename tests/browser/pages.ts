@@ -48,6 +48,16 @@ export async function waitForPage(page: Page, url: RegExp): Promise<void> {
   await expect(page).toHaveURL(url, { timeout: APP_WAIT })
 }
 
+/**
+ * Waits until a reading of the whole page finds nothing wrong, once the colors of what changed
+ * have. One reading of every control of the gallery takes over a second, and on a busy machine
+ * more than an expectation polls for by default. This wait adds its time to the test's too.
+ */
+export async function waitForNoFindings(read: () => Promise<string[]>): Promise<void> {
+  allowAppWait()
+  await expect.poll(read, { timeout: APP_WAIT }).toEqual([])
+}
+
 /** Gives the test the time of one more wait for the app. */
 function allowAppWait(): void {
   const testInfo = test.info()
