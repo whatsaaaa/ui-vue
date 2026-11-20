@@ -24,10 +24,12 @@
     "lint:package": "pnpm -r lint:package",
     "format": "oxfmt .",
     "format:check": "oxfmt --check .",
-    "changeset": "changeset"
+    "changeset": "changeset",
+    "levels": "node scripts/levels-readme.ts"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",
+    "@axe-core/playwright": "^4.14.0",
     "@changesets/changelog-github": "^1.0.1",
     "@changesets/cli": "^3.0.3",
     "@playwright/test": "1.65.0",

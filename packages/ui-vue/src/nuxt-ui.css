@@ -18,8 +18,11 @@
 [data-theme],
 .dark,
 .light {
-  /* Text */
-  --ui-text-dimmed: var(--ws-color-text-faint);
+  /*
+   * Text. Nuxt UI sets text in its dimmed color, a timeline's dates among it, so it is the
+   * secondary color too: the faint one is under 4.5:1 on the page.
+   */
+  --ui-text-dimmed: var(--ws-color-text-secondary);
   --ui-text-muted: var(--ws-color-text-secondary);
   --ui-text-toned: color-mix(in oklab, var(--ws-color-text-secondary), var(--ws-color-text));
   --ui-text: var(--ws-color-text);

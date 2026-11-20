@@ -54,10 +54,12 @@ const cell =
  * page color behind each line of text, which would hide it, as HighlightText is near the page
  * color: the cell keeps its colors as they are, and so does the text in it. The parts of Nuxt
  * UI's components in it draw colors of their own, such as a badge's or a button's, and keep the
- * forced colors as they do everywhere, unless a part keeps its own, as a checked box does.
+ * forced colors as they do everywhere, unless a part keeps its own, as a checked box does. An
+ * icon of the cell itself, outside any such part, is in HighlightText as the text is, where the
+ * stylesheet paints every icon in the text color of the page.
  */
 const chosenCell =
-  'forced-colors:in-data-[selected=true]:text-[HighlightText] forced-colors:in-data-[selected=true]:forced-color-adjust-none forced-colors:in-data-[selected=true]:[:where(&_[data-slot])]:forced-color-adjust-auto'
+  'forced-colors:in-data-[selected=true]:text-[HighlightText] forced-colors:in-data-[selected=true]:forced-color-adjust-none forced-colors:in-data-[selected=true]:[:where(&_[data-slot])]:forced-color-adjust-auto forced-colors:in-data-[selected=true]:[:where(&_.iconify:not(svg,:is(&_[data-slot]_*)))]:bg-[HighlightText]'
 
 /**
  * The ring of a row over a pinned cell. The cell's fill, which hides what scrolls under it, lies

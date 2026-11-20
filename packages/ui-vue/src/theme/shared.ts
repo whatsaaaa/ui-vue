@@ -47,6 +47,13 @@ export const forcedChecked =
   'forced-colors:bg-[Highlight] forced-colors:text-[HighlightText] forced-colors:forced-color-adjust-none forced-colors:in-disabled:bg-[GrayText] forced-colors:in-disabled:text-[Canvas]'
 
 /**
+ * The mark of a checked control, where it is an icon drawn as a mask: in the fill's text color,
+ * where the stylesheet paints every icon in the text color of the page.
+ */
+export const forcedMark =
+  'forced-colors:not-[svg]:bg-[HighlightText] forced-colors:in-disabled:not-[svg]:bg-[Canvas]'
+
+/**
  * An icon drawn as a mask, in the text color, gray inside a disabled control as its label is: a
  * button, a select's trigger or a tab. An input's icons sit beside the input, not inside it, so
  * they keep the text color when it is disabled. An icon drawn as an SVG, as Nuxt UI draws them on

@@ -58,12 +58,20 @@
   position: relative;
 }
 
-/* the list is as wide as its trigger: Reka's min-width of its content would widen the column */
-.gallery-open [data-reka-popper-content-wrapper] {
+/*
+ * the list is as wide as its trigger: Reka's min-width of its content would widen the column. An
+ * open menu, popover or tooltip on the page of the others, in OthersOpen, is in place too
+ */
+:is(.gallery-open, .others-open) [data-reka-popper-content-wrapper] {
   position: static !important;
   min-width: 0 !important;
   transform: none !important;
   margin-top: var(--ws-space-8);
+}
+
+/* and as wide as its content, where its example leaves it more room than its trigger has */
+.others-open [data-reka-popper-content-wrapper] {
+  width: fit-content;
 }
 
 .gallery-open:has([role='dialog']) {
@@ -161,6 +169,24 @@ body:has(.gallery-open) .window {
 .ws-status-line__keys button:disabled .ws-kbd {
   border-color: var(--ws-color-border);
   color: inherit;
+}
+
+/*
+ * On a narrow screen the design system gives every tab the same width, the widest one's, and
+ * four of them do not fit a phone at that. Each is as wide as its name here, and they share the
+ * room that is left. On the narrowest screens they are padded less too.
+ */
+@media (width < 64rem) {
+  .ws-tabs li {
+    flex: 1 1 auto;
+  }
+}
+
+@media (width < 24rem) {
+  .ws-tabs a {
+    gap: var(--ws-space-4);
+    padding-inline: var(--ws-space-4);
+  }
 }
 
 /* The mark of the handle at 32 px, in the cut for the page's theme. */

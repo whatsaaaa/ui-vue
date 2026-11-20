@@ -350,3 +350,31 @@ test.describe('the gallery', () => {
     await expect(themeSwitch(page, 'nuxt')).toBeEnabled()
   })
 })
+
+test.describe('the page of the others', () => {
+  test.beforeEach(async ({ page }, testInfo) => {
+    test.skip(playground(testInfo) !== 'nuxt', 'The page of the others is in the gallery')
+    await open(page, '/others')
+  })
+
+  test('each search opens alone, from the keys its button shows', async ({ page }) => {
+    const windows = page.locator('[role=dialog]:not([inert] *)').filter({ visible: true })
+    for (const [search, item] of [
+      ['UDashboardSearch', 'Registrations'],
+      ['UContentSearch', 'Install'],
+    ] as const) {
+      // as the key caps read: Ctrl, or ⌘ on a Mac, and a letter
+      const keys = await page.getByTestId(`open-${search}`).locator('kbd').allInnerTexts()
+      await page.keyboard.press(
+        keys
+          .map((key) => key.trim().toLowerCase())
+          .map((key) => ({ ctrl: 'Control', '⌘': 'Meta' })[key] ?? key)
+          .join('+'),
+      )
+      await expect(windows).toHaveCount(1)
+      await expect(windows).toContainText(item)
+      await page.keyboard.press('Escape')
+      await expect(windows).toHaveCount(0)
+    }
+  })
+})
