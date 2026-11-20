@@ -67,15 +67,15 @@ function measure(row: Locator) {
 
 /**
  * The room around a row's content, where no text is in the way: a column of pixels of a cell
- * between the pinned ones, which scrolls, and of each pinned one, and a row of pixels over the
- * content, clear of the ring's lines above and below.
+ * between the pinned ones, which scrolls, and of the row's first and last cell, both pinned, and
+ * a row of pixels over the content, clear of the ring's lines above and below.
  */
 function room(at: Awaited<ReturnType<typeof measure>>) {
-  const start = at.cells.find((cell) => cell.pinned === 'left')!
+  const starts = at.cells.filter((cell) => cell.pinned === 'left')
   const end = at.cells.find((cell) => cell.pinned === 'right')!
   return {
-    between: start.right + 2,
-    first: start.left + 4,
+    between: starts.at(-1)!.right + 2,
+    first: starts[0]!.left + 4,
     last: end.right - 4,
     inside: at.top + 6,
   }
@@ -149,6 +149,32 @@ async function expectWholeRing(page: Page, row: Locator): Promise<void> {
   expect(ringed(colors.slice(37, 40)), "the ring's start").toEqual([true, true, false])
   expect(ringed(colors.slice(40, 43)), "the ring's end").toEqual([true, true, false])
   expect(new Set(colors.slice(43)), 'the ends are whole').toEqual(new Set([ring]))
+}
+
+/**
+ * A pinned cell between a ringed row's first and last: the ring's lines show above and below it
+ * as over a cell that scrolls, and it draws no end of the ring. Over its content it is one color
+ * from side to side, a pixel in from its edges.
+ */
+async function expectNoEndBetween(page: Page, row: Locator): Promise<void> {
+  const at = await measure(row)
+  const { between, inside } = room(at)
+  const cell = at.cells.filter((cell) => cell.pinned === 'left')[1]!
+  // the second pixel of the line above, and the first of the line below
+  const lines = (x: number) => [
+    { x, y: at.top + 1 },
+    { x, y: at.bottom - 2 },
+  ]
+  const colors = await painted(page, [
+    ...lines(between),
+    ...lines(cell.left + 4),
+    ...Array.from({ length: cell.right - cell.left - 2 }, (_, offset) => ({
+      x: cell.left + 1 + offset,
+      y: inside,
+    })),
+  ])
+  expect(colors.slice(2, 4), "the ring's lines over the cell").toEqual(colors.slice(0, 2))
+  expect([...new Set(colors.slice(4))], 'the cell draws no end of the ring').toHaveLength(1)
 }
 
 /**
@@ -242,6 +268,38 @@ for (const { name, use } of systems) {
       await page.keyboard.press('Shift+Tab')
       await expect(row).toBeFocused()
       await expectOneRing(page, row)
+    })
+
+    test("a pinned cell between a ringed row's first and last shows the ring's lines, and draws no end of it", async ({
+      page,
+    }, testInfo) => {
+      test.skip(playground(testInfo) !== 'nuxt', 'The tables are in the gallery')
+      await open(page)
+      const table = page.getByTestId('table-pinned')
+      await table.scrollIntoViewIfNeeded()
+      // The gallery pins one column at each end: a third would leave its narrowest page no room
+      // for the columns that scroll. So a second column is pinned at the start here, with what
+      // Nuxt UI gives its cells: the classes of a pinned cell, and its place after the first.
+      await table.locator('tbody tr').evaluateAll((rows: HTMLTableRowElement[]) => {
+        for (const row of rows) {
+          const [first, second] = [...row.cells]
+          second!.className = first!.className
+          second!.dataset.pinned = 'left'
+          second!.style.left = `${first!.getBoundingClientRect().width}px`
+        }
+      })
+      const row = table.locator('tbody tr').nth(1)
+      await table.getByRole('button', { name: 'Edit Maya Collins' }).focus()
+      await page.keyboard.press('Tab')
+      await expect(row.getByRole('checkbox', { name: 'Choose Daniel Brooks' })).toBeFocused()
+      await expect(row).toHaveCSS('outline-style', 'solid')
+      await expectWholeRing(page, row)
+      await expectNoEndBetween(page, row)
+
+      // with the columns scrolled to their end, under the pinned cells
+      await table.evaluate((frame) => frame.scrollTo({ left: frame.scrollWidth }))
+      await expectWholeRing(page, row)
+      await expectNoEndBetween(page, row)
     })
   })
 }

@@ -65,12 +65,14 @@ const chosenCell =
  * and below it: it is clipped there by its row's --table-row-ring-clip, which in every other row
  * is far outside the cell and clips nothing. The first or the last cell of the row keeps its
  * whole height where the ring ends, as wide as --table-row-ring, and draws the end itself: the
- * row's own may have scrolled away under it. The end is a border, which forced colors keep, in
- * the color the outline has there: the text color, or Highlight on a row that has the focus
- * itself and is not chosen, the color the browser gives the outline of what has the focus.
+ * row's own may have scrolled away under it. A pinned cell between them draws none: Tailwind's
+ * after: gives a content to whatever it styles, so those cells are told to have none. The end is
+ * a border, which forced colors keep, in the color the outline has there: the text color, or
+ * Highlight on a row that has the focus itself and is not chosen, the color the browser gives
+ * the outline of what has the focus.
  */
 const pinnedRing =
-  "[clip-path:inset(var(--table-row-ring-clip)_-100vmax)] first:[clip-path:polygon(-100vmax_-100vmax,var(--table-row-ring)_-100vmax,var(--table-row-ring)_var(--table-row-ring-clip),calc(100%_+_100vmax)_var(--table-row-ring-clip),calc(100%_+_100vmax)_calc(100%_-_var(--table-row-ring-clip)),var(--table-row-ring)_calc(100%_-_var(--table-row-ring-clip)),var(--table-row-ring)_calc(100%_+_100vmax),-100vmax_calc(100%_+_100vmax))] last:[clip-path:polygon(-100vmax_var(--table-row-ring-clip),calc(100%_-_var(--table-row-ring))_var(--table-row-ring-clip),calc(100%_-_var(--table-row-ring))_-100vmax,calc(100%_+_100vmax)_-100vmax,calc(100%_+_100vmax)_calc(100%_+_100vmax),calc(100%_-_var(--table-row-ring))_calc(100%_+_100vmax),calc(100%_-_var(--table-row-ring))_calc(100%_-_var(--table-row-ring-clip)),-100vmax_calc(100%_-_var(--table-row-ring-clip)))] first:after:content-[''] last:after:content-[''] after:absolute after:inset-y-0 first:after:left-0 last:after:right-0 after:pointer-events-none after:border-s-[length:var(--table-row-ring,0px)] after:border-interactive forced-colors:after:border-current forced-colors:[tr[data-selectable=true]:focus-visible:not([data-selected=true])>&]:after:border-[Highlight]"
+  "[clip-path:inset(var(--table-row-ring-clip)_-100vmax)] first:[clip-path:polygon(-100vmax_-100vmax,var(--table-row-ring)_-100vmax,var(--table-row-ring)_var(--table-row-ring-clip),calc(100%_+_100vmax)_var(--table-row-ring-clip),calc(100%_+_100vmax)_calc(100%_-_var(--table-row-ring-clip)),var(--table-row-ring)_calc(100%_-_var(--table-row-ring-clip)),var(--table-row-ring)_calc(100%_+_100vmax),-100vmax_calc(100%_+_100vmax))] last:[clip-path:polygon(-100vmax_var(--table-row-ring-clip),calc(100%_-_var(--table-row-ring))_var(--table-row-ring-clip),calc(100%_-_var(--table-row-ring))_-100vmax,calc(100%_+_100vmax)_-100vmax,calc(100%_+_100vmax)_calc(100%_+_100vmax),calc(100%_-_var(--table-row-ring))_calc(100%_+_100vmax),calc(100%_-_var(--table-row-ring))_calc(100%_-_var(--table-row-ring-clip)),-100vmax_calc(100%_-_var(--table-row-ring-clip)))] after:content-none first:after:content-[''] last:after:content-[''] after:absolute after:inset-y-0 first:after:left-0 last:after:right-0 after:pointer-events-none after:border-s-[length:var(--table-row-ring,0px)] after:border-interactive forced-colors:after:border-current forced-colors:[tr[data-selectable=true]:focus-visible:not([data-selected=true])>&]:after:border-[Highlight]"
 
 /**
  * A pinned cell hides what scrolls under it: on the page color, or its row's fill, raised under
