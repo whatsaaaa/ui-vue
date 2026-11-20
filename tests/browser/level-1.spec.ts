@@ -348,6 +348,21 @@ test('the page of the others has an example of every component the levels file s
   expect(empty).toEqual([])
 })
 
+test('the page of the others opens at its top, with no example holding the focus', async ({
+  page,
+}) => {
+  await open(page, PAGE)
+  // a control that takes the focus as it comes does so a moment after, and scrolls to itself
+  await page.evaluate(() => new Promise((resolve) => setTimeout(resolve)))
+  const landing = await page.evaluate(() => ({
+    focus:
+      document.activeElement?.closest<HTMLElement>('[data-sample]')?.dataset.sample ??
+      document.activeElement?.localName,
+    top: document.documentElement.scrollTop + document.querySelector('.window__main')!.scrollTop,
+  }))
+  expect(landing).toEqual({ focus: 'body', top: 0 })
+})
+
 for (const theme of ['dark', 'light'] as const) {
   test.describe(`in the ${theme} theme`, () => {
     test.use({ colorScheme: theme })

@@ -72,6 +72,7 @@ const steps = [
     <UCommandPalette
       :groups="commands"
       placeholder="Search pages and people"
+      :autofocus="false"
       class="h-80 w-full max-w-md rounded-lg border-thin border-border"
     />
   </OthersSample>

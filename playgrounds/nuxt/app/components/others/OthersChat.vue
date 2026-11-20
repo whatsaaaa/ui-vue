@@ -66,14 +66,19 @@ const question = ref('')
           :auto-scroll="false"
         />
         <template #prompt>
-          <UChatPrompt placeholder="Ask about the conference" variant="naked" />
+          <UChatPrompt placeholder="Ask about the conference" variant="naked" :autofocus="false" />
         </template>
       </UChatPalette>
     </div>
   </OthersSample>
 
   <OthersSample name="UChatPrompt" :with="['UChatPromptSubmit']">
-    <UChatPrompt v-model="question" placeholder="Ask about the conference" class="max-w-xl">
+    <UChatPrompt
+      v-model="question"
+      placeholder="Ask about the conference"
+      :autofocus="false"
+      class="max-w-xl"
+    >
       <UChatPromptSubmit />
     </UChatPrompt>
   </OthersSample>
