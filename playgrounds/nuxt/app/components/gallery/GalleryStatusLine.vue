@@ -46,13 +46,7 @@ onBeforeUnmount(() => {
     </span>
     <!-- Each hint is the control it names: the key clicks the button. -->
     <span class="ws-status-line__keys">
-      <button
-        type="button"
-        data-ws-key="t"
-        aria-label="Switch theme"
-        :disabled="colorMode.forced"
-        @click="switchTheme"
-      >
+      <button type="button" data-ws-key="t" :disabled="colorMode.forced" @click="switchTheme">
         <kbd class="ws-kbd">t</kbd>theme
       </button>
     </span>
@@ -70,25 +64,18 @@ onBeforeUnmount(() => {
     </button>
     <!--
       The name of the theme, which also switches it: the hints above are hidden on a narrow
-      screen, and this is not. Both names are in the page and the styles show the theme's one.
+      screen, and this is not. Both names are in the button and the styles show the theme's one,
+      so the button keeps the focus when the theme changes.
     -->
     <button
       type="button"
-      class="ws-status-line__theme ws-status-line__item--dark"
+      class="ws-status-line__theme"
       :disabled="colorMode.forced"
       @click="switchTheme"
     >
       <span class="sr-only">Switch theme, now</span>
-      rose-pine
-    </button>
-    <button
-      type="button"
-      class="ws-status-line__theme ws-status-line__item--light"
-      :disabled="colorMode.forced"
-      @click="switchTheme"
-    >
-      <span class="sr-only">Switch theme, now</span>
-      rose-pine-dawn
+      <span class="ws-theme-dark">rose-pine</span>
+      <span class="ws-theme-light">rose-pine-dawn</span>
     </button>
   </footer>
 </template>

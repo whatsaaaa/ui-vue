@@ -1,5 +1,5 @@
 import { expect, test, type Locator, type Page } from '@playwright/test'
-import { open, playground } from './pages.ts'
+import { open, playground, waitForNoFindings } from './pages.ts'
 
 /*
  * Forced colors, Windows' contrast themes, take box shadows away and paint every background in
@@ -284,12 +284,10 @@ for (const colorScheme of ['dark', 'light'] as const) {
         ).toBeGreaterThanOrEqual(4.5)
 
       // a row's action, a button, once its row is chosen
-      const edit = page.getByRole('button', { name: 'Edit Maya Collins' })
-      await page
-        .locator('tbody tr', { has: edit })
-        .getByRole('checkbox', { name: 'Choose Maya Collins' })
-        .click()
-      await expect(page.locator('tbody tr', { has: edit })).toHaveAttribute('data-selected', 'true')
+      const withAction = page.getByTestId('table-action').locator('tbody tr').first()
+      const edit = withAction.getByRole('button', { name: 'Edit Maya Collins' })
+      await withAction.getByRole('checkbox', { name: 'Choose Maya Collins' }).click()
+      await expect(withAction).toHaveAttribute('data-selected', 'true')
       expect(await paintedContrast(page, edit), 'Edit reads on the row').toBeGreaterThanOrEqual(4.5)
     })
 
@@ -305,14 +303,14 @@ for (const colorScheme of ['dark', 'light'] as const) {
       await page.locator('label', { has: morning }).click()
       await expect(morning).toBeChecked()
       // once its colors have changed
-      await expect.poll(() => checked(page)).toEqual([])
+      await waitForNoFindings(() => checked(page))
 
       // An arrow checks the next option while the key is down, as a hand presses it.
       await page.keyboard.down('ArrowRight')
       await expect(afternoon).toBeChecked()
       await page.keyboard.up('ArrowRight')
       expect(await afternoon.evaluate((element) => element.matches(':focus-visible'))).toBe(true)
-      await expect.poll(() => checked(page)).toEqual([])
+      await waitForNoFindings(() => checked(page))
     })
 
     test('an open list and a modal have their edges, and the hovered option its own', async ({

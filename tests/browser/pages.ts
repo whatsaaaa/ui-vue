@@ -34,9 +34,34 @@ const APP_WAIT = 30_000
  * the test's, so a test that loads the gallery more than once has the time for each load.
  */
 export async function waitForApp(page: Page): Promise<void> {
+  allowAppWait()
+  await expect(colorMode(page)).toBeVisible({ timeout: APP_WAIT })
+}
+
+/**
+ * Waits for the page a tab of the gallery opens, by its URL, which the app changes once it has
+ * the page. Between the gallery and another page that takes the app seconds on a busy machine,
+ * more than an expectation waits by default. This wait adds its time to the test's too.
+ */
+export async function waitForPage(page: Page, url: RegExp): Promise<void> {
+  allowAppWait()
+  await expect(page).toHaveURL(url, { timeout: APP_WAIT })
+}
+
+/**
+ * Waits until a reading of the whole page finds nothing wrong, once the colors of what changed
+ * have. One reading of every control of the gallery takes over a second, and on a busy machine
+ * more than an expectation polls for by default. This wait adds its time to the test's too.
+ */
+export async function waitForNoFindings(read: () => Promise<string[]>): Promise<void> {
+  allowAppWait()
+  await expect.poll(read, { timeout: APP_WAIT }).toEqual([])
+}
+
+/** Gives the test the time of one more wait for the app. */
+function allowAppWait(): void {
   const testInfo = test.info()
   if (testInfo.timeout) testInfo.setTimeout(testInfo.timeout + APP_WAIT)
-  await expect(colorMode(page)).toBeVisible({ timeout: APP_WAIT })
 }
 
 /** Nuxt UI's color mode: a radio group bound to it, on both pages. */
@@ -54,8 +79,16 @@ export function colorModeOption(page: Page, label: 'system' | 'dark' | 'light') 
  */
 export function themeSwitch(page: Page, where: Playground) {
   return where === 'nuxt'
-    ? page.getByRole('button', { name: /^Switch theme, now/ }).filter({ visible: true })
+    ? page.getByRole('button', { name: /^Switch theme, now/ })
     : page.getByRole('button', { name: 'Theme', exact: true })
+}
+
+/**
+ * The gallery's key hint of the theme, in its status line: a button named by what it shows, its
+ * key and what the key does.
+ */
+export function themeKey(page: Page) {
+  return page.getByRole('button', { name: 't theme', exact: true })
 }
 
 /** Where Nuxt UI's color mode remembers its preference: @nuxtjs/color-mode's key, and VueUse's. */

@@ -5,6 +5,9 @@
  * example marked data-demo="hover", data-demo="active" or data-demo="focus" draws that state, and
  * so does what is inside it. The same rules draw the real state; this build only adds the marked
  * one to them.
+ *
+ * A part that takes no attribute from its example, as one tab of a row, shows the focus with the
+ * class demo-focus, which marks that part alone.
  */
 @custom-variant hover {
   @media (hover: hover) {
@@ -25,7 +28,7 @@
 }
 
 @custom-variant focus-visible {
-  &:is(:focus-visible, [data-demo~='focus'], [data-demo~='focus'] *) {
+  &:is(:focus-visible, [data-demo~='focus'], [data-demo~='focus'] *, .demo-focus) {
     @slot;
   }
 }
@@ -148,12 +151,6 @@ body:has(.gallery-open) .window {
 .ws-status-line__keys :is(a, button) {
   margin-inline: calc(-1 * var(--ws-space-8));
   padding-inline: var(--ws-space-8);
-}
-
-/* The name of the theme is the last item, in the window's corner: its ring follows the curve. */
-.ws-status-line__theme:focus-visible {
-  border-radius: var(--ws-radius-sm) var(--ws-radius-sm)
-    calc(var(--ws-radius-xl) - var(--ws-border-width-thin)) var(--ws-radius-sm);
 }
 
 :is(.ws-status-line__keys button, .ws-status-line__theme):disabled {

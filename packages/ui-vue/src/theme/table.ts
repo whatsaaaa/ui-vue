@@ -26,9 +26,20 @@ const hover =
  * The ring inside a row, while the checkbox in its first cell has the focus or the row itself
  * does. The row with its checkbox has the focus in it, but not in another cell: written so, the
  * focus a gallery draws on the checkbox with the focus-visible variant rings the row too.
+ *
+ * A ringed row also says how wide its ring is, in --table-row-ring, and how far inside the row
+ * a cell that lies over the ring has to start for the ring to show, in --table-row-ring-clip: a
+ * pinned cell reads both. The clip is a thin border wider than the ring: a cell starts inside
+ * its row by a part of the line between the rows, which the browser rounds to a pixel or to none,
+ * and what the clip bares past the ring is the row's fill. In a row without a ring the ring is
+ * nothing and the clip far outside the cell.
+ *
+ * In forced colors the ring of a chosen row is HighlightText, the row's text color there, on its
+ * Highlight. Left to the browser, the outline of a row that has the focus itself would be in the
+ * browser's color for what has the focus, Highlight on Highlight.
  */
 const focus =
-  '[&>tr]:outline-interactive [&>tr]:-outline-offset-(--ws-border-width-medium) [&>tr]:has-[>td:first-child_[role=checkbox]]:has-focus-visible:not-has-[>td:not(:first-child)_:focus-visible]:outline-2 [&>tr]:has-[>td:first-child_[role=checkbox]]:has-focus-visible:not-has-[>td:not(:first-child)_:focus-visible]:outline-solid [&>tr]:data-[selectable=true]:outline-interactive [&>tr]:data-[selectable=true]:-outline-offset-(--ws-border-width-medium) [&>tr]:data-[selectable=true]:focus-visible:outline-2 [&>tr]:data-[selectable=true]:focus-visible:outline-solid'
+  '[&>tr]:outline-interactive [&>tr]:-outline-offset-(--ws-border-width-medium) [&>tr]:[--table-row-ring:0px] [&>tr]:[--table-row-ring-clip:-100vmax] [&>tr]:has-[>td:first-child_[role=checkbox]]:has-focus-visible:not-has-[>td:not(:first-child)_:focus-visible]:outline-2 [&>tr]:has-[>td:first-child_[role=checkbox]]:has-focus-visible:not-has-[>td:not(:first-child)_:focus-visible]:outline-solid [&>tr]:has-[>td:first-child_[role=checkbox]]:has-focus-visible:not-has-[>td:not(:first-child)_:focus-visible]:[--table-row-ring:var(--ws-border-width-medium)] [&>tr]:has-[>td:first-child_[role=checkbox]]:has-focus-visible:not-has-[>td:not(:first-child)_:focus-visible]:[--table-row-ring-clip:calc(var(--ws-border-width-medium)_+_var(--ws-border-width-thin))] [&>tr]:data-[selectable=true]:outline-interactive [&>tr]:data-[selectable=true]:-outline-offset-(--ws-border-width-medium) [&>tr]:data-[selectable=true]:focus-visible:outline-2 [&>tr]:data-[selectable=true]:focus-visible:outline-solid [&>tr]:data-[selectable=true]:focus-visible:[--table-row-ring:var(--ws-border-width-medium)] [&>tr]:data-[selectable=true]:focus-visible:[--table-row-ring-clip:calc(var(--ws-border-width-medium)_+_var(--ws-border-width-thin))] forced-colors:[&>tr]:data-[selected=true]:outline-[HighlightText]'
 
 /**
  * A cell's measures. Nuxt UI takes the end padding off a cell with a checkbox, the spec does not;
@@ -49,11 +60,25 @@ const chosenCell =
   'forced-colors:in-data-[selected=true]:text-[HighlightText] forced-colors:in-data-[selected=true]:forced-color-adjust-none forced-colors:in-data-[selected=true]:[:where(&_[data-slot])]:forced-color-adjust-auto'
 
 /**
+ * The ring of a row over a pinned cell. The cell's fill, which hides what scrolls under it, lies
+ * over the row's outline too. So in a ringed row the cell gives way to the outline's lines above
+ * and below it: it is clipped there by its row's --table-row-ring-clip, which in every other row
+ * is far outside the cell and clips nothing. The first or the last cell of the row keeps its
+ * whole height where the ring ends, as wide as --table-row-ring, and draws the end itself: the
+ * row's own may have scrolled away under it. A pinned cell between them draws none: Tailwind's
+ * after: gives a content to whatever it styles, so those cells are told to have none. The end is
+ * a border, which forced colors keep, in the color the outline has there: the text color, or
+ * Highlight on a row that has the focus itself and is not chosen, the color the browser gives
+ * the outline of what has the focus.
+ */
+const pinnedRing =
+  "[clip-path:inset(var(--table-row-ring-clip)_-100vmax)] first:[clip-path:polygon(-100vmax_-100vmax,var(--table-row-ring)_-100vmax,var(--table-row-ring)_var(--table-row-ring-clip),calc(100%_+_100vmax)_var(--table-row-ring-clip),calc(100%_+_100vmax)_calc(100%_-_var(--table-row-ring-clip)),var(--table-row-ring)_calc(100%_-_var(--table-row-ring-clip)),var(--table-row-ring)_calc(100%_+_100vmax),-100vmax_calc(100%_+_100vmax))] last:[clip-path:polygon(-100vmax_var(--table-row-ring-clip),calc(100%_-_var(--table-row-ring))_var(--table-row-ring-clip),calc(100%_-_var(--table-row-ring))_-100vmax,calc(100%_+_100vmax)_-100vmax,calc(100%_+_100vmax)_calc(100%_+_100vmax),calc(100%_-_var(--table-row-ring))_calc(100%_+_100vmax),calc(100%_-_var(--table-row-ring))_calc(100%_-_var(--table-row-ring-clip)),-100vmax_calc(100%_-_var(--table-row-ring-clip)))] after:content-none first:after:content-[''] last:after:content-[''] after:absolute after:inset-y-0 first:after:left-0 last:after:right-0 after:pointer-events-none after:border-s-[length:var(--table-row-ring,0px)] after:border-interactive forced-colors:after:border-current forced-colors:[tr[data-selectable=true]:focus-visible:not([data-selected=true])>&]:after:border-[Highlight]"
+
+/**
  * A pinned cell hides what scrolls under it: on the page color, or its row's fill, raised under
  * the pointer where the row is, or chosen.
  */
-const pinnedCell =
-  'sticky bg-bg z-1 [@media(hover:hover)]:[tr:has(>td:first-child_[role=checkbox]):hover>&]:bg-(--ws-table-row-bg-hover) [@media(hover:hover)]:[tr[data-selectable=true]:hover>&]:bg-(--ws-table-row-bg-hover) in-data-[selected=true]:bg-(--ws-table-row-bg-selected)! forced-colors:in-data-[selected=true]:bg-[Highlight]!'
+const pinnedCell = `sticky bg-bg z-1 ${pinnedRing} [@media(hover:hover)]:[tr:has(>td:first-child_[role=checkbox]):hover>&]:bg-(--ws-table-row-bg-hover) [@media(hover:hover)]:[tr[data-selectable=true]:hover>&]:bg-(--ws-table-row-bg-hover) in-data-[selected=true]:bg-(--ws-table-row-bg-selected)! forced-colors:in-data-[selected=true]:bg-[Highlight]!`
 
 export default {
   slots: {
@@ -61,7 +86,8 @@ export default {
     tbody: `divide-y-thin divide-border ${hover} ${focus}`,
     // A chosen row keeps its fill under the pointer. In forced colors it is in the selection
     // colors, the system's own, which forced colors keep: Highlight under HighlightText, the
-    // color its ring and its line take there, as every other color of the row is forced.
+    // color its line takes there, as every other color of the row is forced, and the color its
+    // ring is given, with the ring's other rules.
     tr: 'data-[selected=true]:bg-(--ws-table-row-bg-selected)! data-[selected=true]:border-b-selection-border forced-colors:data-[selected=true]:bg-[Highlight]! forced-colors:data-[selected=true]:text-[HighlightText]',
     th: `${cell} align-middle bg-(--ws-table-head-bg) font-mono font-bold text-overline uppercase text-(--ws-table-head-text) whitespace-nowrap in-[thead]:border-b-thin in-[thead]:border-border in-[tfoot]:border-t-thin in-[tfoot]:border-border`,
     td: `${cell} align-top font-sans text-body-sm text-(--ws-table-row-text) ${chosenCell}`,
