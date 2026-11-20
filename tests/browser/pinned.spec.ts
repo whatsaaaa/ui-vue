@@ -53,21 +53,55 @@ function measure(row: Locator) {
 }
 
 /**
+ * The room around a row's content, where no text is in the way: a column of pixels of a cell
+ * between the pinned ones, which scrolls, and of each pinned one, and a row of pixels over the
+ * content, clear of the ring's lines above and below.
+ */
+function room(at: Awaited<ReturnType<typeof measure>>) {
+  const start = at.cells.find((cell) => cell.pinned === 'left')!
+  const end = at.cells.find((cell) => cell.pinned === 'right')!
+  return {
+    between: start.right + 2,
+    first: start.left + 4,
+    last: end.right - 4,
+    inside: at.top + 6,
+  }
+}
+
+/**
+ * The colors painted where a row's ring is, when it has one: on its lines above and below, over a
+ * cell that scrolls and over each pinned one, and down both of its ends. The row's first and last
+ * pixels are left out: the line between two rows may be there, and the corners of a row that has
+ * the focus itself, which the browser rounds. With them, the row's fill.
+ */
+async function ringColors(page: Page, row: Locator): Promise<{ fill: string; ring: string[] }> {
+  const at = await measure(row)
+  const { between, first, last, inside } = room(at)
+  // the second pixel of the line above, and the first of the line below
+  const [above, below] = [at.top + 1, at.bottom - 2]
+  const down = (x: number) =>
+    Array.from({ length: below - above + 1 }, (_, offset) => ({ x, y: above + offset }))
+  const [fill, ...ring] = await painted(page, [
+    { x: between, y: inside },
+    ...[between, first, last].flatMap((x) => [
+      { x, y: above },
+      { x, y: below },
+    ]),
+    ...[at.shownLeft, at.shownLeft + 1, at.shownRight - 1, at.shownRight - 2].flatMap(down),
+  ])
+  return { fill: fill!, ring: [...new Set(ring)] }
+}
+
+/**
  * The ring of a row is whole: over each pinned cell its lines above and below are painted as
  * over a cell that is not pinned, and it ends at both ends of what the table shows of the row.
  */
 async function expectWholeRing(page: Page, row: Locator): Promise<void> {
   const at = await measure(row)
-  const start = at.cells.find((cell) => cell.pinned === 'left')!
-  const end = at.cells.find((cell) => cell.pinned === 'right')!
+  const { between, first, last, inside } = room(at)
   // a column of pixels that crosses the row's edge: the line between the rows, then the ring
   const across = (x: number, edge: number) =>
     [-2, -1, 0, 1, 2, 3].map((offset) => ({ x, y: edge + offset }))
-  // in the room around a cell's content, so no text is in the way: of a cell between the pinned
-  // ones, which scrolls, and of each pinned one
-  const [between, first, last] = [start.right + 2, start.left + 4, end.right - 4]
-  // in the room over the content, clear of the ring's lines above and below
-  const inside = at.top + 6
   // a column of pixels down an end of the ring, from the row's first pixel to its last
   const down = (x: number) =>
     Array.from({ length: at.bottom - at.top }, (_, offset) => ({ x, y: at.top + offset }))
@@ -129,8 +163,13 @@ for (const { name, use } of systems) {
       const shown = table.locator('tbody tr').first()
       await expectWholeRing(page, shown)
 
-      // and the focus of the keyboard, on the second row
+      // the second row, without the focus, has no ring, and its pinned cells draw none: where a
+      // ring would be, the row is its fill alone
       const row = table.locator('tbody tr').nth(1)
+      const rest = await ringColors(page, row)
+      expect(rest.ring, 'a row without the focus has no ring').toEqual([rest.fill])
+
+      // and the focus of the keyboard, on that row
       const checkbox = row.getByRole('checkbox', { name: 'Choose Daniel Brooks' })
       await table.getByRole('button', { name: 'Edit Maya Collins' }).focus()
       await page.keyboard.press('Tab')
@@ -146,14 +185,32 @@ for (const { name, use } of systems) {
       await page.keyboard.press('Space')
       await expect(row).toHaveAttribute('data-selected', 'true')
       await expectWholeRing(page, row)
+    })
 
-      // a row without the focus has no ring, and its pinned cells draw none
-      const other = table.locator('tbody tr').nth(2)
-      const [x, y] = await measure(other).then((at) => [at.cells[0]!.left + 4, at.top + 6])
-      const column = Array.from({ length: 30 }, (_, down) => ({ x: x!, y: y! - 6 + down }))
-      const colors = await painted(page, [{ x: x!, y: y! }, ...column])
-      // from under the line between the rows down, the cell is its fill alone
-      expect(new Set(colors.slice(3))).toEqual(new Set([colors[0]]))
+    test("a row that is a stop itself is ringed over its pinned cells, the ends in its lines' color", async ({
+      page,
+    }, testInfo) => {
+      test.skip(playground(testInfo) !== 'nuxt', 'The tables are in the gallery')
+      await open(page)
+      const table = page.getByTestId('table-pinned')
+      await table.scrollIntoViewIfNeeded()
+      // what Nuxt UI puts on each row of a table with a handler for its rows, such as @select
+      await table.locator('tbody tr').evaluateAll((rows: HTMLElement[]) => {
+        for (const row of rows) {
+          row.dataset.selectable = 'true'
+          row.tabIndex = 0
+        }
+      })
+      const row = table.locator('tbody tr').nth(1)
+      await table.getByRole('button', { name: 'Edit Maya Collins' }).focus()
+      await page.keyboard.press('Tab')
+      await expect(row).toBeFocused()
+      await expect(row).toHaveCSS('outline-style', 'solid')
+      // in forced colors the browser draws the outline of what has the focus in a color of its
+      // own, not in the text color
+      const { fill, ring } = await ringColors(page, row)
+      expect(ring, 'the lines and both ends are one color').toHaveLength(1)
+      expect(ring, 'the row is ringed').not.toContain(fill)
     })
   })
 }
