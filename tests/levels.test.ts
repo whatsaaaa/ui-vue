@@ -24,21 +24,6 @@ function nuxtUiComponents(): string[] {
     .sort()
 }
 
-/**
- * The components of Nuxt UI that the Vue files of a folder of the gallery draw: the tags they
- * write, and the toast, which useToast draws.
- */
-function drawnIn(folder: string): Set<string> {
-  const drawn = new Set<string>()
-  for (const file of readdirSync(join(root, folder))) {
-    if (!file.endsWith('.vue')) continue
-    const source = readFileSync(join(root, folder, file), 'utf8')
-    for (const [, tag] of source.matchAll(/<((?:U|Prose)[A-Z][A-Za-z0-9]*)/g)) drawn.add(tag!)
-    if (source.includes('useToast()')) drawn.add('UToast')
-  }
-  return drawn
-}
-
 describe('the levels file', () => {
   test('names every component of the Nuxt UI the package pins, and no other', () => {
     const has = nuxtUiComponents()
@@ -70,37 +55,31 @@ describe('the levels file', () => {
     ).toEqual(themed.sort())
   })
 
-  test('names as the parts of a component only components it has', () => {
-    for (const [name, component] of entries)
-      for (const part of component.parts ?? []) expect(components, name).toHaveProperty(part)
+  test('gives a reason for a component the gallery does not show, which is then at level 1', () => {
+    for (const [name, { today, unshown }] of entries)
+      if (unshown) {
+        expect(today, name).toBe(1)
+        expect(unshown.note, name).not.toBe('')
+      }
   })
 
-  test('shows a component where its level says: in the gallery from level 2, else with the others', () => {
-    for (const [name, component] of entries)
-      if (typeof component.shown === 'string')
-        expect(component.shown, name).toBe(component.today > 1 ? 'gallery' : 'others')
-  })
-
-  test('says where the gallery shows each component, as its Vue files have it', () => {
-    const gallery = drawnIn('playgrounds/nuxt/app/components/sections')
-    const others = drawnIn('playgrounds/nuxt/app/components/others')
-    const wrong: string[] = []
-    for (const [name, { shown }] of entries) {
-      if (shown === 'gallery' && !gallery.has(name)) wrong.push(`${name} is in no section`)
-      if (shown === 'others' && !others.has(name)) wrong.push(`${name} has no example`)
-      if (typeof shown === 'object' && (gallery.has(name) || others.has(name)))
-        wrong.push(`${name} is shown`)
-    }
-    expect(wrong).toEqual([])
-  })
-
-  test('lists a known failure only with a component the gallery shows, with the parts that fail', () => {
+  test('lists a known failure only with a component the gallery shows, with its themes and parts', () => {
     for (const [name, component] of entries)
       for (const failure of component.fails ?? []) {
-        expect(component.shown, name).toBeTypeOf('string')
+        expect(component.unshown, name).toBeUndefined()
+        expect(failure.themes.length, name).toBeGreaterThan(0)
         expect(failure.slots.length, name).toBeGreaterThan(0)
         expect(failure.note, name).not.toBe('')
       }
+  })
+
+  test('lists no failure twice: one check on one part of a component in one theme', () => {
+    const listed = entries.flatMap(([name, { fails = [] }]) =>
+      fails.flatMap(({ check, themes, slots }) =>
+        themes.flatMap((theme) => slots.map((slot) => `${name} ${slot} ${check} ${theme}`)),
+      ),
+    )
+    expect(listed.filter((failure, index) => listed.indexOf(failure) !== index)).toEqual([])
   })
 })
 

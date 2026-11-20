@@ -41,8 +41,11 @@ export default {
     'at-rule-no-deprecated': [true, { ignoreAtRules: ['apply'] }],
     // the declarations of a utility under a condition, which Tailwind puts in the utility's rule
     'no-invalid-position-declaration': [true, { ignoreAtRules: ['utility'] }],
-    // the selector of a variant, which Tailwind puts the utility's in for &
-    'nesting-selector-no-missing-scoping-root': [true, { ignoreAtRules: ['custom-variant'] }],
+    // the selector of a variant or of a utility, which Tailwind puts the class in for &
+    'nesting-selector-no-missing-scoping-root': [
+      true,
+      { ignoreAtRules: ['custom-variant', 'utility'] },
+    ],
     'import-notation': 'string',
     'selector-class-pattern': null,
     'custom-property-pattern': null,

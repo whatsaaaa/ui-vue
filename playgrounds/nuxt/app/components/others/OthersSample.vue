@@ -29,13 +29,11 @@ const component = computed<ComponentLevels>(() => components[props.name])
       <span class="text-text-secondary">
         level {{ component.today }}, for 1.0.0 level {{ component.target }}
       </span>
-      <span v-if="component.parts" class="text-text-secondary">
-        made of {{ component.parts.join(', ') }}
-      </span>
     </header>
+    <!-- With a known failure it does not pass level 1 yet, and says which check it fails. -->
     <ul v-if="component.fails" class="mt-1 font-mono text-caption text-text-secondary">
-      <li v-for="failure in component.fails" :key="`${failure.check} ${failure.theme}`">
-        fails {{ failure.check }}{{ failure.theme ? ` in ${failure.theme}` : '' }}:
+      <li v-for="failure in component.fails" :key="`${failure.check} ${failure.themes}`">
+        does not pass level 1 yet: {{ failure.check }} in {{ failure.themes.join(' and ') }}.
         {{ failure.note }}
       </li>
     </ul>

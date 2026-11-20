@@ -78,6 +78,18 @@ function showToast() {
         </template>
       </UPopover>
     </OthersOpen>
+    <!-- One that opens: its window has nothing in it to take the focus, and can have it itself. -->
+    <UPopover>
+      <UButton
+        label="Open the popover"
+        color="neutral"
+        variant="outline"
+        data-testid="open-UPopover"
+      />
+      <template #content>
+        <p class="p-4 text-body-sm">Sixteen seats are left for all three days.</p>
+      </template>
+    </UPopover>
   </OthersSample>
 
   <OthersSample name="USlideover">

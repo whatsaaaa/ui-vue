@@ -73,12 +73,22 @@
  * An edge drawn as a ring, as an outline of the ring's width in the text color: where the ring
  * is, outside the box or inside it, and taking no room either. Added to Tailwind's own ring
  * utilities, so it follows every variant a ring is written with.
+ *
+ * The outline keeps its style against the classes that take an outline away, as Nuxt UI's
+ * focus:outline-none does on a popover or a drawer: they hide the outline the browser draws for
+ * the focus, and the edge stays while the part has it. A focus ring written as an outline still
+ * shows, by its width and its offset. Not so where the outline is taken away on the element
+ * itself, as Reka does on a menu: there its width is the browser's, not the ring's.
  */
 @utility ring {
   @media (forced-colors: active) {
     --ring-outline-width: 1px;
 
     outline: var(--ring-outline-width) solid canvastext;
+
+    &:not([style*='outline']) {
+      outline-style: solid !important;
+    }
   }
 }
 
@@ -87,6 +97,10 @@
     --ring-outline-width: calc(--value(integer) * 1px);
 
     outline: var(--ring-outline-width) solid canvastext;
+
+    &:not([style*='outline']) {
+      outline-style: solid !important;
+    }
   }
 }
 

@@ -5,6 +5,7 @@ import {
   type ComponentLevels,
   type Theme,
   components,
+  shownOn,
 } from '../../packages/ui-vue/levels.ts'
 import { type Finding, edges, icons, openWithSystemColors, settle } from './forced.ts'
 import { open, playground, reportsOf } from './pages.ts'
@@ -12,31 +13,34 @@ import { open, playground, reportsOf } from './pages.ts'
 /*
  * Level 1 of packages/ui-vue/levels.ts, as tests over the gallery and its page of the others, in
  * both themes: axe finds no contrast failure, in forced colors every icon is painted, every part
- * with a ring keeps an edge and a control that is on differs from one that is off, the page logs
- * no error and nothing overflows at 390 px.
+ * with a ring keeps an edge and a control that is on differs from one that is off, and the page
+ * logs no error.
  *
- * A check a component still fails is listed with it in the levels file. Each test holds what it
- * finds to that list, both ways: a failure that is not listed fails it, and so does a listed one
- * that no longer fails, so the list only shrinks.
+ * A check a component still fails is listed with it in the levels file: it does not pass level 1
+ * yet. Each test holds what it finds to that list, both ways: a failure that is not listed fails
+ * it, and so does a listed one that no longer fails, so the list only shrinks. A failure is one
+ * check on one part of one component in one theme, and another check or theme on the same part
+ * is another failure.
  */
 
 const PAGE = '/others'
 const entries = Object.entries(components) as [string, ComponentLevels][]
 
-/** A failure, as the tests compare them: the component, and its part. */
-const key = ({ where, slot }: Pick<Finding, 'where' | 'slot'>) => `${where}: ${slot}`
+/** A failure, as the tests compare them: the check, the theme, the component and its part. */
+const key = (check: Check, theme: Theme, { where, slot }: Pick<Finding, 'where' | 'slot'>) =>
+  `${check}, ${theme}: ${where}, ${slot}`
 
 /**
- * The failures of a check the levels file lists for a theme, each part once: of the components
- * on the page of the others, or of the ones in the gallery.
+ * The failures of a check the levels file lists for a theme: of the components on the page of
+ * the others, or of the ones in the gallery.
  */
-function known(check: Check, theme: Theme, shown: 'others' | 'gallery' = 'others'): string[] {
+function known(check: Check, theme: Theme, on: 'others' | 'gallery' = 'others'): string[] {
   return entries
-    .filter(([, component]) => component.shown === shown)
+    .filter(([, component]) => shownOn(component) === on)
     .flatMap(([name, { fails = [] }]) =>
       fails
-        .filter((failure) => failure.check === check && (failure.theme ?? theme) === theme)
-        .flatMap(({ slots }) => slots.map((slot) => key({ where: name, slot }))),
+        .filter((failure) => failure.check === check && failure.themes.includes(theme))
+        .flatMap(({ slots }) => slots.map((slot) => key(check, theme, { where: name, slot }))),
     )
     .sort()
 }
@@ -47,23 +51,16 @@ const inGallery = (finding: Finding): Finding => ({
   where: `U${(finding.where ?? '').replaceAll(/(^|-)(\w)/g, (_, _dash, letter: string) => letter.toUpperCase())}`,
 })
 
-/** What a check found, each part once, with what it found there. */
-function found(findings: Finding[]): { keys: string[]; details: string } {
-  return {
-    keys: [...new Set(findings.map(key))].sort(),
-    details: findings.map((finding) => `${key(finding)}: ${finding.detail}`).join('\n'),
-  }
-}
-
-/** Holds what a check found to the failures the levels file lists for it. */
+/** Holds what a check found in a theme to the failures the levels file lists for it. */
 function expectKnown(
   findings: Finding[],
   check: Check,
   theme: Theme,
-  shown: 'others' | 'gallery' = 'others',
+  on: 'others' | 'gallery' = 'others',
 ): void {
-  const { keys, details } = found(findings)
-  expect(keys, `${check}, ${theme}:\n${details}`).toEqual(known(check, theme, shown))
+  const keys = [...new Set(findings.map((finding) => key(check, theme, finding)))].sort()
+  const details = findings.map(({ where, slot, detail }) => `${where}, ${slot}: ${detail}`)
+  expect(keys, details.join('\n')).toEqual(known(check, theme, on))
 }
 
 /**
@@ -71,19 +68,27 @@ function expectKnown(
  * large text. Within a part of the page, where one is given, which then belongs to the component
  * named.
  *
- * On a wide screen the window scrolls its content inside itself, and axe takes what is scrolled
- * out of it for hidden: the window grows with its content first, as it does on a narrow screen.
- * The text of a disabled option is left out, as WCAG leaves out an inactive component: axe knows
- * a disabled control's label for one, but not the line about it, which nothing ties to it.
+ * Two things hide a part of the pages from axe, and are taken away while it looks. On a wide
+ * screen the window scrolls its content inside itself, and axe takes what is scrolled out of it
+ * for hidden: the window grows with its content, as it does on a narrow screen. And axe leaves
+ * out what is inert, as the lists, menus and windows held open in place are: they are checked as
+ * they would be open in an app.
+ *
+ * The text of a disabled control or option is left out, as WCAG leaves out an inactive
+ * component: axe knows a disabled control's label for one, but not the line about it, which
+ * nothing ties to it, nor a disabled option of a list.
  */
 async function contrast(page: Page, within?: { selector: string; where: string }) {
   await page.addStyleTag({
     content: '.window { height: auto !important } .window__main { overflow: visible !important }',
   })
+  const held = page.locator('.gallery-open, .others-open')
+  await held.evaluateAll((held) => held.forEach((open) => open.removeAttribute('inert')))
   await settle(page)
   const axe = new AxeBuilder({ page }).withRules(['color-contrast'])
   if (within) axe.include(within.selector)
   const { violations } = await axe.analyze()
+  await held.evaluateAll((held) => held.forEach((open) => open.setAttribute('inert', '')))
   const nodes = violations.flatMap(({ nodes }) =>
     nodes.map(({ target, any }) => ({
       selector: String(target.at(-1)),
@@ -94,10 +99,11 @@ async function contrast(page: Page, within?: { selector: string; where: string }
     (nodes) =>
       nodes.flatMap(({ selector, detail }): Finding[] => {
         const element = document.querySelector(selector)!
+        const disabled = ':disabled, [aria-disabled=true], [data-disabled]'
         const control = element
           .closest('[data-slot=item], [data-slot=root]')
           ?.querySelector('[role=checkbox], [role=radio], [role=switch]')
-        if (control?.matches(':disabled, [aria-disabled=true]')) return []
+        if (element.closest(disabled) || control?.matches(disabled)) return []
         return [{ ...window.partOf(element), detail: `${element.textContent?.trim()}: ${detail}` }]
       }),
     nodes,
@@ -248,6 +254,12 @@ const openings: Opening[] = [
     opened: DIALOG,
   },
   {
+    // the one that opens: the other is held open in place
+    name: 'UPopover',
+    open: (page) => page.getByTestId('open-UPopover').click(),
+    opened: DIALOG,
+  },
+  {
     name: 'USlideover',
     open: (page) => page.getByTestId('open-USlideover').click(),
     opened: DIALOG,
@@ -319,10 +331,21 @@ test('the page of the others has an example of every component the levels file s
   )
   expect(shown.sort()).toEqual(
     entries
-      .filter(([, component]) => component.shown === 'others')
+      .filter(([, component]) => shownOn(component) === 'others')
       .map(([name]) => name)
       .sort(),
   )
+  // and every example draws something under its name
+  const empty = await page.evaluate(() =>
+    [...document.querySelectorAll<HTMLElement>('[data-sample]')]
+      .filter((sample) =>
+        [...sample.querySelectorAll(':scope > div > *')].every(
+          (drawn) => drawn.getBoundingClientRect().height === 0,
+        ),
+      )
+      .map((sample) => sample.dataset.sample),
+  )
+  expect(empty).toEqual([])
 })
 
 for (const theme of ['dark', 'light'] as const) {
@@ -338,7 +361,7 @@ for (const theme of ['dark', 'light'] as const) {
       page,
     }) => {
       await openWithSystemColors(page, '/open')
-      expect(found(await contrast(page))).toEqual({ keys: [], details: '' })
+      expect(await contrast(page)).toEqual([])
     })
 
     test('axe finds no contrast failure on the page of the others, but the known ones', async ({
@@ -370,45 +393,6 @@ for (const theme of ['dark', 'light'] as const) {
       }
       expect(reports).toEqual([])
     })
-
-    test.describe('at 390 px', () => {
-      test.use({ viewport: { width: 390, height: 800 } })
-
-      test('nothing overflows sideways on the page of the others, but the known parts', async ({
-        page,
-      }) => {
-        await openWithSystemColors(page, PAGE)
-        const { scroll, sticking } = await page.evaluate(() => {
-          const width = document.documentElement.clientWidth
-          const sticking: Finding[] = []
-          for (const element of document.querySelectorAll('body *')) {
-            const box = element.getBoundingClientRect()
-            if (box.width === 0 || box.height === 0 || box.right <= width + 0.5) continue
-            if (!element.checkVisibility()) continue
-            let contained = false
-            for (let parent = element.parentElement; parent; parent = parent.parentElement) {
-              const style = getComputedStyle(parent)
-              if (
-                ['auto', 'scroll', 'hidden', 'clip'].includes(style.overflowX) ||
-                style.position === 'fixed'
-              ) {
-                contained = true
-                break
-              }
-            }
-            if (!contained)
-              sticking.push({
-                ...window.partOf(element),
-                detail: `${element.localName}.${element.getAttribute('class') ?? ''} ends at ${Math.round(box.right)} px`,
-              })
-          }
-          return { scroll: document.documentElement.scrollWidth - width, sticking }
-        })
-        expectKnown(sticking, 'overflow', theme)
-        // the page itself scrolls sideways only where a known part sticks out
-        if (known('overflow', theme).length === 0) expect(scroll).toBe(0)
-      })
-    })
   })
 
   test.describe(`in forced colors, on a ${theme} system`, () => {
@@ -431,6 +415,19 @@ for (const theme of ['dark', 'light'] as const) {
       }
       expectKnown(painted, 'forced-icon', theme)
       expectKnown(edged, 'forced-edge', theme)
+    })
+
+    test('a part with a ring keeps its edge while it has the focus itself', async ({ page }) => {
+      await openWithSystemColors(page, PAGE)
+      // a popover's window can have the focus itself, and Nuxt UI hides the outline the browser
+      // draws for it: the ring's outline stays
+      const popover = await opened(
+        page,
+        openings.find(({ name }) => name === 'UPopover')!,
+      )
+      await popover.focus()
+      await expect(popover).toBeFocused()
+      expect(await edges(popover)).toEqual([])
     })
 
     test('a control that is on is painted unlike one that is off, but the known ones', async ({

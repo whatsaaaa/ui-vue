@@ -11,6 +11,7 @@ import {
   type Level,
   components,
   families,
+  shownOn,
 } from '../packages/ui-vue/levels.ts'
 
 export const README = join(import.meta.dirname, '../README.md')
@@ -53,7 +54,10 @@ function table(head: string[], rows: string[][]): string {
 const count = (of: ComponentLevels[], when: 'today' | 'target', level: Level) =>
   String(of.filter((component) => component[when] === level).length)
 
-/** One row for each family, and one for all of them. */
+/**
+ * One row for each family, and one for all of them. A component that fails a level 1 check is
+ * counted apart from the ones that pass them all, whatever its level today.
+ */
 function summary(): string {
   const row = (title: string, of: ComponentLevels[]) => [
     title,
@@ -61,6 +65,8 @@ function summary(): string {
     count(of, 'today', 3),
     count(of, 'today', 2),
     count(of, 'today', 1),
+    String(of.filter((component) => !component.fails).length),
+    String(of.filter((component) => component.fails).length),
     count(of, 'target', 3),
     count(of, 'target', 2),
     count(of, 'target', 1),
@@ -72,6 +78,8 @@ function summary(): string {
       'Level 3 today',
       'Level 2 today',
       'Level 1 today',
+      'Pass every level 1 check',
+      'Fail a level 1 check',
       'Level 3 for 1.0.0',
       'Level 2 for 1.0.0',
       'Level 1 for 1.0.0',
@@ -91,24 +99,45 @@ function summary(): string {
   )
 }
 
-/** Where the gallery shows a component, or that it does not. */
-function shown({ shown }: ComponentLevels): string {
-  if (shown === 'gallery') return 'Gallery'
-  if (shown === 'others') return 'Others'
-  return { nothing: 'No: draws nothing', part: 'No: an internal part' }[shown.unshown]
+/** One row for each known failure: the components that do not pass level 1 yet, by family. */
+function failing(): string {
+  return table(
+    ['Component', 'Today', 'For 1.0.0', 'Check it fails', 'In', 'Parts', 'What fails'],
+    families.flatMap((family) =>
+      entries
+        .filter(([, component]) => component.family === family)
+        .flatMap(([name, { today, target, fails = [] }]) =>
+          fails.map(({ check, themes, slots, note }) => [
+            `\`${name}\``,
+            String(today),
+            String(target),
+            check,
+            themes.join(', '),
+            slots.join(', '),
+            note,
+          ]),
+        ),
+    ),
+  )
 }
 
-/** The level 1 checks a component fails, each once, with the theme where it is only one. */
-function fails({ fails = [] }: ComponentLevels): string {
-  return [...new Set(fails.map(({ check, theme }) => (theme ? `${check} (${theme})` : check)))]
-    .sort()
-    .join(', ')
+/** Where the gallery shows a component, or that it does not. */
+function shown(component: ComponentLevels): string {
+  if (component.unshown)
+    return { nothing: 'No: draws nothing', part: 'No: an internal part' }[component.unshown.why]
+  return { gallery: 'Gallery', others: 'Others' }[shownOn(component)!]
+}
+
+/** Whether a component passes the level 1 checks, and the ones it fails where it does not. */
+function passes({ fails }: ComponentLevels): string {
+  if (!fails) return 'Yes'
+  return `No: ${[...new Set(fails.map(({ check }) => check))].sort().join(', ')}`
 }
 
 /** One row for each component, by family. */
 function all(): string {
   return table(
-    ['Component', 'Family', 'Today', 'For 1.0.0', 'In the gallery', 'Known level 1 failures'],
+    ['Component', 'Family', 'Today', 'For 1.0.0', 'In the gallery', 'Passes level 1'],
     families.flatMap((family) =>
       entries
         .filter(([, component]) => component.family === family)
@@ -118,7 +147,7 @@ function all(): string {
           String(component.today),
           String(component.target),
           shown(component),
-          fails(component),
+          passes(component),
         ]),
     ),
   )
@@ -126,9 +155,15 @@ function all(): string {
 
 /** What stands between the markers. */
 export function levelsTables(): string {
-  return [summary(), '<details>', '<summary>Every component</summary>', all(), '</details>'].join(
-    '\n\n',
-  )
+  return [
+    summary(),
+    'The components that do not pass level 1 yet, with each check they fail:',
+    failing(),
+    '<details>',
+    '<summary>Every component</summary>',
+    all(),
+    '</details>',
+  ].join('\n\n')
 }
 
 /** The README given, with the tables between its markers. */

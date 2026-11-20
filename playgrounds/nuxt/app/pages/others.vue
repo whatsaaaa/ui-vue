@@ -15,7 +15,7 @@ import {
   OthersPage,
   OthersProse,
 } from '#components'
-import { type ComponentLevels, type Family, components, families } from '#levels'
+import { type ComponentLevels, type Family, components, families, shownOn } from '#levels'
 
 /** The examples of each family. The internal parts have none: their components draw them. */
 const samples = {
@@ -60,13 +60,13 @@ const entries = Object.entries(components) as [string, ComponentLevels][]
 /** Each family with its components: the ones this page shows, and the others with the reason. */
 const sections = families.map((family) => {
   const own = entries.filter(([, component]) => component.family === family)
+  const shown = (where: ReturnType<typeof shownOn>) =>
+    own.filter(([, component]) => shownOn(component) === where).map(([name]) => name)
   return {
     family,
-    shown: own.filter(([, component]) => component.shown === 'others').map(([name]) => name),
-    gallery: own.filter(([, component]) => component.shown === 'gallery').map(([name]) => name),
-    unshown: own.flatMap(([name, { shown }]) =>
-      typeof shown === 'object' ? [{ name, note: shown.note }] : [],
-    ),
+    shown: shown('others'),
+    gallery: shown('gallery'),
+    unshown: own.flatMap(([name, { unshown }]) => (unshown ? [{ name, note: unshown.note }] : [])),
   }
 })
 </script>
