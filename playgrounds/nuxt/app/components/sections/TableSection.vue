@@ -94,21 +94,27 @@ const choosable = choosing()
 const choosableFocused = choosing(0)
 
 // a row's own action at its end, a stop of its own, which rings itself and not its row
-const choosableWithAction: TableColumn<Registration>[] = [
-  ...choosable,
-  {
-    id: 'action',
-    header: 'Action',
-    cell: ({ row }) =>
-      h(UButton, {
-        color: 'primary',
-        variant: 'link',
-        size: 'sm',
-        label: 'Edit',
-        'aria-label': `Edit ${row.original.name}`,
-      }),
-  },
-]
+const action: TableColumn<Registration> = {
+  id: 'action',
+  header: 'Action',
+  cell: ({ row }) =>
+    h(UButton, {
+      color: 'primary',
+      variant: 'link',
+      size: 'sm',
+      label: 'Edit',
+      'aria-label': `Edit ${row.original.name}`,
+    }),
+}
+const choosableWithAction = [...choosable, action]
+
+/*
+ * Pinned columns, which the table spec does not draw: the checkbox stays at the start and the
+ * action at the end while the columns between them scroll under both. Its first row shows the
+ * focus, whose ring runs over the pinned cells too.
+ */
+const pinnedFocused = [...choosableFocused, action]
+const pinning = { left: ['select'], right: ['action'] }
 
 const rows = data.slice(0, 3)
 
@@ -119,6 +125,7 @@ const selection = {
   focus: ref<Record<string, boolean>>({}),
   selected: ref<Record<string, boolean>>({ 0: true }),
   action: ref<Record<string, boolean>>({}),
+  pinned: ref<Record<string, boolean>>({}),
 }
 </script>
 
@@ -186,9 +193,22 @@ const selection = {
     <GalleryRow label="selectable, with an action">
       <UTable
         v-model:row-selection="selection.action.value"
+        data-testid="table-action"
         :data="rows"
         :columns="choosableWithAction"
         class="w-full"
+      />
+    </GalleryRow>
+
+    <!-- narrower than its columns, so they scroll -->
+    <GalleryRow label="pinned columns: focus">
+      <UTable
+        v-model:row-selection="selection.pinned.value"
+        data-testid="table-pinned"
+        :column-pinning="pinning"
+        :data="rows"
+        :columns="pinnedFocused"
+        class="w-full max-w-xl"
       />
     </GalleryRow>
 

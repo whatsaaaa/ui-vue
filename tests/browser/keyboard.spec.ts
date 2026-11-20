@@ -5,6 +5,7 @@ import {
   open,
   playground,
   resolveColor,
+  themeKey,
   themeSwitch,
   waitForApp,
 } from './pages.ts'
@@ -143,6 +144,24 @@ test.describe('the gallery', () => {
     await expect(tabs.getByRole('tab', { name: 'Overview' })).toBeFocused()
   })
 
+  test("the example of a tab with the focus rings one tab, with the ring of a tab's own focus", async ({
+    page,
+  }) => {
+    const tabs = page.locator('[data-spec="tabs.link.focus"]').getByRole('tab')
+    const ring = (tab: Locator) =>
+      tab.evaluate((tab) => {
+        const { outlineStyle, outlineWidth, outlineColor, outlineOffset } = getComputedStyle(tab)
+        return { outlineStyle, outlineWidth, outlineColor, outlineOffset }
+      })
+    await expect(tabs).toHaveCount(2)
+    const shown = await ring(tabs.first())
+    expect(shown.outlineStyle).toBe('solid')
+    expect((await ring(tabs.last())).outlineStyle).toBe('none')
+    // the other tab, once the keyboard is on it, is ringed as the example shows
+    await tabs.last().focus()
+    expect(await ring(tabs.last())).toEqual(shown)
+  })
+
   test("a table's rows are chosen by their checkboxes, and a row is no stop of its own", async ({
     page,
   }) => {
@@ -171,9 +190,7 @@ test.describe('the gallery', () => {
   test('a row is ringed inside while its checkbox has the focus, not while another control in it has', async ({
     page,
   }) => {
-    const table = page
-      .getByRole('table')
-      .filter({ has: page.getByRole('button', { name: 'Edit Maya Collins' }) })
+    const table = page.getByTestId('table-action')
     const row = table.locator('tbody tr').first()
     await table.getByRole('checkbox', { name: 'Choose every registration' }).focus()
     await page.keyboard.press('Tab')
@@ -273,7 +290,7 @@ test.describe('the gallery', () => {
       'aria-checked',
       'true',
     )
-    await expect(page.getByRole('button', { name: 'Switch theme', exact: true })).toBeVisible()
+    await expect(themeKey(page)).toBeVisible()
 
     await page.keyboard.press('1')
     await expect(page).toHaveURL(/\/$/)
@@ -284,10 +301,29 @@ test.describe('the gallery', () => {
     )
   })
 
+  test('the status line names its controls by what they show, and the theme switch keeps the focus', async ({
+    page,
+  }) => {
+    // a name that holds what the control shows, so speech input can press it by what is read
+    const hint = themeKey(page)
+    await expect(hint).toBeVisible()
+    expect(await hint.getAttribute('aria-label')).toBeNull()
+
+    // one button holds both themes' names, so it is still there once the theme has changed
+    const control = themeSwitch(page, 'nuxt')
+    await expect(control).toHaveCount(1)
+    await expect(control).toHaveAccessibleName('Switch theme, now rose-pine')
+    await control.focus()
+    await page.keyboard.press('Enter')
+    await expect(colorModeOption(page, 'light')).toBeChecked()
+    await expect(control).toHaveAccessibleName('Switch theme, now rose-pine-dawn')
+    await expect(control).toBeFocused()
+  })
+
   test('a page that forces its theme disables the theme switch, and t changes nothing', async ({
     page,
   }) => {
-    const hint = page.getByRole('button', { name: 'Switch theme', exact: true })
+    const hint = themeKey(page)
     const stored = () =>
       page.evaluate((key) => localStorage.getItem(key), COLOR_MODE_STORAGE_KEY.nuxt)
     const boxes = () =>

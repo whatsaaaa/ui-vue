@@ -54,8 +54,16 @@ export function colorModeOption(page: Page, label: 'system' | 'dark' | 'light') 
  */
 export function themeSwitch(page: Page, where: Playground) {
   return where === 'nuxt'
-    ? page.getByRole('button', { name: /^Switch theme, now/ }).filter({ visible: true })
+    ? page.getByRole('button', { name: /^Switch theme, now/ })
     : page.getByRole('button', { name: 'Theme', exact: true })
+}
+
+/**
+ * The gallery's key hint of the theme, in its status line: a button named by what it shows, its
+ * key and what the key does.
+ */
+export function themeKey(page: Page) {
+  return page.getByRole('button', { name: 't theme', exact: true })
 }
 
 /** Where Nuxt UI's color mode remembers its preference: @nuxtjs/color-mode's key, and VueUse's. */

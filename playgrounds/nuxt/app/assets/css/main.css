@@ -5,6 +5,9 @@
  * example marked data-demo="hover", data-demo="active" or data-demo="focus" draws that state, and
  * so does what is inside it. The same rules draw the real state; this build only adds the marked
  * one to them.
+ *
+ * A part that takes no attribute from its example, as one tab of a row, shows the focus with the
+ * class demo-focus, which marks that part alone.
  */
 @custom-variant hover {
   @media (hover: hover) {
@@ -25,7 +28,7 @@
 }
 
 @custom-variant focus-visible {
-  &:is(:focus-visible, [data-demo~='focus'], [data-demo~='focus'] *) {
+  &:is(:focus-visible, [data-demo~='focus'], [data-demo~='focus'] *, .demo-focus) {
     @slot;
   }
 }

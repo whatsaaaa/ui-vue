@@ -19,6 +19,12 @@ const specOf = (state: string, size = 'md') =>
  * first is the one in the state; in the others the second is the current tab.
  */
 const pair = items.slice(0, 2)
+
+/*
+ * The focus is on one tab at a time, so the first tab alone shows it: Nuxt UI passes a tab no
+ * attribute, only classes, and data-demo on the example would ring every tab in it.
+ */
+const focused: TabsItem[] = [{ ...pair[0]!, ui: { trigger: 'demo-focus' } }, pair[1]!]
 const archived = [items[3]!, items[1]!]
 </script>
 
@@ -45,15 +51,8 @@ const archived = [items[3]!, items[1]!]
           :content="false"
         />
       </GalleryItem>
-      <!-- the focus of one tab: every tab inside a marked example draws it -->
       <GalleryItem caption="focus">
-        <UTabs
-          :data-spec="specOf('focus')"
-          data-demo="focus"
-          :items="pair"
-          default-value="1"
-          :content="false"
-        />
+        <UTabs :data-spec="specOf('focus')" :items="focused" default-value="1" :content="false" />
       </GalleryItem>
       <GalleryItem caption="current">
         <UTabs :data-spec="specOf('current')" :items="pair" :content="false" />

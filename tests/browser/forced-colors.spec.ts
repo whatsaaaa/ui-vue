@@ -284,12 +284,10 @@ for (const colorScheme of ['dark', 'light'] as const) {
         ).toBeGreaterThanOrEqual(4.5)
 
       // a row's action, a button, once its row is chosen
-      const edit = page.getByRole('button', { name: 'Edit Maya Collins' })
-      await page
-        .locator('tbody tr', { has: edit })
-        .getByRole('checkbox', { name: 'Choose Maya Collins' })
-        .click()
-      await expect(page.locator('tbody tr', { has: edit })).toHaveAttribute('data-selected', 'true')
+      const withAction = page.getByTestId('table-action').locator('tbody tr').first()
+      const edit = withAction.getByRole('button', { name: 'Edit Maya Collins' })
+      await withAction.getByRole('checkbox', { name: 'Choose Maya Collins' }).click()
+      await expect(withAction).toHaveAttribute('data-selected', 'true')
       expect(await paintedContrast(page, edit), 'Edit reads on the row').toBeGreaterThanOrEqual(4.5)
     })
 
