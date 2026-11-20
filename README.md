@@ -90,7 +90,7 @@ The package ships its TypeScript compiled, with the type declarations, in `dist/
 
 You need Node.js 24.12 or later and pnpm. `corepack enable` sets pnpm up.
 
-The playgrounds and the tests use the package as an app does, built in `packages/ui-vue/dist`. `pnpm install` builds it, and the commands that read it build it again first.
+The playgrounds use the package as an app does, built in `packages/ui-vue/dist`, and the browser tests run on the playgrounds. The unit tests import the package's TypeScript, and need the build too: its stylesheet reads the themes' classes from there. `pnpm install` builds it, and the commands that read it build it again first.
 
 | Command             | What it does                                                                                                                                                         |
 | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

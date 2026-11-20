@@ -1,7 +1,7 @@
 /**
  * What the component themes share. Tailwind finds the classes it builds by reading the
- * source, so every class here and in the themes is written out whole: none is put together
- * from parts, and each color has its own line.
+ * compiled themes as text, so every class here and in the themes is written out whole: none is
+ * put together from parts, and each color has its own line.
  *
  * Every slot is a string, merged onto Nuxt UI's own classes, where a class of the same kind
  * replaces Nuxt UI's: font-semibold its font-medium, disabled:opacity-100 its

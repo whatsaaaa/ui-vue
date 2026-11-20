@@ -7,6 +7,6 @@
  *   in the Vite plugin's options.
  *
  * With them go the stylesheet, `@whatsaaaa/ui-vue/index.css`, and the color mode's head script
- * in `@whatsaaaa/ui-vue/color-mode`. The README shows each setup.
+ * in `@whatsaaaa/ui-vue/color-mode`. The repository's README shows each setup.
  */
 export { theme, ui } from './theme/index.ts'
