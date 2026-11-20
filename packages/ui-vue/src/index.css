@@ -14,8 +14,11 @@
 @import '@whatsaaaa/design-system/tailwind/variants.css';
 @import './nuxt-ui.css';
 
-/* The classes the component themes use. */
-@source './theme';
+/*
+ * The classes the component themes use, read from the themes as the build compiles them: the
+ * same files an app runs, whether it has the package from the workspace or from npm.
+ */
+@source '../dist/theme';
 
 /*
  * A status as text is set in its text color, which differs from the status color in the light

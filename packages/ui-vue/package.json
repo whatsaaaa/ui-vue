@@ -1,28 +1,69 @@
 {
   "name": "@whatsaaaa/ui-vue",
   "version": "0.0.0",
-  "private": true,
   "description": "Nuxt UI themed with the Whatsaaaa design system, for Vue and Nuxt",
+  "keywords": [
+    "design-system",
+    "nuxt",
+    "nuxt-ui",
+    "tailwindcss",
+    "theme",
+    "vue"
+  ],
+  "homepage": "https://github.com/whatsaaaa/ui-vue/tree/main/packages/ui-vue#readme",
+  "bugs": "https://github.com/whatsaaaa/ui-vue/issues",
   "license": "MIT",
+  "author": "Whatsaaaa",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/whatsaaaa/ui-vue.git",
+    "directory": "packages/ui-vue"
+  },
+  "files": [
+    "dist",
+    "src/*.css"
+  ],
   "type": "module",
   "sideEffects": [
     "**/*.css"
   ],
   "exports": {
-    ".": "./src/index.ts",
-    "./color-mode": "./src/color-mode.ts",
-    "./index.css": "./src/index.css"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./color-mode": {
+      "types": "./dist/color-mode.d.ts",
+      "default": "./dist/color-mode.js"
+    },
+    "./index.css": "./src/index.css",
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "dev": "tsc -p tsconfig.build.json --watch --preserveWatchOutput",
+    "build": "tsc -p tsconfig.build.json",
+    "prepare": "pnpm build",
+    "lint:package": "publint --strict && pnpm pack --out .attw/package.tgz && attw .attw/package.tgz --profile esm-only --exclude-entrypoints index.css"
   },
   "devDependencies": {
     "@nuxt/ui": "4.13.0",
+    "@types/node": "^24.19.2",
     "@whatsaaaa/design-system": "^0.14.0",
+    "@whatsaaaa/tsconfig": "^1.0.0",
     "tailwindcss": "^4.3.5",
+    "typescript": "~6.0.3",
     "vue": "^3.5.45"
   },
   "peerDependencies": {
-    "@nuxt/ui": "4.13.0",
+    "@nuxt/ui": "~4.13.0",
     "@whatsaaaa/design-system": "^0.14.0",
     "tailwindcss": "^4.3.5",
     "vue": "^3.5.0"
+  },
+  "engines": {
+    "node": "^22.18.0 || >=24.12.0"
   }
 }

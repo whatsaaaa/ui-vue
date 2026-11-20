@@ -1,4 +1,12 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["github>whatsaaaa/.github"]
+  "extends": ["github>whatsaaaa/.github"],
+  "packageRules": [
+    {
+      "description": "A release works with one minor of Nuxt UI, and of the design system until its 1.0.0: an update moves the peer range to the new minor, where Renovate's default would widen it to both",
+      "matchPackageNames": ["@nuxt/ui", "@whatsaaaa/design-system"],
+      "matchDepTypes": ["peerDependencies"],
+      "rangeStrategy": "replace"
+    }
+  ]
 }
