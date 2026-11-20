@@ -18,6 +18,9 @@ coverage
 *.tgz
 .eslintcache
 
+# Packed by lint:package for attw to check
+.attw
+
 # Nuxt
 .nuxt
 .output

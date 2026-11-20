@@ -1,0 +1,22 @@
+# npm's trusted publisher names this file: keep its name.
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  release:
+    uses: whatsaaaa/template/.github/workflows/changesets-release.yml@v1
+    # The version job starts ci.yml on the Version Packages pull request, through its
+    # workflow_dispatch trigger, since GitHub starts no pull_request run for it
+    permissions:
+      actions: write # starts CI on the Version Packages pull request
+      contents: write # Version Packages pull request, git tags and GitHub releases
+      pull-requests: write # Version Packages pull request
+      id-token: write # npm OIDC

@@ -12,7 +12,7 @@ kind: library
 license: MIT
 name: ui-vue
 pages: false
-publish: false
+publish: true
 stack: typescript
 starter: false
 visibility: public

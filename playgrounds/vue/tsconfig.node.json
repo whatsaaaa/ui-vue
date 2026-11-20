@@ -7,8 +7,6 @@
     "moduleResolution": "bundler",
     "types": ["node"],
     "noEmit": true,
-    // the package is TypeScript, imported as it is
-    "allowImportingTsExtensions": true,
     "paths": {
       "#build/ui": ["./node_modules/.nuxt-ui/ui"]
     }
