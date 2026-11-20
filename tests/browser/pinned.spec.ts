@@ -29,6 +29,19 @@ async function painted(page: Page, points: Point[]): Promise<string[]> {
   )
 }
 
+/** The contrast of two painted colors, each as "r g b", by WCAG's formula. */
+function contrast(one: string, other: string): number {
+  const luminance = (color: string) => {
+    const [r, g, b] = color
+      .split(' ')
+      .map((channel) => Number(channel) / 255)
+      .map((channel) => (channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4))
+    return 0.2126 * r! + 0.7152 * g! + 0.0722 * b!
+  }
+  const [lighter, darker] = [luminance(one), luminance(other)].sort((a, b) => b - a)
+  return (lighter! + 0.05) / (darker! + 0.05)
+}
+
 /** Where a row and its cells are in the page, and the part of the row its table shows. */
 function measure(row: Locator) {
   return row.evaluate((row: HTMLTableRowElement) => {
@@ -119,9 +132,10 @@ async function expectWholeRing(page: Page, row: Locator): Promise<void> {
   const strip = (from: number) => colors.slice(from, from + 12)
   const [scrolling, pinnedFirst, pinnedLast] = [strip(0), strip(12), strip(24)]
   const fill = colors[36]!
-  // the ring where no cell is pinned: two pixels inside the row, in a color other than its fill
+  // the ring where no cell is pinned: two pixels inside the row, in a color that reads on its
+  // fill, at the WCAG's 3:1 for a part of the interface
   const ring = scrolling[2]!
-  expect(ring, 'the row is ringed').not.toBe(fill)
+  expect(contrast(ring, fill), 'the row is ringed').toBeGreaterThanOrEqual(3)
   expect(scrolling.slice(2, 4), 'the ring is two pixels wide').toEqual([ring, ring])
   // Which pixels are the ring's. A pinned cell's fill is not compared: in forced colors the
   // browser may paint a chosen row's, the system's Highlight, see-through, and a pinned cell's
@@ -135,6 +149,16 @@ async function expectWholeRing(page: Page, row: Locator): Promise<void> {
   expect(ringed(colors.slice(37, 40)), "the ring's start").toEqual([true, true, false])
   expect(ringed(colors.slice(40, 43)), "the ring's end").toEqual([true, true, false])
   expect(new Set(colors.slice(43)), 'the ends are whole').toEqual(new Set([ring]))
+}
+
+/**
+ * The ring of a row that has the focus itself: its lines and both of its ends are one color,
+ * which reads on the row's fill, at the WCAG's 3:1 for a part of the interface.
+ */
+async function expectOneRing(page: Page, row: Locator): Promise<void> {
+  const { fill, ring } = await ringColors(page, row)
+  expect(ring, 'the lines and both ends are one color').toHaveLength(1)
+  expect(contrast(ring[0]!, fill), 'the ring reads on the row').toBeGreaterThanOrEqual(3)
 }
 
 const systems = [
@@ -208,9 +232,16 @@ for (const { name, use } of systems) {
       await expect(row).toHaveCSS('outline-style', 'solid')
       // in forced colors the browser draws the outline of what has the focus in a color of its
       // own, not in the text color
-      const { fill, ring } = await ringColors(page, row)
-      expect(ring, 'the lines and both ends are one color').toHaveLength(1)
-      expect(ring, 'the row is ringed').not.toContain(fill)
+      await expectOneRing(page, row)
+
+      // once chosen, by its checkbox, and with the focus again: in forced colors the browser's
+      // color for the outline is the color of the chosen row's fill
+      await page.keyboard.press('Tab')
+      await page.keyboard.press('Space')
+      await expect(row).toHaveAttribute('data-selected', 'true')
+      await page.keyboard.press('Shift+Tab')
+      await expect(row).toBeFocused()
+      await expectOneRing(page, row)
     })
   })
 }
