@@ -1,81 +1,16 @@
 import { expect, test, type Locator, type Page } from '@playwright/test'
-import { open, playground, waitForNoFindings } from './pages.ts'
+import { edges, icons, openWithSystemColors } from './forced.ts'
+import { playground, waitForNoFindings } from './pages.ts'
 
 /*
- * Forced colors, Windows' contrast themes, take box shadows away and paint every background in
- * the page color. Nuxt UI draws edges with ring, a box shadow, and icons as masks over their
- * background, so the theme draws them again in the system's colors: a part with a ring has a
- * border, a field keeps the border it draws its edge with, a checked control and the current tab
- * are in the selection color, and every icon is painted. These read each part of the pages as
- * the browser draws it in forced colors.
+ * The parts of the pages in forced colors that the theme draws again in the system's colors: a
+ * field keeps the border it draws its edge with, a checked control and the current tab are in
+ * the selection color. Every part with a ring keeps an edge and every icon is painted, which
+ * forced.ts reads.
  */
-
-declare global {
-  interface Window {
-    /**
-     * A system color as the browser paints it where the element is: in its color scheme, which
-     * the part of the gallery in the other theme changes.
-     */
-    systemColor(near: Element, name: string): string
-    /**
-     * Whether an element has an edge: a solid border on every side, in a color other than the
-     * page's.
-     */
-    hasEdge(element: Element): boolean
-  }
-}
-
-/** Opens the page, with window.systemColor. */
-async function openWithSystemColors(page: Page): Promise<void> {
-  await page.addInitScript(() => {
-    window.systemColor = (near, name) => {
-      const probe = document.createElement('span')
-      probe.style.position = 'absolute'
-      probe.style.backgroundColor = name
-      near.append(probe)
-      const color = getComputedStyle(probe).backgroundColor
-      probe.remove()
-      return color
-    }
-    window.hasEdge = (element) => {
-      const style = getComputedStyle(element)
-      const page = window.systemColor(element, 'Canvas')
-      return ['top', 'right', 'bottom', 'left'].every(
-        (side) =>
-          parseFloat(style.getPropertyValue(`border-${side}-width`)) >= 1 &&
-          style.getPropertyValue(`border-${side}-style`) === 'solid' &&
-          style.getPropertyValue(`border-${side}-color`) !== page,
-      )
-    }
-  })
-  await open(page)
-}
 
 /** What is wrong, one line for each part. */
 type Findings = string[]
-
-/**
- * Every part with a ring has an edge: a solid border on every side, in a color other than the
- * page's. The ring is still in Tailwind's variable when forced colors drop the shadow.
- */
-function edges(within: Locator): Promise<Findings> {
-  return within.evaluate((root) => {
-    const findings: string[] = []
-    for (const element of [root, ...root.querySelectorAll<HTMLElement>('*')]) {
-      const style = getComputedStyle(element)
-      // a ring is "0 0 0 calc(<width> + <offset>) <color>", and none is "0 0 #0000"
-      const ring = style.getPropertyValue('--tw-ring-shadow').trim()
-      if (!/calc\((?!0px)/.test(ring) || /(#0000|transparent)$/.test(ring)) continue
-      const box = element.getBoundingClientRect()
-      if (box.width <= 2 || box.height <= 2 || !element.checkVisibility()) continue
-      if (!window.hasEdge(element))
-        findings.push(
-          `${element.dataset.slot} ${element.getAttribute('class')?.slice(0, 60)}: border ${style.borderWidth} ${style.borderStyle} ${style.borderColor}`,
-        )
-    }
-    return findings
-  })
-}
 
 /**
  * Every field has an edge: a text field, and the trigger of a select or a select menu. A field
@@ -91,7 +26,7 @@ function fieldEdges(within: Locator): Promise<Findings> {
       const box = field.getBoundingClientRect()
       if (box.width <= 2 || box.height <= 2 || !field.checkVisibility({ opacityProperty: true }))
         continue
-      if (!window.hasEdge(field)) {
+      if (!window.hasBorder(field)) {
         const style = getComputedStyle(field)
         findings.push(
           `${field.localName} ${field.id}: border ${style.borderWidth} ${style.borderStyle} ${style.borderColor}`,
@@ -103,39 +38,9 @@ function fieldEdges(within: Locator): Promise<Findings> {
 }
 
 /**
- * Every icon is painted in a color other than the one behind it. An icon drawn as a mask is its
- * background; one drawn as an SVG, on Vue, is its text color, with nothing behind it.
- */
-function icons(within: Locator): Promise<Findings> {
-  return within.evaluate((root) => {
-    const findings: string[] = []
-    const transparent = 'rgba(0, 0, 0, 0)'
-    const behind = (element: Element) => {
-      for (let parent = element.parentElement; parent; parent = parent.parentElement) {
-        const color = getComputedStyle(parent).backgroundColor
-        if (color !== transparent) return color
-      }
-      return window.systemColor(element, 'Canvas')
-    }
-    for (const icon of root.querySelectorAll<HTMLElement | SVGElement>('.iconify')) {
-      if (!icon.checkVisibility() || icon.getBoundingClientRect().width === 0) continue
-      const style = getComputedStyle(icon)
-      const label = `${icon.dataset.slot} ${icon.getAttribute('class')}`
-      if (icon instanceof SVGElement) {
-        if (style.backgroundColor !== transparent)
-          findings.push(`${label}: a fill behind it, ${style.backgroundColor}`)
-        if (style.color === behind(icon)) findings.push(`${label}: painted ${style.color}`)
-      } else if ([transparent, behind(icon)].includes(style.backgroundColor))
-        findings.push(`${label}: painted ${style.backgroundColor}`)
-    }
-    return findings
-  })
-}
-
-/**
  * A checkbox or a radio that is checked, or a checkbox that is indeterminate, is filled with the
- * selection color, gray when it is disabled, its mark in another color. One that is not has no
- * fill. A card without its control shows the state by its border, in the selection color.
+ * selection color, gray when it is disabled, its mark in the selection's text color, the page
+ * color when it is disabled. One that is not has no fill. A card without its control shows the state by its border, in the selection color.
  */
 function checked(page: Page): Promise<Findings> {
   return page.evaluate(() => {
@@ -164,14 +69,15 @@ function checked(page: Page): Promise<Findings> {
       }
       if (fill !== (disabled ? window.systemColor(control, 'GrayText') : highlight))
         findings.push(`${label}: filled ${fill}`)
-      // the mark: a checkbox's icon, a radio's dot
+      // the mark, a checkbox's icon or a radio's dot, in the fill's text color
       const icon = indicator?.querySelector('[data-slot=icon]')
       const mark = !icon
         ? getComputedStyle(indicator!, '::after').backgroundColor
         : icon instanceof SVGElement
           ? getComputedStyle(icon).color
           : getComputedStyle(icon).backgroundColor
-      if ([fill, 'rgba(0, 0, 0, 0)'].includes(mark)) findings.push(`${label}: its mark is ${mark}`)
+      if (mark !== window.systemColor(control, disabled ? 'Canvas' : 'HighlightText'))
+        findings.push(`${label}: its mark is ${mark}`)
     }
     return findings
   })

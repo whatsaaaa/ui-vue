@@ -80,6 +80,9 @@ describe("the Nuxt UI colors, the stylesheet that points Nuxt UI's variables at 
       '--ui-info': '--ws-color-note',
       '--ui-warning': '--ws-color-warning',
       '--ui-error': '--ws-color-danger',
+      // the faint text color is under 4.5:1 on the page, and Nuxt UI sets text in its dimmed one
+      '--ui-text-dimmed': '--ws-color-text-secondary',
+      '--ui-text-muted': '--ws-color-text-secondary',
       '--ui-radius': '--ws-radius-sm',
       '--ui-header-height': '--ws-size-tab-bar',
     })

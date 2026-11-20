@@ -12,7 +12,10 @@
   },
   "dependencies": {
     "@iconify-json/lucide": "^1.2.154",
+    "@iconify-json/vscode-icons": "^1.2.99",
+    "@internationalized/date": "^3.12.4",
     "@nuxt/ui": "4.13.0",
+    "@tanstack/charts": "^1.5.0",
     "@whatsaaaa/design-system": "^0.14.0",
     "@whatsaaaa/ui-vue": "workspace:*",
     "nuxt": "^4.6.4",

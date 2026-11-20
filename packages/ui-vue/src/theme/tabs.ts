@@ -17,7 +17,8 @@ import { type ByColor, byColor, forcedEdge, forcedIcon, transition } from './sha
  * and the marker of a link is drawn inside the row, over its line.
  *
  * In forced colors the current tab is marked in the selection color: a pill's outlined, a link's
- * underlined, and the bar of the pills is outlined.
+ * underlined, and the bar of the pills is outlined. The pill's mark is a ring, which the
+ * stylesheet outlines in the text color there: the outline takes the selection color too.
  */
 
 /**
@@ -90,8 +91,9 @@ export default {
       pill: {
         list: `bg-bg ring ring-inset ring-border rounded-md p-1 ${forcedEdge}`,
         trigger:
-          "grow shrink-0 rounded-sm in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:content-[''] in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:absolute in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:inset-0 in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:rounded-sm in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:ring in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:ring-inset in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:-z-10 forced-colors:in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:border-2 forced-colors:in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:border-[Highlight] isolate",
-        indicator: 'rounded-sm forced-colors:border-2 forced-colors:border-[Highlight]',
+          "grow shrink-0 rounded-sm in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:content-[''] in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:absolute in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:inset-0 in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:rounded-sm in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:ring in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:ring-inset in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:-z-10 forced-colors:in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:border-2 forced-colors:in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:border-[Highlight] forced-colors:in-[[data-slot=list]:not(:has([data-slot=indicator]))]:data-[state=active]:before:outline-[Highlight] isolate",
+        indicator:
+          'rounded-sm forced-colors:border-2 forced-colors:border-[Highlight] forced-colors:outline-[Highlight]',
       },
       link: {
         list: 'p-0 border-border',

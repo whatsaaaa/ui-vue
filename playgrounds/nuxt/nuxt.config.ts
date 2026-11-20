@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url'
 import { keysInitScript } from '@whatsaaaa/design-system/shortcuts'
 import { theme } from '@whatsaaaa/ui-vue'
 import { colorModeInitScript } from '@whatsaaaa/ui-vue/color-mode'
@@ -10,11 +11,23 @@ export default defineNuxtConfig({
     theme,
     // The design system brings its fonts, self-hosted. @nuxt/fonts would fetch them again.
     fonts: false,
+    // The prose and content components, which Nuxt UI registers for @nuxt/content alone: the
+    // page of the others shows them too.
+    prose: true,
+    content: true,
+  },
+  alias: {
+    // The level of every component, which the page of the others is drawn from
+    '#levels': fileURLToPath(new URL('../../packages/ui-vue/levels.ts', import.meta.url)),
   },
   icon: {
     // The icons are bundled with the app, so a static copy asks no server for them.
     provider: 'none',
-    clientBundle: { scan: true },
+    clientBundle: {
+      scan: true,
+      // The icons Nuxt UI's prose gives a code block by its file's name, which no file writes
+      icons: ['vscode-icons:file-type-css', 'vscode-icons:file-type-nuxt'],
+    },
   },
   app: {
     head: {

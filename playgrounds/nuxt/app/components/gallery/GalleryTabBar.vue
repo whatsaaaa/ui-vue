@@ -17,6 +17,7 @@ import markOnLight from '~/assets/mark-on-light.svg'
         <li><NuxtLink to="/">gallery</NuxtLink></li>
         <li><NuxtLink to="/dark">dark</NuxtLink></li>
         <li><NuxtLink to="/open">open</NuxtLink></li>
+        <li><NuxtLink to="/others">others</NuxtLink></li>
       </ul>
     </nav>
     <div class="ws-tab-bar__end">

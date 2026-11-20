@@ -45,3 +45,53 @@
     outline-offset: 3px;
   }
 }
+
+/*
+ * Forced colors, Windows' contrast themes, paint every background in the page color and take box
+ * shadows away. Nuxt UI draws an icon as a mask over its background and many an edge with ring,
+ * a box shadow, so both are gone there. These two rules draw them again for every component,
+ * whether the package themes it or not.
+ */
+
+/*
+ * An icon drawn as a mask is its background, in its own color, which forced colors would paint
+ * in the page color. Here the icon keeps its colors as they are, and its color is the text color
+ * of the page. Outside any layer, so it wins over the color a component gives its icon, which is
+ * not a system color and would stay. A theme still paints an icon in another system color by its
+ * background, as a disabled control's gray. An icon drawn as an image, as one in several colors
+ * is, has no fill and stays as it is, and one drawn as an SVG, as on Vue, already takes the text
+ * color.
+ */
+@media (forced-colors: active) {
+  .iconify:not(svg) {
+    forced-color-adjust: none;
+    color: canvastext;
+  }
+}
+
+/*
+ * An edge drawn as a ring, as an outline of the ring's width in the text color: where the ring
+ * is, outside the box or inside it, and taking no room either. Added to Tailwind's own ring
+ * utilities, so it follows every variant a ring is written with.
+ */
+@utility ring {
+  @media (forced-colors: active) {
+    --ring-outline-width: 1px;
+
+    outline: var(--ring-outline-width) solid canvastext;
+  }
+}
+
+@utility ring-* {
+  @media (forced-colors: active) {
+    --ring-outline-width: calc(--value(integer) * 1px);
+
+    outline: var(--ring-outline-width) solid canvastext;
+  }
+}
+
+@utility ring-inset {
+  @media (forced-colors: active) {
+    outline-offset: calc(-1 * var(--ring-outline-width, 1px));
+  }
+}

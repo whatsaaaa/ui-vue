@@ -8,7 +8,7 @@ const BRIDGE = [
   ['--ui-bg-elevated', '--ws-color-raised'],
   ['--ui-text', '--ws-color-text'],
   ['--ui-text-muted', '--ws-color-text-secondary'],
-  ['--ui-text-dimmed', '--ws-color-text-faint'],
+  ['--ui-text-dimmed', '--ws-color-text-secondary'],
   ['--ui-border', '--ws-color-border'],
   ['--ui-border-accented', '--ws-color-field-border'],
   ['--ui-primary', '--ws-color-interactive'],

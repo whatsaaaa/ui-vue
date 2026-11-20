@@ -8,5 +8,5 @@
     // nothing imports JSON, and the shared config's default would allow it
     "resolveJsonModule": false
   },
-  "include": ["packages/ui-vue/src", "tests", "*.config.ts"]
+  "include": ["packages/ui-vue/src", "packages/ui-vue/levels.ts", "scripts", "tests", "*.config.ts"]
 }

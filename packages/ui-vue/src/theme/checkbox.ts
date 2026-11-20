@@ -15,7 +15,7 @@ import {
   indicator,
   label,
 } from './choice.ts'
-import { byColor, forcedChecked, forcedControlEdge, transition } from './shared.ts'
+import { byColor, forcedChecked, forcedControlEdge, forcedMark, transition } from './shared.ts'
 
 /*
  * A box with the smallest radius and a tick, as the design system's checkbox spec draws it. The
@@ -26,6 +26,7 @@ export default {
   slots: {
     base: `rounded-xs ${control} ${forcedControlEdge} ${transition}`,
     indicator: `${indicator} flex items-center justify-center ${forcedChecked}`,
+    icon: forcedMark,
     label,
     description,
   },
