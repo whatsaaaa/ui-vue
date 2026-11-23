@@ -13,6 +13,8 @@
     "test:unit": "vitest run",
     "test:browser": "run-s build test:browser:run",
     "test:browser:run": "playwright test",
+    "test:browser:docker": "sh scripts/browser-tests-in-docker.sh",
+    "test:browser:update": "sh scripts/browser-tests-in-docker.sh --update-snapshots=changed visual",
     "type-check": "run-s build:package type-check:root type-check:nuxt type-check:vue",
     "type-check:root": "tsc --noEmit -p tsconfig.json",
     "type-check:nuxt": "pnpm --filter playground-nuxt type-check",
