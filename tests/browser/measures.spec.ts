@@ -189,9 +189,9 @@ test("a badge takes the tag's colors, room and radius from the tier as it change
   await open(page)
   // values no token has, on the page's tier
   const tier = {
-    '--ws-tag-success-bg': 'rgb(1, 2, 3)',
-    '--ws-tag-danger-text': 'rgb(4, 5, 6)',
-    '--ws-tag-outline-text': 'rgb(7, 8, 9)',
+    '--ws-tag-success-bg-rest': 'rgb(1, 2, 3)',
+    '--ws-tag-danger-text-rest': 'rgb(4, 5, 6)',
+    '--ws-tag-outline-text-rest': 'rgb(7, 8, 9)',
     '--ws-tag-radius': '7px',
     '--ws-tag-padding-inline-md': '11px',
     '--ws-tag-outline-padding-block-md': '9px',
@@ -204,10 +204,10 @@ test("a badge takes the tag's colors, room and radius from the tier as it change
 
   await expect(example('badge.success.rest')).toHaveCSS(
     'background-color',
-    tier['--ws-tag-success-bg'],
+    tier['--ws-tag-success-bg-rest'],
   )
-  await expect(example('badge.danger.rest')).toHaveCSS('color', tier['--ws-tag-danger-text'])
-  await expect(example('badge.outline.rest')).toHaveCSS('color', tier['--ws-tag-outline-text'])
+  await expect(example('badge.danger.rest')).toHaveCSS('color', tier['--ws-tag-danger-text-rest'])
+  await expect(example('badge.outline.rest')).toHaveCSS('color', tier['--ws-tag-outline-text-rest'])
   await expect(example('badge.primary.rest')).toHaveCSS('padding-inline', '11px')
   // the outlined tag's edge is inside its padding-block
   await expect(example('badge.outline.rest')).toHaveCSS('padding-block', '8px')
@@ -287,7 +287,7 @@ for (const colorScheme of ['dark', 'light'] as const) {
     }, testInfo) => {
       test.skip(playground(testInfo) !== 'nuxt', 'The marks are in the gallery')
       await open(page)
-      const red = await resolveColor(page, 'var(--ws-field-required-text)')
+      const red = await resolveColor(page, 'var(--ws-field-required-text-rest)')
       for (const section of ['#input', '#select', '#checkbox', '#radio-group']) {
         // the asterisk after a label or a legend
         const marks = await page.locator(section).evaluate((section) =>

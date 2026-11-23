@@ -16,7 +16,7 @@ const fadeOut =
 
 export default {
   slots: {
-    content: 'bg-(--ws-overlay-bg) divide-y-thin divide-border',
+    content: 'bg-(--ws-overlay-bg-rest) divide-y-thin divide-border',
     header:
       'items-start gap-3 min-h-(--ws-size-tab-bar) px-(--ws-space-16) py-0 sm:px-(--ws-space-16) lg:px-(--ws-overlay-window-padding) bg-bg',
     wrapper: 'flex-1 min-w-0 py-3',
@@ -41,7 +41,7 @@ export default {
     fullscreen: {
       false: {
         content:
-          'w-[calc(100vw-2rem)] max-w-[32rem] rounded-(--ws-overlay-window-radius) border-(length:--ws-overlay-border-width) border-(--ws-overlay-border) ring-0 [box-shadow:none] overflow-hidden',
+          'w-[calc(100vw-2rem)] max-w-[32rem] rounded-(--ws-overlay-window-radius) border-(length:--ws-overlay-border-width) border-(--ws-overlay-border-rest) ring-0 [box-shadow:none] overflow-hidden',
       },
     },
     overlay: {

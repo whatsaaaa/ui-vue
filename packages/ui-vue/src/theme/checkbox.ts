@@ -61,7 +61,9 @@ export default {
       xl: { ...choiceSizes.xl, icon: 'size-icon-lg' },
     },
     required: {
-      true: { label: "after:content-['*'] after:ms-0.5 after:text-(--ws-field-required-text)" },
+      true: {
+        label: "after:content-['*'] after:ms-0.5 after:text-(--ws-field-required-text-rest)",
+      },
     },
     disabled: {
       true: {

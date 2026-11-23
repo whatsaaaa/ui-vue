@@ -20,12 +20,12 @@ import { type ByColor, byColor, forcedEdge, forcedIcon, solid } from './shared.t
 
 /** A tint of the color under its text color: the tag, at every color of the tier. */
 const tag: ByColor = {
-  primary: 'bg-(--ws-tag-primary-bg) text-(--ws-tag-primary-text)',
-  success: 'bg-(--ws-tag-success-bg) text-(--ws-tag-success-text)',
-  info: 'bg-(--ws-tag-info-bg) text-(--ws-tag-info-text)',
-  warning: 'bg-(--ws-tag-warning-bg) text-(--ws-tag-warning-text)',
-  error: 'bg-(--ws-tag-danger-bg) text-(--ws-tag-danger-text)',
-  neutral: 'bg-(--ws-tag-neutral-bg) text-(--ws-tag-neutral-text)',
+  primary: 'bg-(--ws-tag-primary-bg-rest) text-(--ws-tag-primary-text-rest)',
+  success: 'bg-(--ws-tag-success-bg-rest) text-(--ws-tag-success-text-rest)',
+  info: 'bg-(--ws-tag-info-bg-rest) text-(--ws-tag-info-text-rest)',
+  warning: 'bg-(--ws-tag-warning-bg-rest) text-(--ws-tag-warning-text-rest)',
+  error: 'bg-(--ws-tag-danger-bg-rest) text-(--ws-tag-danger-text-rest)',
+  neutral: 'bg-(--ws-tag-neutral-bg-rest) text-(--ws-tag-neutral-text-rest)',
 }
 
 /**
@@ -38,7 +38,7 @@ const outline: ByColor = {
   info: 'ring-0 bg-transparent border-note text-note-text',
   warning: 'ring-0 bg-transparent border-warning text-warning-text',
   error: 'ring-0 bg-transparent border-danger text-danger-text',
-  neutral: 'ring-0 bg-transparent border-border text-(--ws-tag-outline-text)',
+  neutral: 'ring-0 bg-transparent border-border text-(--ws-tag-outline-text-rest)',
 }
 
 /** The edge of a subtle badge, over its tint. */

@@ -112,7 +112,7 @@ test("a table's rows take the table colors from the tier as it changes: raised u
   await open(page)
   // colors and a padding no token has, on the page's tier
   const tier = {
-    '--ws-table-head-bg': 'rgb(1, 2, 3)',
+    '--ws-table-head-bg-rest': 'rgb(1, 2, 3)',
     '--ws-table-row-bg-hover': 'rgb(4, 5, 6)',
     '--ws-table-row-bg-selected': 'rgb(7, 8, 9)',
     '--ws-table-cell-padding-inline': '13px',
@@ -124,7 +124,7 @@ test("a table's rows take the table colors from the tier as it changes: raised u
   const table = page.locator('[data-spec="table.selectable.rest"]')
   await expect(table.locator('th').first()).toHaveCSS(
     'background-color',
-    tier['--ws-table-head-bg'],
+    tier['--ws-table-head-bg-rest'],
   )
   await expect(table.locator('td').first()).toHaveCSS('padding-inline-start', '13px')
   const row = table.locator('tbody tr').first()
@@ -185,8 +185,8 @@ test("a select's trigger takes the field's colors from the tier as it changes, u
   await open(page)
   // colors no token has, on the page's tier
   const tier = {
-    '--ws-field-bg': 'rgb(1, 2, 3)',
-    '--ws-field-icon': 'rgb(4, 5, 6)',
+    '--ws-field-bg-rest': 'rgb(1, 2, 3)',
+    '--ws-field-icon-rest': 'rgb(4, 5, 6)',
     '--ws-field-text-disabled': 'rgb(7, 8, 9)',
   }
   await page.evaluate((tier) => {
@@ -198,13 +198,13 @@ test("a select's trigger takes the field's colors from the tier as it changes, u
     page.locator('#select').getByRole('combobox').first(),
     page.getByTestId('select-menu'),
   ]) {
-    await expect(trigger).toHaveCSS('background-color', tier['--ws-field-bg'])
+    await expect(trigger).toHaveCSS('background-color', tier['--ws-field-bg-rest'])
     await expect(trigger.locator('[data-slot="trailingIcon"]')).toHaveCSS(
       'color',
-      tier['--ws-field-icon'],
+      tier['--ws-field-icon-rest'],
     )
     await trigger.hover()
-    await expect(trigger).toHaveCSS('background-color', tier['--ws-field-bg'])
+    await expect(trigger).toHaveCSS('background-color', tier['--ws-field-bg-rest'])
   }
   await expect(page.locator('#select').getByRole('combobox', { disabled: true })).toHaveCSS(
     'color',

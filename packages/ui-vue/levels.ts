@@ -21,9 +21,9 @@
  * check it fails today, carried here so that the test passes without restyling anything. The
  * test fails when a failure appears that is not listed and when a listed one no longer fails, so
  * the list only shrinks. For most, the fix comes with the restyling or the spec their level for
- * 1.0.0 asks for. For eight it is open work, with no pull request planned yet: UInputRating,
- * ProseCaution, ProseNote, ProseTip and ProseWarning stay at level 1 for 1.0.0, and UCheckbox,
- * URadioGroup and UTable are specced already, so their fix is a change of their specs.
+ * 1.0.0 asks for. For seven it is open work, with no pull request planned yet: UInputRating,
+ * ProseCaution, ProseNote, ProseTip and ProseWarning stay at level 1 for 1.0.0, and UCheckbox and
+ * URadioGroup are specced already, so their fix is a change of their specs.
  */
 
 /** The families: the categories of Nuxt UI's docs, and its internal parts, which have no page. */
@@ -258,19 +258,7 @@ export const components = {
   UEmpty: { family: 'data', today: 1, target: 2 },
   UMarquee: { family: 'data', today: 1, target: 1 },
   UScrollArea: { family: 'data', today: 1, target: 1 },
-  UTable: {
-    family: 'data',
-    today: 3,
-    target: 3,
-    fails: [
-      {
-        check: 'contrast',
-        themes: ['dark'],
-        slots: ['label'],
-        note: "A tag in a chosen row: the tag's text on its tint over the chosen row's fill, 3.9:1. The table spec gives the fill and the badge spec the tag, so the fix is the specs'",
-      },
-    ],
-  },
+  UTable: { family: 'data', today: 3, target: 3 },
   UTimeline: { family: 'data', today: 1, target: 2 },
   UTree: { family: 'data', today: 1, target: 2 },
   UUser: { family: 'data', today: 1, target: 2 },

@@ -8,4 +8,4 @@ The first release on npm: Nuxt UI themed with the Whatsaaaa design system.
 - `@whatsaaaa/ui-vue/index.css`: the app's whole stylesheet. It names the package's themes as a source of classes itself, so an app adds no `@source` for them.
 - `colorModeInitScript` and `vueColorModeInitScript` from `@whatsaaaa/ui-vue/color-mode`: the head scripts for Nuxt and for Vue.
 
-It ships compiled JavaScript with type declarations, and works with Nuxt UI `~4.13.0` and the design system `^0.14.0`: one minor of each.
+It ships compiled JavaScript with type declarations, and works with Nuxt UI `~4.13.0` and the design system `^0.15.0`: one minor of each.
