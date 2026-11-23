@@ -91,22 +91,22 @@ export default {
     // color its line takes there, as every other color of the row is forced, and the color its
     // ring is given, with the ring's other rules.
     tr: 'data-[selected=true]:bg-(--ws-table-row-bg-selected)! data-[selected=true]:border-b-selection-border forced-colors:data-[selected=true]:bg-[Highlight]! forced-colors:data-[selected=true]:text-[HighlightText]',
-    th: `${cell} align-middle bg-(--ws-table-head-bg) font-mono font-bold text-overline uppercase text-(--ws-table-head-text) whitespace-nowrap in-[thead]:border-b-thin in-[thead]:border-border in-[tfoot]:border-t-thin in-[tfoot]:border-border`,
-    td: `${cell} align-top font-sans text-body-sm text-(--ws-table-row-text) ${chosenCell}`,
+    th: `${cell} align-middle bg-(--ws-table-head-bg-rest) font-mono font-bold text-overline uppercase text-(--ws-table-head-text-rest) whitespace-nowrap in-[thead]:border-b-thin in-[thead]:border-border in-[tfoot]:border-t-thin in-[tfoot]:border-border`,
+    td: `${cell} align-top font-sans text-body-sm text-(--ws-table-row-text-rest) ${chosenCell}`,
     separator: 'hidden',
     empty: 'font-sans text-body-sm text-text-secondary',
   },
   variants: {
     pinned: {
-      true: { th: 'sticky bg-(--ws-table-head-bg) z-1', td: pinnedCell },
+      true: { th: 'sticky bg-(--ws-table-head-bg-rest) z-1', td: pinnedCell },
     },
     sticky: {
       true: {
-        thead: 'sticky top-0 inset-x-0 bg-(--ws-table-head-bg) backdrop-blur-none z-1',
+        thead: 'sticky top-0 inset-x-0 bg-(--ws-table-head-bg-rest) backdrop-blur-none z-1',
         tfoot: 'sticky bottom-0 inset-x-0 bg-bg backdrop-blur-none z-1',
       },
       header: {
-        thead: 'sticky top-0 inset-x-0 bg-(--ws-table-head-bg) backdrop-blur-none z-1',
+        thead: 'sticky top-0 inset-x-0 bg-(--ws-table-head-bg-rest) backdrop-blur-none z-1',
       },
       footer: { tfoot: 'sticky bottom-0 inset-x-0 bg-bg backdrop-blur-none z-1' },
     },

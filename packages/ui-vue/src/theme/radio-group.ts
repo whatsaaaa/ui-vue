@@ -36,7 +36,7 @@ const checked: ByColor = {
 
 export default {
   slots: {
-    legend: 'font-mono font-normal text-(--ws-field-label-text)',
+    legend: 'font-mono font-normal text-(--ws-field-label-text-rest)',
     base: `rounded-(--ws-radius-full) ${control} ${forcedControlEdge} ${transition}`,
     indicator: `${indicator} ${forcedChecked} forced-colors:after:bg-[HighlightText] forced-colors:in-disabled:after:bg-[Canvas]`,
     label,
@@ -100,7 +100,9 @@ export default {
       },
     },
     required: {
-      true: { legend: "after:content-['*'] after:ms-0.5 after:text-(--ws-field-required-text)" },
+      true: {
+        legend: "after:content-['*'] after:ms-0.5 after:text-(--ws-field-required-text-rest)",
+      },
     },
     disabled: {
       true: {

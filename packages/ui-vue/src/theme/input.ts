@@ -5,8 +5,8 @@ export default {
   slots: {
     // The system uses no placeholders: one an app passes anyway is the secondary text, at 4.5:1.
     base: `rounded-(--ws-control-radius) font-sans placeholder:text-text-secondary disabled:text-(--ws-field-text-disabled) disabled:opacity-100 ${transition}`,
-    leadingIcon: `text-(--ws-field-icon) ${forcedIcon}`,
-    trailingIcon: `text-(--ws-field-icon) ${forcedIcon}`,
+    leadingIcon: `text-(--ws-field-icon-rest) ${forcedIcon}`,
+    trailingIcon: `text-(--ws-field-icon-rest) ${forcedIcon}`,
   },
   variants: {
     size: fieldSizes,

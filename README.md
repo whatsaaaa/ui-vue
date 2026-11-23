@@ -17,7 +17,7 @@
 An app adds the package next to Nuxt UI, and with it the design system and Tailwind, which the package reads:
 
 ```sh
-pnpm add @whatsaaaa/ui-vue '@whatsaaaa/design-system@^0.14.0' '@nuxt/ui@~4.13.0' tailwindcss
+pnpm add @whatsaaaa/ui-vue '@whatsaaaa/design-system@^0.15.0' '@nuxt/ui@~4.13.0' tailwindcss
 ```
 
 The versions are the package's peer ranges. A release works with one minor of Nuxt UI, the one its tests passed on: a theme leans on Nuxt UI's own classes, which change in a minor, so a new minor of Nuxt UI comes with a new minor of the package. Until the design system's 1.0.0, a release works with one minor of it too.
@@ -102,7 +102,7 @@ How far a Nuxt UI component follows the design system is one of three levels, ea
 
 `packages/ui-vue/levels.ts` lists every component of the Nuxt UI version the package pins with the level it is at today and the level it is to reach for 1.0.0. A unit test fails when Nuxt UI has a component the file does not name.
 
-A component with a known failure in the file does not pass level 1 yet: the file lists each level 1 check it fails today, with the theme and the part, so that the test passes without restyling anything here. The browser test fails when a failure appears that is not listed and when a listed one no longer fails, so the list only shrinks. For most of them the fix comes with the restyling or the spec their level for 1.0.0 asks for. For eight it is open work, with no pull request planned yet: `UInputRating`, `ProseCaution`, `ProseNote`, `ProseTip` and `ProseWarning` stay at level 1 for 1.0.0, and `UCheckbox`, `URadioGroup` and `UTable` are specced already, so their fix is a change of their specs.
+A component with a known failure in the file does not pass level 1 yet: the file lists each level 1 check it fails today, with the theme and the part, so that the test passes without restyling anything here. The browser test fails when a failure appears that is not listed and when a listed one no longer fails, so the list only shrinks. For most of them the fix comes with the restyling or the spec their level for 1.0.0 asks for. For seven it is open work, with no pull request planned yet: `UInputRating`, `ProseCaution`, `ProseNote`, `ProseTip` and `ProseWarning` stay at level 1 for 1.0.0, and `UCheckbox` and `URadioGroup` are specced already, so their fix is a change of their specs.
 
 The tables below are drawn from the file by `pnpm levels`.
 
@@ -112,7 +112,7 @@ The tables below are drawn from the file by `pnpm levels`.
 | -------------- | ---------- | ------------- | ------------- | ------------- | ------------------------ | -------------------- | ------------------ | ----------------- | ----------------- | ----------------- |
 | Element        | 19         | 3             | 0             | 16            | 15                       | 4                    | 0                  | 6                 | 10                | 3                 |
 | Form           | 21         | 6             | 0             | 15            | 17                       | 4                    | 0                  | 11                | 7                 | 3                 |
-| Data           | 10         | 1             | 0             | 9             | 9                        | 1                    | 0                  | 2                 | 4                 | 4                 |
+| Data           | 10         | 1             | 0             | 9             | 10                       | 0                    | 0                  | 2                 | 4                 | 4                 |
 | Navigation     | 8          | 1             | 0             | 7             | 8                        | 0                    | 0                  | 3                 | 4                 | 1                 |
 | Overlay        | 8          | 1             | 0             | 7             | 6                        | 2                    | 0                  | 6                 | 2                 | 0                 |
 | Layout         | 9          | 0             | 0             | 9             | 8                        | 0                    | 1                  | 0                 | 3                 | 6                 |
@@ -125,30 +125,29 @@ The tables below are drawn from the file by `pnpm levels`.
 | Locale         | 1          | 0             | 0             | 1             | 1                        | 0                    | 0                  | 0                 | 0                 | 1                 |
 | Prose          | 47         | 0             | 0             | 47            | 42                       | 4                    | 1                  | 0                 | 0                 | 47                |
 | Internal parts | 5          | 0             | 0             | 5             | 0                        | 0                    | 5                  | 2                 | 1                 | 2                 |
-| **All**        | 186        | 12            | 0             | 174           | 164                      | 15                   | 7                  | 30                | 44                | 112               |
+| **All**        | 186        | 12            | 0             | 174           | 165                      | 14                   | 7                  | 30                | 44                | 112               |
 
 A component that is not in the gallery is counted apart from the ones that pass or fail: one that draws nothing of its own is not checked, and an internal part is checked through the component that draws it.
 
 The components that do not pass level 1 yet, with each check they fail:
 
-| Component       | Today | For 1.0.0 | Check it fails | In          | Parts              | What fails                                                                                                                                                              |
-| --------------- | ----- | --------- | -------------- | ----------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `UAlert`        | 1     | 3         | contrast       | dark        | description        | The subtle error alert: its description in the danger color on the danger tint, 4.3:1 where text needs 4.5:1                                                            |
-| `UAlert`        | 1     | 3         | contrast       | light       | title, description | The solid warning alert: the page color on the warning color, 2.05:1 and 1.9:1. The status kinds get a tint and an outline with the alert's spec, and no solid          |
-| `UBanner`       | 1     | 2         | contrast       | dark, light | label              | An outline button on the banner: its label is drawn for the page and stands on the banner's fill, 1.29:1 in dark and 1.19:1 in light                                    |
-| `UToggle`       | 1     | 2         | forced-state   | dark, light | pressed            | Pressed is a fill alone, which forced colors take away: a pressed state comes when it is restyled with the toggle group                                                 |
-| `UToggleGroup`  | 1     | 3         | forced-state   | dark, light | pressed            | Pressed is a fill alone, which forced colors take away: a pressed state comes with its spec                                                                             |
-| `UCheckbox`     | 3     | 3         | contrast       | dark        | description        | A checked card: its description in the secondary text color on the tint of a checked card, 3.94:1. The checkbox spec gives both colors, so the fix is the spec's        |
-| `UInputRating`  | 1     | 1         | forced-state   | dark, light | radio              | A chosen star is the same icon as one that is not, in another color, which forced colors take away                                                                      |
-| `URadioGroup`   | 3     | 3         | contrast       | dark        | description        | A checked card: its description in the secondary text color on the tint of a checked card, 3.94:1. The radio group spec gives both colors, so the fix is the spec's     |
-| `USwitch`       | 1     | 3         | forced-state   | dark, light | switch             | On and off are the same empty outline: the thumb and the fill of the track are fills alone, which forced colors take away. Its spec draws both                          |
-| `UTable`        | 3     | 3         | contrast       | dark        | label              | A tag in a chosen row: the tag's text on its tint over the chosen row's fill, 3.9:1. The table spec gives the fill and the badge spec the tag, so the fix is the specs' |
-| `UContextMenu`  | 1     | 2         | forced-edge    | dark, light | content            | Reka writes outline: none on the list itself, which the outline the stylesheet gives a ring does not win over. Its restyling draws the edge as a border                 |
-| `UDropdownMenu` | 1     | 3         | forced-edge    | dark, light | content            | Reka writes outline: none on the list itself, which the outline the stylesheet gives a ring does not win over. Its spec draws the edge as a border                      |
-| `ProseCaution`  | 1     | 1         | contrast       | dark, light | div                | Its text is a shade of the danger color on a tint of it: 2.3:1 in dark, 4:1 in light                                                                                    |
-| `ProseNote`     | 1     | 1         | contrast       | dark, light | div                | Its text is a shade of the note color on a tint of it: 2.72:1 in dark, 3.71:1 in light                                                                                  |
-| `ProseTip`      | 1     | 1         | contrast       | dark        | div                | Its text is a shade of the tip color on a tint of it: 3.11:1                                                                                                            |
-| `ProseWarning`  | 1     | 1         | contrast       | dark, light | div                | Its text is a shade of the warning color on a tint of it: 3.2:1 in dark, 2.48:1 in light                                                                                |
+| Component       | Today | For 1.0.0 | Check it fails | In          | Parts              | What fails                                                                                                                                                          |
+| --------------- | ----- | --------- | -------------- | ----------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `UAlert`        | 1     | 3         | contrast       | dark        | description        | The subtle error alert: its description in the danger color on the danger tint, 4.3:1 where text needs 4.5:1                                                        |
+| `UAlert`        | 1     | 3         | contrast       | light       | title, description | The solid warning alert: the page color on the warning color, 2.05:1 and 1.9:1. The status kinds get a tint and an outline with the alert's spec, and no solid      |
+| `UBanner`       | 1     | 2         | contrast       | dark, light | label              | An outline button on the banner: its label is drawn for the page and stands on the banner's fill, 1.29:1 in dark and 1.19:1 in light                                |
+| `UToggle`       | 1     | 2         | forced-state   | dark, light | pressed            | Pressed is a fill alone, which forced colors take away: a pressed state comes when it is restyled with the toggle group                                             |
+| `UToggleGroup`  | 1     | 3         | forced-state   | dark, light | pressed            | Pressed is a fill alone, which forced colors take away: a pressed state comes with its spec                                                                         |
+| `UCheckbox`     | 3     | 3         | contrast       | dark        | description        | A checked card: its description in the secondary text color on the tint of a checked card, 3.94:1. The checkbox spec gives both colors, so the fix is the spec's    |
+| `UInputRating`  | 1     | 1         | forced-state   | dark, light | radio              | A chosen star is the same icon as one that is not, in another color, which forced colors take away                                                                  |
+| `URadioGroup`   | 3     | 3         | contrast       | dark        | description        | A checked card: its description in the secondary text color on the tint of a checked card, 3.94:1. The radio group spec gives both colors, so the fix is the spec's |
+| `USwitch`       | 1     | 3         | forced-state   | dark, light | switch             | On and off are the same empty outline: the thumb and the fill of the track are fills alone, which forced colors take away. Its spec draws both                      |
+| `UContextMenu`  | 1     | 2         | forced-edge    | dark, light | content            | Reka writes outline: none on the list itself, which the outline the stylesheet gives a ring does not win over. Its restyling draws the edge as a border             |
+| `UDropdownMenu` | 1     | 3         | forced-edge    | dark, light | content            | Reka writes outline: none on the list itself, which the outline the stylesheet gives a ring does not win over. Its spec draws the edge as a border                  |
+| `ProseCaution`  | 1     | 1         | contrast       | dark, light | div                | Its text is a shade of the danger color on a tint of it: 2.3:1 in dark, 4:1 in light                                                                                |
+| `ProseNote`     | 1     | 1         | contrast       | dark, light | div                | Its text is a shade of the note color on a tint of it: 2.72:1 in dark, 3.71:1 in light                                                                              |
+| `ProseTip`      | 1     | 1         | contrast       | dark        | div                | Its text is a shade of the tip color on a tint of it: 3.11:1                                                                                                        |
+| `ProseWarning`  | 1     | 1         | contrast       | dark, light | div                | Its text is a shade of the warning color on a tint of it: 3.2:1 in dark, 2.48:1 in light                                                                            |
 
 <details>
 
@@ -202,7 +201,7 @@ The components that do not pass level 1 yet, with each check they fail:
 | `UEmpty`                    | Data           | 1     | 2         | Others               | Yes                                               |
 | `UMarquee`                  | Data           | 1     | 1         | Others               | Yes                                               |
 | `UScrollArea`               | Data           | 1     | 1         | Others               | Yes                                               |
-| `UTable`                    | Data           | 3     | 3         | Gallery              | No: contrast                                      |
+| `UTable`                    | Data           | 3     | 3         | Gallery              | Yes                                               |
 | `UTimeline`                 | Data           | 1     | 2         | Others               | Yes                                               |
 | `UTree`                     | Data           | 1     | 2         | Others               | Yes                                               |
 | `UUser`                     | Data           | 1     | 2         | Others               | Yes                                               |

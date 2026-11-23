@@ -44,14 +44,14 @@
   },
   "scripts": {
     "dev": "tsc -p tsconfig.build.json --watch --preserveWatchOutput",
-    "build": "tsc -p tsconfig.build.json",
+    "build": "node --eval \"fs.rmSync('dist', { recursive: true, force: true })\" && tsc -p tsconfig.build.json",
     "prepare": "pnpm build",
     "lint:package": "publint --strict && pnpm pack --out .attw/package.tgz && attw .attw/package.tgz --profile esm-only --exclude-entrypoints index.css"
   },
   "devDependencies": {
     "@nuxt/ui": "4.13.0",
     "@types/node": "^24.19.2",
-    "@whatsaaaa/design-system": "^0.14.0",
+    "@whatsaaaa/design-system": "^0.15.0",
     "@whatsaaaa/tsconfig": "^1.0.0",
     "tailwindcss": "^4.3.5",
     "typescript": "~6.0.3",
@@ -59,7 +59,7 @@
   },
   "peerDependencies": {
     "@nuxt/ui": "~4.13.0",
-    "@whatsaaaa/design-system": "^0.14.0",
+    "@whatsaaaa/design-system": "^0.15.0",
     "tailwindcss": "^4.3.5",
     "vue": "^3.5.0"
   },

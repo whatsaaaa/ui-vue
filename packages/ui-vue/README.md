@@ -7,7 +7,7 @@
 ## Install
 
 ```sh
-pnpm add @whatsaaaa/ui-vue '@whatsaaaa/design-system@^0.14.0' '@nuxt/ui@~4.13.0' tailwindcss
+pnpm add @whatsaaaa/ui-vue '@whatsaaaa/design-system@^0.15.0' '@nuxt/ui@~4.13.0' tailwindcss
 ```
 
 The versions are the package's peer ranges: a release works with one minor of Nuxt UI and, until the design system's 1.0.0, one minor of it.

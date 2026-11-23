@@ -6,8 +6,8 @@ import { forcedIcon, transition } from './shared.ts'
  * is a field. The list opens on a panel of the overlay, --ws-overlay-*: the surface in the field
  * border's edge, which reads at 3:1, and no shadow; the highlighted option raised, the chosen one
  * ticked in the interactive color. Options are values, so they are in Inter; a group's name is an
- * overline. The edge is a border, so forced colors keep it; there the highlighted option is
- * outlined in the selection color.
+ * overline. The edge and the line between groups are borders, so forced colors keep them; there
+ * the highlighted option is outlined in the selection color.
  */
 
 /** What a select and a select menu share. */
@@ -16,18 +16,20 @@ export const selectSlots = {
   // often the only words in the trigger, so in the secondary text color, which reads at 4.5:1;
   // faint with the rest of a disabled trigger
   placeholder: 'truncate text-text-secondary group-disabled:text-(--ws-field-text-disabled)',
-  leadingIcon: `text-(--ws-field-icon) ${forcedIcon}`,
-  trailingIcon: `text-(--ws-field-icon) ${forcedIcon}`,
+  leadingIcon: `text-(--ws-field-icon-rest) ${forcedIcon}`,
+  trailingIcon: `text-(--ws-field-icon-rest) ${forcedIcon}`,
   content:
-    'bg-(--ws-overlay-bg) rounded-(--ws-overlay-list-radius) border-(length:--ws-overlay-border-width) border-(--ws-overlay-border) ring-0 [box-shadow:none]',
-  arrow: 'fill-(--ws-overlay-bg) stroke-(--ws-overlay-border)',
+    'bg-(--ws-overlay-bg-rest) rounded-(--ws-overlay-list-radius) border-(length:--ws-overlay-border-width) border-(--ws-overlay-border-rest) ring-0 [box-shadow:none]',
+  arrow: 'fill-(--ws-overlay-bg-rest) stroke-(--ws-overlay-border-rest)',
   viewport: 'divide-y divide-border',
   group: 'p-(--ws-overlay-list-padding)',
   empty: 'text-center text-text-secondary',
   // an overline: mono, in capitals
   label: 'font-mono font-(--ws-text-overline-font-weight) uppercase text-text-secondary',
+  // Nuxt UI's line is a fill a pixel high, which forced colors paint over: no height and no fill,
+  // or the border and the fill would draw a line of two
   separator:
-    '-mx-(--ws-overlay-list-padding) my-(--ws-overlay-list-padding) h-(--ws-border-width-thin) bg-border',
+    '-mx-(--ws-overlay-list-padding) my-(--ws-overlay-list-padding) h-0 bg-transparent border-b-thin border-border',
   item: `cursor-pointer font-sans before:rounded-(--ws-radius-sm) data-disabled:opacity-100 data-disabled:text-text-faint text-text data-highlighted:not-data-disabled:text-text data-highlighted:not-data-disabled:before:bg-raised forced-colors:data-highlighted:not-data-disabled:before:border forced-colors:data-highlighted:not-data-disabled:before:border-[Highlight] ${transition} motion-reduce:before:transition-none`,
   itemLeadingIcon: `text-text-secondary group-data-highlighted:not-group-data-disabled:text-text ${forcedIcon} ${transition}`,
   // the chosen option's tick, centered on the option's first line
@@ -105,7 +107,7 @@ export const selectVariants = {
   },
   variant: {
     ...fieldVariants,
-    outline: `${fieldVariants.outline} hover:bg-(--ws-field-bg) disabled:bg-(--ws-field-bg)`,
+    outline: `${fieldVariants.outline} hover:bg-(--ws-field-bg-rest) disabled:bg-(--ws-field-bg-rest)`,
     subtle: `${fieldVariants.subtle} hover:bg-raised disabled:bg-transparent`,
   },
   position: {

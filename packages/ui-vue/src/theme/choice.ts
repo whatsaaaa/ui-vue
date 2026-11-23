@@ -15,7 +15,7 @@ import type { ByColor } from './shared.ts'
 
 /** The control at rest: its edge, its fill, and the edge under the pointer. */
 export const control =
-  'relative overflow-visible ring-0 border-thin border-(--ws-choice-control-border-rest) bg-(--ws-choice-control-bg) cursor-pointer hover:border-(--ws-choice-control-border-hover)'
+  'relative overflow-visible ring-0 border-thin border-(--ws-choice-control-border-rest) bg-(--ws-choice-control-bg-rest) cursor-pointer hover:border-(--ws-choice-control-border-hover)'
 
 /** The fill of a checked control, over the control and its edge, in the control's shape. */
 export const indicator = 'absolute -inset-(--ws-border-width-thin) size-auto rounded-[inherit]'

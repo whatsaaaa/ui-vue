@@ -8,12 +8,12 @@
  */
 export default {
   slots: {
-    label: 'font-mono font-normal text-(--ws-field-label-text)',
+    label: 'font-mono font-normal text-(--ws-field-label-text-rest)',
     description: 'text-text-secondary font-sans',
     hint: 'text-text-secondary font-sans',
-    help: 'mt-1.5 text-(--ws-field-help-text) font-sans',
+    help: 'mt-1.5 text-(--ws-field-help-text-rest) font-sans',
     error:
-      "mt-1.5 flex gap-1.5 font-sans font-(--ws-field-error-font-weight) text-(--ws-field-error-text) before:shrink-0 before:size-icon before:mt-[calc((1lh-var(--ws-size-icon))/2)] before:text-(--ws-field-error-icon) before:bg-current before:content-[''] before:mask-(--ws-icon-danger) before:mask-center before:mask-no-repeat before:mask-size-(--ws-size-icon) forced-colors:before:bg-[CanvasText]",
+      "mt-1.5 flex gap-1.5 font-sans font-(--ws-field-error-font-weight) text-(--ws-field-error-text-rest) before:shrink-0 before:size-icon before:mt-[calc((1lh-var(--ws-size-icon))/2)] before:text-(--ws-field-error-icon-rest) before:bg-current before:content-[''] before:mask-(--ws-icon-danger) before:mask-center before:mask-no-repeat before:mask-size-(--ws-size-icon) forced-colors:before:bg-[CanvasText]",
   },
   variants: {
     size: {
@@ -24,7 +24,9 @@ export default {
       xl: { root: 'text-body', label: 'text-label' },
     },
     required: {
-      true: { label: "after:content-['*'] after:ms-0.5 after:text-(--ws-field-required-text)" },
+      true: {
+        label: "after:content-['*'] after:ms-0.5 after:text-(--ws-field-required-text-rest)",
+      },
     },
     orientation: {
       vertical: { container: 'mt-1.5' },
