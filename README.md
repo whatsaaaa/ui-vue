@@ -353,18 +353,22 @@ You need Node.js 24.12 or later and pnpm. `corepack enable` sets pnpm up.
 
 The playgrounds use the package as an app does, built in `packages/ui-vue/dist`, and the browser tests run on the playgrounds. The unit tests import the package's TypeScript, and need the build too: its stylesheet reads the themes' classes from there. `pnpm install` builds it, and the commands that read it build it again first.
 
-| Command             | What it does                                                                                                                                                                          |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `pnpm dev`          | Starts the gallery, and builds the package again when its TypeScript changes                                                                                                          |
-| `pnpm dev:vue`      | Starts the Vue page, the same way                                                                                                                                                     |
-| `pnpm build`        | Builds the package into `packages/ui-vue/dist`, then both playgrounds; the gallery into `playgrounds/nuxt/.output/public`                                                             |
-| `pnpm test`         | Unit tests: the config and the colors it builds, the Nuxt UI bridge, the head scripts, the versions the install command names, the levels file, the Playwright version `ci.yml` names |
-| `pnpm test:browser` | Builds the package and both playgrounds, and tests them in a browser                                                                                                                  |
-| `pnpm lint`         | Checks the code, the stylesheets and the package as it is packed                                                                                                                      |
-| `pnpm type-check`   | Type-checks the package and both playgrounds                                                                                                                                          |
-| `pnpm format`       | Formats everything                                                                                                                                                                    |
-| `pnpm changeset`    | Records a change to the package for the next release                                                                                                                                  |
-| `pnpm levels`       | Writes the coverage tables of this README from `packages/ui-vue/levels.ts`                                                                                                            |
+| Command                    | What it does                                                                                                                                                                          |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm dev`                 | Starts the gallery, and builds the package again when its TypeScript changes                                                                                                          |
+| `pnpm dev:vue`             | Starts the Vue page, the same way                                                                                                                                                     |
+| `pnpm build`               | Builds the package into `packages/ui-vue/dist`, then both playgrounds; the gallery into `playgrounds/nuxt/.output/public`                                                             |
+| `pnpm test`                | Unit tests: the config and the colors it builds, the Nuxt UI bridge, the head scripts, the versions the install command names, the levels file, the Playwright version `ci.yml` names |
+| `pnpm test:browser`        | Builds the package and both playgrounds, and tests them in a browser                                                                                                                  |
+| `pnpm test:browser:docker` | The browser tests in the Playwright container, as CI runs them, screenshots included                                                                                                  |
+| `pnpm test:browser:update` | Takes the gallery's screenshots again, in the Playwright container                                                                                                                    |
+| `pnpm lint`                | Checks the code, the stylesheets and the package as it is packed                                                                                                                      |
+| `pnpm type-check`          | Type-checks the package and both playgrounds                                                                                                                                          |
+| `pnpm format`              | Formats everything                                                                                                                                                                    |
+| `pnpm changeset`           | Records a change to the package for the next release                                                                                                                                  |
+| `pnpm levels`              | Writes the coverage tables of this README from `packages/ui-vue/levels.ts`                                                                                                            |
+
+Every section of every page of the gallery has a stored screenshot in dark and in light, in `tests/browser/__screenshots__`, which catches a change that moves pixels without changing a token. Text is drawn differently on every system, so they are taken and compared only on Linux, in the Playwright container of the version of `@playwright/test`, which Docker runs; elsewhere `pnpm test:browser` skips them. When a change to the look is meant, `pnpm test:browser:update` takes the ones that changed again: look at them before you commit them. A new section has its screenshots taken by the same command, and a new tab goes into `PAGES` in `tests/browser/visual.spec.ts`, which a test holds to the tab bar.
 
 ## Releasing
 
