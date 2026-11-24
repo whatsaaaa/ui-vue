@@ -88,9 +88,10 @@ export default {
     tbody: `divide-y-thin divide-border ${hover} ${focus}`,
     // A chosen row keeps its fill under the pointer. In forced colors it is in the selection
     // colors, the system's own, which forced colors keep: Highlight under HighlightText, the
-    // color its line takes there, as every other color of the row is forced, and the color its
-    // ring is given, with the ring's other rules.
-    tr: 'data-[selected=true]:bg-(--ws-table-row-bg-selected)! data-[selected=true]:border-b-selection-border forced-colors:data-[selected=true]:bg-[Highlight]! forced-colors:data-[selected=true]:text-[HighlightText]',
+    // color its ring is given, with the ring's other rules. Its line is CanvasText, as the line
+    // under every other row is there: forced colors would draw it in the row's HighlightText,
+    // the page's color, and the line would vanish over the next row.
+    tr: 'data-[selected=true]:bg-(--ws-table-row-bg-selected)! data-[selected=true]:border-b-selection-border forced-colors:data-[selected=true]:bg-[Highlight]! forced-colors:data-[selected=true]:text-[HighlightText] forced-colors:data-[selected=true]:border-b-[CanvasText]',
     th: `${cell} align-middle bg-(--ws-table-head-bg-rest) font-mono font-bold text-overline uppercase text-(--ws-table-head-text-rest) whitespace-nowrap in-[thead]:border-b-thin in-[thead]:border-border in-[tfoot]:border-t-thin in-[tfoot]:border-border`,
     td: `${cell} align-top font-sans text-body-sm text-(--ws-table-row-text-rest) ${chosenCell}`,
     separator: 'hidden',

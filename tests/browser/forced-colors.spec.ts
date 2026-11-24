@@ -183,6 +183,12 @@ for (const colorScheme of ['dark', 'light'] as const) {
         'background-color',
         await row.evaluate((row) => window.systemColor(row, 'Highlight')),
       )
+      // the line under it in the text color, as under every other row, not in its HighlightText,
+      // which is the page's color
+      await expect(row).toHaveCSS(
+        'border-block-end-color',
+        await row.evaluate((row) => window.systemColor(row, 'CanvasText')),
+      )
       // its fields and its status, a tag, at the WCAG's 4.5:1 for text
       for (const text of ['Maya Collins', 'Lisbon', 'All three days', '€420.00', 'paid'])
         expect(
