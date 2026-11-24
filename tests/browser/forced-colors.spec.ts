@@ -183,6 +183,12 @@ for (const colorScheme of ['dark', 'light'] as const) {
         'background-color',
         await row.evaluate((row) => window.systemColor(row, 'Highlight')),
       )
+      // the line under it in the text color, as under every other row, not in its HighlightText,
+      // which is the page's color
+      await expect(row).toHaveCSS(
+        'border-block-end-color',
+        await row.evaluate((row) => window.systemColor(row, 'CanvasText')),
+      )
       // its fields and its status, a tag, at the WCAG's 4.5:1 for text
       for (const text of ['Maya Collins', 'Lisbon', 'All three days', '€420.00', 'paid'])
         expect(
@@ -196,6 +202,29 @@ for (const colorScheme of ['dark', 'light'] as const) {
       await withAction.getByRole('checkbox', { name: 'Choose Maya Collins' }).click()
       await expect(withAction).toHaveAttribute('data-selected', 'true')
       expect(await paintedContrast(page, edit), 'Edit reads on the row').toBeGreaterThanOrEqual(4.5)
+    })
+
+    test('two chosen rows together keep the line between them, in the selection colors', async ({
+      page,
+    }, testInfo) => {
+      test.skip(playground(testInfo) !== 'nuxt', 'The tables are in the gallery')
+      await openWithSystemColors(page)
+      // the table spec's chosen row, and the row under it chosen too
+      const rows = page.locator('[data-spec="table.selectable.selected"] tbody tr')
+      const [first, second] = [rows.nth(0), rows.nth(1)]
+      await second.getByRole('checkbox', { name: 'Choose Daniel Brooks' }).click()
+      await expect(second).toHaveAttribute('data-selected', 'true')
+      // the line between them on their Highlight, in its HighlightText, not in the text color,
+      // which is near Highlight
+      await expect(first).toHaveCSS(
+        'border-block-end-color',
+        await first.evaluate((row) => window.systemColor(row, 'HighlightText')),
+      )
+      // the line under the second, over a row that is not chosen, in the text color
+      await expect(second).toHaveCSS(
+        'border-block-end-color',
+        await second.evaluate((row) => window.systemColor(row, 'CanvasText')),
+      )
     })
 
     test('a card without its control shows it is checked, in an error and with the focus', async ({
