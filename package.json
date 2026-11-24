@@ -38,7 +38,7 @@
     "@tailwindcss/node": "4.3.5",
     "@tailwindcss/oxide": "4.3.5",
     "@types/node": "^24.19.2",
-    "@whatsaaaa/design-system": "^0.15.1",
+    "@whatsaaaa/design-system": "^1.0.0",
     "@whatsaaaa/eslint-config": "^1.0.0",
     "@whatsaaaa/format-config": "^1.0.0",
     "@whatsaaaa/oxlint-config": "^1.0.0",

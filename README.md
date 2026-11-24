@@ -17,7 +17,7 @@
 An app adds the package next to Nuxt UI, and with it the design system and Tailwind, which the package reads:
 
 ```sh
-pnpm add @whatsaaaa/ui-vue '@whatsaaaa/design-system@^0.15.1' '@nuxt/ui@~4.13.0' tailwindcss
+pnpm add @whatsaaaa/ui-vue '@whatsaaaa/design-system@^1.0.0' '@nuxt/ui@~4.13.0' tailwindcss
 ```
 
 The versions are the package's peer ranges. A release works with one minor of Nuxt UI, the one its tests passed on: a theme leans on Nuxt UI's own classes, which change in a minor, so a new minor of Nuxt UI comes with a new minor of the package. Until the design system's 1.0.0, a release works with one minor of it too.
