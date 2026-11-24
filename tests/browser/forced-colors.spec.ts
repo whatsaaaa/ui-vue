@@ -204,6 +204,29 @@ for (const colorScheme of ['dark', 'light'] as const) {
       expect(await paintedContrast(page, edit), 'Edit reads on the row').toBeGreaterThanOrEqual(4.5)
     })
 
+    test('two chosen rows together keep the line between them, in the selection colors', async ({
+      page,
+    }, testInfo) => {
+      test.skip(playground(testInfo) !== 'nuxt', 'The tables are in the gallery')
+      await openWithSystemColors(page)
+      // the table spec's chosen row, and the row under it chosen too
+      const rows = page.locator('[data-spec="table.selectable.selected"] tbody tr')
+      const [first, second] = [rows.nth(0), rows.nth(1)]
+      await second.getByRole('checkbox', { name: 'Choose Daniel Brooks' }).click()
+      await expect(second).toHaveAttribute('data-selected', 'true')
+      // the line between them on their Highlight, in its HighlightText, not in the text color,
+      // which is near Highlight
+      await expect(first).toHaveCSS(
+        'border-block-end-color',
+        await first.evaluate((row) => window.systemColor(row, 'HighlightText')),
+      )
+      // the line under the second, over a row that is not chosen, in the text color
+      await expect(second).toHaveCSS(
+        'border-block-end-color',
+        await second.evaluate((row) => window.systemColor(row, 'CanvasText')),
+      )
+    })
+
     test('a card without its control shows it is checked, in an error and with the focus', async ({
       page,
     }, testInfo) => {
