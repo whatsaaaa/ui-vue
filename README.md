@@ -104,7 +104,7 @@ How far a Nuxt UI component follows the design system is one of three levels, ea
 
 A component with a known failure in the file does not pass level 1 yet: the file lists each level 1 check it fails today, with the theme and the part, so that the test passes without restyling anything here. The browser test fails when a failure appears that is not listed and when a listed one no longer fails, so the list only shrinks.
 
-The tables below are drawn from the file by `pnpm levels`.
+The tables below, and what they say of where the fixes come from, are drawn from the file by `pnpm levels`.
 
 <!-- levels:start -->
 
