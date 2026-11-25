@@ -48,7 +48,7 @@
     "jiti": "^2.7.0",
     "lightningcss": "^1.33.0",
     "npm-run-all2": "^9.0.4",
-    "oxfmt": "^0.78.0",
+    "oxfmt": "^0.80.0",
     "oxlint": "^1.93.0",
     "postcss-html": "^2.0.0",
     "publint": "^0.3.25",
