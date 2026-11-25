@@ -96,7 +96,7 @@ The package ships its TypeScript compiled, with the type declarations, in `dist/
 
 How far a Nuxt UI component follows the design system is one of three levels, each a test:
 
-1. **Inherits.** It takes the system's colors, radius and fonts through the stylesheet, and nothing else: its type, its sizes and its states are still Nuxt UI's. It is on the gallery's page of the others in both themes, where axe finds no contrast failure, and where in forced colors every icon and every edge drawn as a ring is still there and a control that is on differs from one that is off.
+1. **Inherits.** It takes the system's colors, radius and fonts through the stylesheet, and nothing else: its type, its sizes and its states are still Nuxt UI's. It is on the gallery's page of the others in both themes, where axe finds no contrast failure, where in forced colors every icon and every edge drawn as a ring is still there and a control that is on differs from one that is off, and where at 390 px, the width of a phone, nothing of its example reaches past the gallery's frame.
 2. **Restyled.** It has a theme in the package, written on the system's tiers.
 3. **Specced.** The design system has a spec for it, and its section of the gallery passes the parity test.
 
@@ -113,37 +113,41 @@ The tables below, and what they say of where the fixes come from, are drawn from
 | Element        | 19         | 3             | 0             | 16            | 15                       | 4                    | 0                  | 6                 | 10                | 3                 |
 | Form           | 21         | 6             | 0             | 15            | 19                       | 2                    | 0                  | 11                | 7                 | 3                 |
 | Data           | 10         | 1             | 0             | 9             | 10                       | 0                    | 0                  | 2                 | 4                 | 4                 |
-| Navigation     | 8          | 1             | 0             | 7             | 8                        | 0                    | 0                  | 3                 | 4                 | 1                 |
+| Navigation     | 8          | 1             | 0             | 7             | 7                        | 1                    | 0                  | 3                 | 4                 | 1                 |
 | Overlay        | 8          | 1             | 0             | 7             | 6                        | 2                    | 0                  | 6                 | 2                 | 0                 |
 | Layout         | 9          | 0             | 0             | 9             | 8                        | 0                    | 1                  | 0                 | 3                 | 6                 |
 | Page           | 23         | 0             | 0             | 23            | 23                       | 0                    | 0                  | 0                 | 13                | 10                |
 | Dashboard      | 10         | 0             | 0             | 10            | 10                       | 0                    | 0                  | 0                 | 0                 | 10                |
 | Chat           | 9          | 0             | 0             | 9             | 9                        | 0                    | 0                  | 0                 | 0                 | 9                 |
 | Editor         | 6          | 0             | 0             | 6             | 6                        | 0                    | 0                  | 0                 | 0                 | 6                 |
-| Content        | 5          | 0             | 0             | 5             | 5                        | 0                    | 0                  | 0                 | 0                 | 5                 |
+| Content        | 5          | 0             | 0             | 5             | 3                        | 2                    | 0                  | 0                 | 0                 | 5                 |
 | Color mode     | 5          | 0             | 0             | 5             | 5                        | 0                    | 0                  | 0                 | 0                 | 5                 |
 | Locale         | 1          | 0             | 0             | 1             | 1                        | 0                    | 0                  | 0                 | 0                 | 1                 |
 | Prose          | 47         | 0             | 0             | 47            | 46                       | 0                    | 1                  | 0                 | 0                 | 47                |
 | Internal parts | 5          | 0             | 0             | 5             | 0                        | 0                    | 5                  | 2                 | 1                 | 2                 |
-| **All**        | 186        | 12            | 0             | 174           | 171                      | 8                    | 7                  | 30                | 44                | 112               |
+| **All**        | 186        | 12            | 0             | 174           | 168                      | 11                   | 7                  | 30                | 44                | 112               |
 
 A component that is not in the gallery is counted apart from the ones that pass or fail: one that draws nothing of its own is not checked, and an internal part is checked through the component that draws it.
 
-For a component that fails a level 1 check and is to reach a higher level for 1.0.0, the fix comes with the restyling or the spec that level asks for. For `UInputRating` the fix is open work: it stays at level 1 for 1.0.0, so no new level brings it.
+For a component that fails a level 1 check and is to reach a higher level for 1.0.0, the fix comes with the restyling or the spec that level asks for. For `UInputRating`, `UContentNavigation` and `UContentToc` the fix is open work: they stay at level 1 for 1.0.0, so no new level brings it.
 
 The components that do not pass level 1 yet, with each check they fail:
 
-| Component       | Today | For 1.0.0 | Check it fails | In          | Parts              | What fails                                                                                                                                                     |
-| --------------- | ----- | --------- | -------------- | ----------- | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `UAlert`        | 1     | 3         | contrast       | dark        | description        | The subtle error alert: its description in the danger color on the danger tint, 4.3:1 where text needs 4.5:1                                                   |
-| `UAlert`        | 1     | 3         | contrast       | light       | title, description | The solid warning alert: the page color on the warning color, 2.05:1 and 1.9:1. The status kinds get a tint and an outline with the alert's spec, and no solid |
-| `UBanner`       | 1     | 2         | contrast       | dark, light | label              | An outline button on the banner: its label is drawn for the page and stands on the banner's fill, 1.29:1 in dark and 1.19:1 in light                           |
-| `UToggle`       | 1     | 2         | forced-state   | dark, light | pressed            | Pressed is a fill alone, which forced colors take away: a pressed state comes when it is restyled with the toggle group                                        |
-| `UToggleGroup`  | 1     | 3         | forced-state   | dark, light | pressed            | Pressed is a fill alone, which forced colors take away: a pressed state comes with its spec                                                                    |
-| `UInputRating`  | 1     | 1         | forced-state   | dark, light | radio              | A chosen star is the same icon as one that is not, in another color, which forced colors take away                                                             |
-| `USwitch`       | 1     | 3         | forced-state   | dark, light | switch             | On and off are the same empty outline: the thumb and the fill of the track are fills alone, which forced colors take away. Its spec draws both                 |
-| `UContextMenu`  | 1     | 2         | forced-edge    | dark, light | content            | Reka writes outline: none on the list itself, which the outline the stylesheet gives a ring does not win over. Its restyling draws the edge as a border        |
-| `UDropdownMenu` | 1     | 3         | forced-edge    | dark, light | content            | Reka writes outline: none on the list itself, which the outline the stylesheet gives a ring does not win over. Its spec draws the edge as a border             |
+| Component            | Today | For 1.0.0 | Check it fails | In          | Parts              | What fails                                                                                                                                                                                                         |
+| -------------------- | ----- | --------- | -------------- | ----------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `UAlert`             | 1     | 3         | contrast       | dark        | description        | The subtle error alert: its description in the danger color on the danger tint, 4.3:1 where text needs 4.5:1                                                                                                       |
+| `UAlert`             | 1     | 3         | contrast       | light       | title, description | The solid warning alert: the page color on the warning color, 2.05:1 and 1.9:1. The status kinds get a tint and an outline with the alert's spec, and no solid                                                     |
+| `UBanner`            | 1     | 2         | contrast       | dark, light | label              | An outline button on the banner: its label is drawn for the page and stands on the banner's fill, 1.29:1 in dark and 1.19:1 in light                                                                               |
+| `UToggle`            | 1     | 2         | forced-state   | dark, light | pressed            | Pressed is a fill alone, which forced colors take away: a pressed state comes when it is restyled with the toggle group                                                                                            |
+| `UToggleGroup`       | 1     | 3         | forced-state   | dark, light | pressed            | Pressed is a fill alone, which forced colors take away: a pressed state comes with its spec                                                                                                                        |
+| `UToggleGroup`       | 1     | 3         | overflow       | dark, light | root               | A row of toggles does not wrap: its four views, apart or attached, are wider than the 332 px the frame has. Its spec can let the row wrap or scroll                                                                |
+| `UInputRating`       | 1     | 1         | forced-state   | dark, light | radio              | A chosen star is the same icon as one that is not, in another color, which forced colors take away                                                                                                                 |
+| `USwitch`            | 1     | 3         | forced-state   | dark, light | switch             | On and off are the same empty outline: the thumb and the fill of the track are fills alone, which forced colors take away. Its spec draws both                                                                     |
+| `UPagination`        | 1     | 2         | overflow       | dark, light | root               | The list is one row that does not wrap: its four arrows and seven places are wider than the 332 px the frame has. Fewer places on a narrow screen would fit it                                                     |
+| `UContextMenu`       | 1     | 2         | forced-edge    | dark, light | content            | Reka writes outline: none on the list itself, which the outline the stylesheet gives a ring does not win over. Its restyling draws the edge as a border                                                            |
+| `UDropdownMenu`      | 1     | 3         | forced-edge    | dark, light | content            | Reka writes outline: none on the list itself, which the outline the stylesheet gives a ring does not win over. Its spec draws the edge as a border                                                                 |
+| `UContentNavigation` | 1     | 1         | overflow       | dark, light | root               | Its list is pulled 10 px out on each side by a negative margin, so that a link's text lines up with the page and its highlight reaches out: past the frame's edge on the left. Taking the margin away would fit it |
+| `UContentToc`        | 1     | 1         | overflow       | dark, light | root               | It is pulled 16 px out on each side by a negative margin, so that it spans the screen as a bar on a phone: past the frame's edge on the left. Taking the margin away would fit it                                  |
 
 <details>
 
@@ -169,7 +173,7 @@ The components that do not pass level 1 yet, with each check they fail:
 | `USeparator`                | Element        | 1     | 2         | Others               | Yes                                               |
 | `USkeleton`                 | Element        | 1     | 2         | Others               | Yes                                               |
 | `UToggle`                   | Element        | 1     | 2         | Others               | No: forced-state                                  |
-| `UToggleGroup`              | Element        | 1     | 3         | Others               | No: forced-state                                  |
+| `UToggleGroup`              | Element        | 1     | 3         | Others               | No: forced-state, overflow                        |
 | `UCheckbox`                 | Form           | 3     | 3         | Gallery              | Yes                                               |
 | `UCheckboxGroup`            | Form           | 1     | 3         | Others               | Yes                                               |
 | `UColorPicker`              | Form           | 1     | 1         | Others               | Yes                                               |
@@ -206,7 +210,7 @@ The components that do not pass level 1 yet, with each check they fail:
 | `UFooterColumns`            | Navigation     | 1     | 1         | Others               | Yes                                               |
 | `ULink`                     | Navigation     | 1     | 2         | Others               | Yes                                               |
 | `UNavigationMenu`           | Navigation     | 1     | 2         | Others               | Yes                                               |
-| `UPagination`               | Navigation     | 1     | 2         | Others               | Yes                                               |
+| `UPagination`               | Navigation     | 1     | 2         | Others               | No: overflow                                      |
 | `UStepper`                  | Navigation     | 1     | 3         | Others               | Yes                                               |
 | `UTabs`                     | Navigation     | 3     | 3         | Gallery              | Yes                                               |
 | `UContextMenu`              | Overlay        | 1     | 2         | Others               | No: forced-edge                                   |
@@ -274,11 +278,11 @@ The components that do not pass level 1 yet, with each check they fail:
 | `UEditorMentionMenu`        | Editor         | 1     | 1         | Others               | Yes                                               |
 | `UEditorSuggestionMenu`     | Editor         | 1     | 1         | Others               | Yes                                               |
 | `UEditorToolbar`            | Editor         | 1     | 1         | Others               | Yes                                               |
-| `UContentNavigation`        | Content        | 1     | 1         | Others               | Yes                                               |
+| `UContentNavigation`        | Content        | 1     | 1         | Others               | No: overflow                                      |
 | `UContentSearch`            | Content        | 1     | 1         | Others               | Yes                                               |
 | `UContentSearchButton`      | Content        | 1     | 1         | Others               | Yes                                               |
 | `UContentSurround`          | Content        | 1     | 1         | Others               | Yes                                               |
-| `UContentToc`               | Content        | 1     | 1         | Others               | Yes                                               |
+| `UContentToc`               | Content        | 1     | 1         | Others               | No: overflow                                      |
 | `UColorModeAvatar`          | Color mode     | 1     | 1         | Others               | Yes                                               |
 | `UColorModeButton`          | Color mode     | 1     | 1         | Others               | Yes                                               |
 | `UColorModeImage`           | Color mode     | 1     | 1         | Others               | Yes                                               |

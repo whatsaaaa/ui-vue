@@ -13,8 +13,8 @@ import { open, playground, reportsOf } from './pages.ts'
 /*
  * Level 1 of packages/ui-vue/levels.ts, as tests over the gallery and its page of the others, in
  * both themes: axe finds no contrast failure, in forced colors every icon is painted, every part
- * with a ring keeps an edge and a control that is on differs from one that is off, and the page
- * logs no error.
+ * with a ring keeps an edge and a control that is on differs from one that is off, the page logs
+ * no error, and at 390 px no example reaches past the frame it is in.
  *
  * A check a component still fails is listed with it in the levels file: it does not pass level 1
  * yet. Each test holds what it finds to that list, both ways: a failure that is not listed fails
@@ -220,6 +220,86 @@ async function states(page: Page): Promise<Finding[]> {
   return findings
 }
 
+/**
+ * The parts of the examples on the page of the others that reach past the box they are laid out
+ * in, sideways: the content box of the gallery frame's content, inside its padding. The frame
+ * hides what reaches past its window, so the page itself never scrolls sideways, and each example
+ * is measured against that box instead.
+ *
+ * What an example draws is measured as it is drawn: the box of each element, and each line of
+ * each text, which can reach past the element it is in. What a part of the component clips or
+ * scrolls inside itself is measured as far as it shows. The box that stands for a screen, in
+ * OthersScreen, clips too, but what reaches past it would reach past a phone's screen, so it is
+ * measured through. What does not show is left out: a part that is hidden or transparent, and one
+ * clipped to nothing, as a label kept for screen readers is.
+ *
+ * A finding is the outermost part that reaches past the box: what is in it reaches with it.
+ */
+async function overflows(page: Page): Promise<Finding[]> {
+  await page.evaluate(() => document.fonts.ready)
+  await settle(page)
+  return page.evaluate(() => {
+    const frame = document.querySelector('.window__main > div')!
+    const style = getComputedStyle(frame)
+    const { left, right } = frame.getBoundingClientRect()
+    const box = {
+      left: left + parseFloat(style.borderLeftWidth) + parseFloat(style.paddingLeft),
+      right: right - parseFloat(style.borderRightWidth) - parseFloat(style.paddingRight),
+    }
+    function* ancestors(element: Element | null) {
+      for (let at = element; at; at = at.parentElement) yield at
+    }
+    // a label kept for screen readers is clipped to nothing, by clip or by clip-path
+    const unseen = (element: Element) =>
+      !element.checkVisibility({ opacityProperty: true, visibilityProperty: true }) ||
+      [...ancestors(element)].some((ancestor) => {
+        const { clip, clipPath } = getComputedStyle(ancestor)
+        return clip === 'rect(0px, 0px, 0px, 0px)' || clipPath === 'inset(50%)'
+      })
+    const lines = (text: Node) => {
+      const range = document.createRange()
+      range.selectNodeContents(text)
+      return range.getClientRects()
+    }
+    const reaching = new Map<Element, string>()
+    for (const sample of document.querySelectorAll<HTMLElement>('[data-sample]')) {
+      const walker = document.createTreeWalker(
+        sample,
+        NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT,
+      )
+      for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+        const element = node instanceof Element ? node : node.parentElement!
+        if (node instanceof Text && !node.data.trim()) continue
+        if (unseen(element)) continue
+        for (const rect of node instanceof Element ? [node.getBoundingClientRect()] : lines(node)) {
+          if (rect.width === 0 || rect.height === 0) continue
+          let [from, to] = [rect.left, rect.right]
+          // as far as the parts of the component around it show it
+          const start = node instanceof Element ? node.parentElement : element
+          for (let at = start; at && at !== sample; at = at.parentElement) {
+            const clips = getComputedStyle(at)
+            if (clips.overflowX === 'visible' || at.matches('.others-screen')) continue
+            const edges = at.getBoundingClientRect()
+            from = Math.max(from, edges.left + parseFloat(clips.borderLeftWidth))
+            to = Math.min(to, edges.right - parseFloat(clips.borderRightWidth))
+          }
+          if (to <= from) continue
+          if (from < box.left - 0.5 || to > box.right + 0.5)
+            reaching.set(
+              element,
+              `${element.localName} reaches from ${Math.round(from - box.left)} to ${Math.round(to - box.left)} px of the ${Math.round(box.right - box.left)} px the frame has`,
+            )
+        }
+      }
+    }
+    return [...reaching]
+      .filter(([element]) =>
+        [...ancestors(element.parentElement)].every((ancestor) => !reaching.has(ancestor)),
+      )
+      .map(([element, detail]) => ({ ...window.partOf(element), detail }))
+  })
+}
+
 /** A window over the page. The popover's example holds another open, in place. */
 const DIALOG = '[role=dialog]:not([inert] *)'
 
@@ -410,6 +490,17 @@ for (const theme of ['dark', 'light'] as const) {
         await closed(page, await opened(page, opening), opening)
       }
       expect(reports).toEqual([])
+    })
+
+    test.describe('at 390 px, the width of a phone', () => {
+      test.use({ viewport: { width: 390, height: 800 } })
+
+      test('no example on the page of the others overflows the frame, but the known ones', async ({
+        page,
+      }) => {
+        await openWithSystemColors(page, PAGE)
+        expectKnown(await overflows(page), 'overflow', theme)
+      })
     })
   })
 
