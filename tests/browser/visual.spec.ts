@@ -64,6 +64,39 @@ function parts(page: Page) {
 }
 
 /**
+ * Makes the screen as tall as the tallest part, at the same width, so that every part is
+ * captured inside it. For a part taller than the screen, Chromium also changes the page's
+ * preferences for the capture, to hide the scrollbars and draw the whole document, and puts them
+ * back once the capture's frame is copied; now and then that frame never comes, the capture never
+ * returns and the page draws nothing again, so every later part times out. A part inside the
+ * screen is captured without that.
+ *
+ * A part is scrolled into view with its scroll margins, so they count in its height: without
+ * them, a section as tall as the screen would end below it, its last lines undrawn.
+ */
+async function holdTallest(page: Page, shown: Awaited<ReturnType<typeof parts>>): Promise<void> {
+  const tallest = await page.evaluate(
+    (selectors) =>
+      Math.max(
+        ...selectors.map((selector) => {
+          const part = document.querySelector(selector)!
+          const style = getComputedStyle(part)
+          return (
+            part.getBoundingClientRect().height +
+            parseFloat(style.scrollMarginTop) +
+            parseFloat(style.scrollMarginBottom)
+          )
+        }),
+      ),
+    shown.map((part) => part.selector),
+  )
+  await page.setViewportSize({
+    width: DESKTOP.width,
+    height: Math.max(DESKTOP.height, Math.ceil(tallest)),
+  })
+}
+
+/**
  * Opens a page of the gallery and waits for the app: the status line's switch of the shortcut
  * keys, on every page, shows once the app has mounted it. The page that keeps the dark theme has
  * no color mode control to wait for, as the others do. The switch is found by its attribute: the
@@ -129,7 +162,10 @@ for (const colorScheme of ['dark', 'light'] as const) {
             '.window { height: auto !important } .window__main { overflow: visible !important }',
         })
         await settle(page)
-        for (const part of await parts(page)) {
+        const shown = await parts(page)
+        await holdTallest(page, shown)
+        await settle(page)
+        for (const part of shown) {
           // a section of a long page takes a few seconds to come still, and two in a row agree
           await expect
             .soft(page.locator(part.selector), part.name)
