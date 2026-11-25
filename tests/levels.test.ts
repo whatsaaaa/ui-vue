@@ -1,9 +1,14 @@
 import { readFileSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
 import { describe, expect, test } from 'vitest'
-import { type ComponentLevels, components, families } from '../packages/ui-vue/levels.ts'
+import {
+  type ComponentLevels,
+  type KnownFailure,
+  components,
+  families,
+} from '../packages/ui-vue/levels.ts'
 import { ui } from '../packages/ui-vue/src/index.ts'
-import { README, withLevelsTables } from '../scripts/levels-readme.ts'
+import { README, failures, withLevelsTables } from '../scripts/levels-readme.ts'
 
 const root = join(import.meta.dirname, '..')
 const entries = Object.entries(components) as [string, ComponentLevels][]
@@ -96,6 +101,43 @@ describe("the README's coverage tables", () => {
   test('are the ones scripts/levels-readme.ts draws from the levels file: pnpm levels', () => {
     const readme = readFileSync(README, 'utf8')
     expect(withLevelsTables(readme)).toBe(readme)
+  })
+
+  describe('say where the fix of a known failure comes from, by the levels alone', () => {
+    const failure: KnownFailure = {
+      check: 'forced-state',
+      themes: ['dark', 'light'],
+      slots: ['radio'],
+      note: 'A chosen star is the same icon as one that is not',
+    }
+    const restyled: ComponentLevels = { family: 'element', today: 1, target: 2, fails: [failure] }
+    const staying: ComponentLevels = { family: 'form', today: 1, target: 1, fails: [failure] }
+    const passing: ComponentLevels = { family: 'form', today: 3, target: 3 }
+    const later =
+      'For a component that fails a level 1 check and is to reach a higher level for 1.0.0, the fix comes with the restyling or the spec that level asks for.'
+
+    test('the restyling or the spec for one to reach a higher level, and open work for one that stays', () => {
+      const [fix, , rows] = failures({ UBanner: restyled, UInputRating: staying, UBadge: passing })
+      expect(fix).toBe(
+        `${later} For \`UInputRating\` the fix is open work: it stays at level 1 for 1.0.0, so no new level brings it.`,
+      )
+      expect(rows).toContain('`UBanner`')
+      expect(rows).toContain('`UInputRating`')
+      expect(rows).not.toContain('`UBadge`')
+    })
+
+    test('no other components when every failure left is open work', () => {
+      expect(failures({ UInputRating: staying, UBadge: passing })[0]).toBe(
+        'For `UInputRating` the fix is open work: it stays at level 1 for 1.0.0, so no new level brings it.',
+      )
+      expect(failures({ UBanner: restyled, UBadge: passing })[0]).toBe(later)
+    })
+
+    test('nothing of a failure when none fails', () => {
+      expect(
+        failures({ UBadge: passing, UColorPicker: { family: 'form', today: 1, target: 1 } }),
+      ).toEqual([])
+    })
   })
 
   test('say no component passes level 1 that no check ran on: a part has the result of the component that draws it', () => {
