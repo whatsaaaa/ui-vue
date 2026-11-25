@@ -21,9 +21,8 @@
  * check it fails today, carried here so that the test passes without restyling anything. The
  * test fails when a failure appears that is not listed and when a listed one no longer fails, so
  * the list only shrinks. For most, the fix comes with the restyling or the spec their level for
- * 1.0.0 asks for. For seven it is open work, with no pull request planned yet: UInputRating,
- * ProseCaution, ProseNote, ProseTip and ProseWarning stay at level 1 for 1.0.0, and UCheckbox and
- * URadioGroup are specced already, so their fix is a change of their specs.
+ * 1.0.0 asks for. For one whose level for 1.0.0 is the level it is at today, it is open work: the
+ * README names them, in a sentence scripts/levels-readme.ts draws from this file.
  */
 
 /** The families: the categories of Nuxt UI's docs, and its internal parts, which have no page. */
@@ -181,19 +180,7 @@ export const components = {
   },
 
   // form
-  UCheckbox: {
-    family: 'form',
-    today: 3,
-    target: 3,
-    fails: [
-      {
-        check: 'contrast',
-        themes: ['dark'],
-        slots: ['description'],
-        note: "A checked card: its description in the secondary text color on the tint of a checked card, 3.94:1. The checkbox spec gives both colors, so the fix is the spec's",
-      },
-    ],
-  },
+  UCheckbox: { family: 'form', today: 3, target: 3 },
   UCheckboxGroup: { family: 'form', today: 1, target: 3 },
   UColorPicker: { family: 'form', today: 1, target: 1 },
   UFileUpload: { family: 'form', today: 1, target: 2 },
@@ -220,19 +207,7 @@ export const components = {
   UInputTime: { family: 'form', today: 1, target: 2 },
   UListbox: { family: 'form', today: 1, target: 2 },
   UPinInput: { family: 'form', today: 1, target: 2 },
-  URadioGroup: {
-    family: 'form',
-    today: 3,
-    target: 3,
-    fails: [
-      {
-        check: 'contrast',
-        themes: ['dark'],
-        slots: ['description'],
-        note: "A checked card: its description in the secondary text color on the tint of a checked card, 3.94:1. The radio group spec gives both colors, so the fix is the spec's",
-      },
-    ],
-  },
+  URadioGroup: { family: 'form', today: 3, target: 3 },
   USelect: { family: 'form', today: 3, target: 3 },
   USelectMenu: { family: 'form', today: 3, target: 3 },
   USlider: { family: 'form', today: 1, target: 3 },
@@ -408,19 +383,7 @@ export const components = {
   ProseCallout: { family: 'prose', today: 1, target: 1 },
   ProseCard: { family: 'prose', today: 1, target: 1 },
   ProseCardGroup: { family: 'prose', today: 1, target: 1 },
-  ProseCaution: {
-    family: 'prose',
-    today: 1,
-    target: 1,
-    fails: [
-      {
-        check: 'contrast',
-        themes: ['dark', 'light'],
-        slots: ['div'],
-        note: 'Its text is a shade of the danger color on a tint of it: 2.3:1 in dark, 4:1 in light',
-      },
-    ],
-  },
+  ProseCaution: { family: 'prose', today: 1, target: 1 },
   ProseCode: { family: 'prose', today: 1, target: 1 },
   ProseCodeCollapse: { family: 'prose', today: 1, target: 1 },
   ProseCodeGroup: { family: 'prose', today: 1, target: 1 },
@@ -440,19 +403,7 @@ export const components = {
   ProseImg: { family: 'prose', today: 1, target: 1 },
   ProseKbd: { family: 'prose', today: 1, target: 1 },
   ProseLi: { family: 'prose', today: 1, target: 1 },
-  ProseNote: {
-    family: 'prose',
-    today: 1,
-    target: 1,
-    fails: [
-      {
-        check: 'contrast',
-        themes: ['dark', 'light'],
-        slots: ['div'],
-        note: 'Its text is a shade of the note color on a tint of it: 2.72:1 in dark, 3.71:1 in light',
-      },
-    ],
-  },
+  ProseNote: { family: 'prose', today: 1, target: 1 },
   ProseOl: { family: 'prose', today: 1, target: 1 },
   ProseP: { family: 'prose', today: 1, target: 1 },
   ProsePre: { family: 'prose', today: 1, target: 1 },
@@ -472,34 +423,10 @@ export const components = {
   ProseTd: { family: 'prose', today: 1, target: 1 },
   ProseTh: { family: 'prose', today: 1, target: 1 },
   ProseThead: { family: 'prose', today: 1, target: 1 },
-  ProseTip: {
-    family: 'prose',
-    today: 1,
-    target: 1,
-    fails: [
-      {
-        check: 'contrast',
-        themes: ['dark'],
-        slots: ['div'],
-        note: 'Its text is a shade of the tip color on a tint of it: 3.11:1',
-      },
-    ],
-  },
+  ProseTip: { family: 'prose', today: 1, target: 1 },
   ProseTr: { family: 'prose', today: 1, target: 1 },
   ProseUl: { family: 'prose', today: 1, target: 1 },
-  ProseWarning: {
-    family: 'prose',
-    today: 1,
-    target: 1,
-    fails: [
-      {
-        check: 'contrast',
-        themes: ['dark', 'light'],
-        slots: ['div'],
-        note: 'Its text is a shade of the warning color on a tint of it: 3.2:1 in dark, 2.48:1 in light',
-      },
-    ],
-  },
+  ProseWarning: { family: 'prose', today: 1, target: 1 },
 
   // internal
   UContextMenuContent: {

@@ -1,7 +1,7 @@
 /**
- * The README's coverage tables, drawn from the levels file: `node scripts/levels-readme.ts`
- * writes them between the two markers in README.md, and tests/levels.test.ts fails when the
- * README has other tables than these.
+ * The README's coverage tables, and what it says of the fixes its known failures wait for, drawn
+ * from the levels file: `node scripts/levels-readme.ts` writes them between the two markers in
+ * README.md, and tests/levels.test.ts fails when the README has other ones than these.
  */
 import { readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
@@ -103,6 +103,35 @@ function summary(): string {
   )
 }
 
+/** Names as the README lists them: `A`, `B` and `C`. */
+function listed(names: string[]): string {
+  const quoted = names.map((name) => `\`${name}\``)
+  return quoted.length < 2
+    ? quoted.join('')
+    : `${quoted.slice(0, -1).join(', ')} and ${quoted.at(-1)}`
+}
+
+/**
+ * Where the fix of a known failure is to come from: with the restyling or the spec of the level a
+ * component is to reach for 1.0.0. One whose level for 1.0.0 is the level it is at today has none
+ * of these to come, so its fix is open work.
+ */
+function fixes(): string {
+  const later = 'the fix comes with the restyling or the spec their level for 1.0.0 asks for'
+  const open = entries.filter(([, { fails, today, target }]) => fails && today === target)
+  if (open.length === 0) return `For each component that fails a level 1 check, ${later}.`
+  const one = open.length === 1
+  const levels = [...new Set(open.map(([, { today }]) => today))]
+  const stay =
+    levels.length === 1
+      ? `${one ? 'it stays' : 'they stay'} at level ${levels[0]}`
+      : 'they stay at the level they are at today'
+  return [
+    `For ${listed(open.map(([name]) => name))} the fix is open work, with no pull request planned`,
+    `yet: ${stay} for 1.0.0. For the other components that fail a level 1 check, ${later}.`,
+  ].join(' ')
+}
+
 /** One row for each known failure: the components that do not pass level 1 yet, by family. */
 function failing(): string {
   return table(
@@ -168,6 +197,7 @@ export function levelsTables(): string {
   return [
     summary(),
     'A component that is not in the gallery is counted apart from the ones that pass or fail: one that draws nothing of its own is not checked, and an internal part is checked through the component that draws it.',
+    fixes(),
     'The components that do not pass level 1 yet, with each check they fail:',
     failing(),
     '<details>',

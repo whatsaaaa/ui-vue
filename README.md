@@ -102,7 +102,7 @@ How far a Nuxt UI component follows the design system is one of three levels, ea
 
 `packages/ui-vue/levels.ts` lists every component of the Nuxt UI version the package pins with the level it is at today and the level it is to reach for 1.0.0. A unit test fails when Nuxt UI has a component the file does not name.
 
-A component with a known failure in the file does not pass level 1 yet: the file lists each level 1 check it fails today, with the theme and the part, so that the test passes without restyling anything here. The browser test fails when a failure appears that is not listed and when a listed one no longer fails, so the list only shrinks. For most of them the fix comes with the restyling or the spec their level for 1.0.0 asks for. For seven it is open work, with no pull request planned yet: `UInputRating`, `ProseCaution`, `ProseNote`, `ProseTip` and `ProseWarning` stay at level 1 for 1.0.0, and `UCheckbox` and `URadioGroup` are specced already, so their fix is a change of their specs.
+A component with a known failure in the file does not pass level 1 yet: the file lists each level 1 check it fails today, with the theme and the part, so that the test passes without restyling anything here. The browser test fails when a failure appears that is not listed and when a listed one no longer fails, so the list only shrinks.
 
 The tables below are drawn from the file by `pnpm levels`.
 
@@ -111,7 +111,7 @@ The tables below are drawn from the file by `pnpm levels`.
 | Family         | Components | Level 3 today | Level 2 today | Level 1 today | Pass every level 1 check | Fail a level 1 check | Not in the gallery | Level 3 for 1.0.0 | Level 2 for 1.0.0 | Level 1 for 1.0.0 |
 | -------------- | ---------- | ------------- | ------------- | ------------- | ------------------------ | -------------------- | ------------------ | ----------------- | ----------------- | ----------------- |
 | Element        | 19         | 3             | 0             | 16            | 15                       | 4                    | 0                  | 6                 | 10                | 3                 |
-| Form           | 21         | 6             | 0             | 15            | 17                       | 4                    | 0                  | 11                | 7                 | 3                 |
+| Form           | 21         | 6             | 0             | 15            | 19                       | 2                    | 0                  | 11                | 7                 | 3                 |
 | Data           | 10         | 1             | 0             | 9             | 10                       | 0                    | 0                  | 2                 | 4                 | 4                 |
 | Navigation     | 8          | 1             | 0             | 7             | 8                        | 0                    | 0                  | 3                 | 4                 | 1                 |
 | Overlay        | 8          | 1             | 0             | 7             | 6                        | 2                    | 0                  | 6                 | 2                 | 0                 |
@@ -123,31 +123,27 @@ The tables below are drawn from the file by `pnpm levels`.
 | Content        | 5          | 0             | 0             | 5             | 5                        | 0                    | 0                  | 0                 | 0                 | 5                 |
 | Color mode     | 5          | 0             | 0             | 5             | 5                        | 0                    | 0                  | 0                 | 0                 | 5                 |
 | Locale         | 1          | 0             | 0             | 1             | 1                        | 0                    | 0                  | 0                 | 0                 | 1                 |
-| Prose          | 47         | 0             | 0             | 47            | 42                       | 4                    | 1                  | 0                 | 0                 | 47                |
+| Prose          | 47         | 0             | 0             | 47            | 46                       | 0                    | 1                  | 0                 | 0                 | 47                |
 | Internal parts | 5          | 0             | 0             | 5             | 0                        | 0                    | 5                  | 2                 | 1                 | 2                 |
-| **All**        | 186        | 12            | 0             | 174           | 165                      | 14                   | 7                  | 30                | 44                | 112               |
+| **All**        | 186        | 12            | 0             | 174           | 171                      | 8                    | 7                  | 30                | 44                | 112               |
 
 A component that is not in the gallery is counted apart from the ones that pass or fail: one that draws nothing of its own is not checked, and an internal part is checked through the component that draws it.
 
+For `UInputRating` the fix is open work, with no pull request planned yet: it stays at level 1 for 1.0.0. For the other components that fail a level 1 check, the fix comes with the restyling or the spec their level for 1.0.0 asks for.
+
 The components that do not pass level 1 yet, with each check they fail:
 
-| Component       | Today | For 1.0.0 | Check it fails | In          | Parts              | What fails                                                                                                                                                          |
-| --------------- | ----- | --------- | -------------- | ----------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `UAlert`        | 1     | 3         | contrast       | dark        | description        | The subtle error alert: its description in the danger color on the danger tint, 4.3:1 where text needs 4.5:1                                                        |
-| `UAlert`        | 1     | 3         | contrast       | light       | title, description | The solid warning alert: the page color on the warning color, 2.05:1 and 1.9:1. The status kinds get a tint and an outline with the alert's spec, and no solid      |
-| `UBanner`       | 1     | 2         | contrast       | dark, light | label              | An outline button on the banner: its label is drawn for the page and stands on the banner's fill, 1.29:1 in dark and 1.19:1 in light                                |
-| `UToggle`       | 1     | 2         | forced-state   | dark, light | pressed            | Pressed is a fill alone, which forced colors take away: a pressed state comes when it is restyled with the toggle group                                             |
-| `UToggleGroup`  | 1     | 3         | forced-state   | dark, light | pressed            | Pressed is a fill alone, which forced colors take away: a pressed state comes with its spec                                                                         |
-| `UCheckbox`     | 3     | 3         | contrast       | dark        | description        | A checked card: its description in the secondary text color on the tint of a checked card, 3.94:1. The checkbox spec gives both colors, so the fix is the spec's    |
-| `UInputRating`  | 1     | 1         | forced-state   | dark, light | radio              | A chosen star is the same icon as one that is not, in another color, which forced colors take away                                                                  |
-| `URadioGroup`   | 3     | 3         | contrast       | dark        | description        | A checked card: its description in the secondary text color on the tint of a checked card, 3.94:1. The radio group spec gives both colors, so the fix is the spec's |
-| `USwitch`       | 1     | 3         | forced-state   | dark, light | switch             | On and off are the same empty outline: the thumb and the fill of the track are fills alone, which forced colors take away. Its spec draws both                      |
-| `UContextMenu`  | 1     | 2         | forced-edge    | dark, light | content            | Reka writes outline: none on the list itself, which the outline the stylesheet gives a ring does not win over. Its restyling draws the edge as a border             |
-| `UDropdownMenu` | 1     | 3         | forced-edge    | dark, light | content            | Reka writes outline: none on the list itself, which the outline the stylesheet gives a ring does not win over. Its spec draws the edge as a border                  |
-| `ProseCaution`  | 1     | 1         | contrast       | dark, light | div                | Its text is a shade of the danger color on a tint of it: 2.3:1 in dark, 4:1 in light                                                                                |
-| `ProseNote`     | 1     | 1         | contrast       | dark, light | div                | Its text is a shade of the note color on a tint of it: 2.72:1 in dark, 3.71:1 in light                                                                              |
-| `ProseTip`      | 1     | 1         | contrast       | dark        | div                | Its text is a shade of the tip color on a tint of it: 3.11:1                                                                                                        |
-| `ProseWarning`  | 1     | 1         | contrast       | dark, light | div                | Its text is a shade of the warning color on a tint of it: 3.2:1 in dark, 2.48:1 in light                                                                            |
+| Component       | Today | For 1.0.0 | Check it fails | In          | Parts              | What fails                                                                                                                                                     |
+| --------------- | ----- | --------- | -------------- | ----------- | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `UAlert`        | 1     | 3         | contrast       | dark        | description        | The subtle error alert: its description in the danger color on the danger tint, 4.3:1 where text needs 4.5:1                                                   |
+| `UAlert`        | 1     | 3         | contrast       | light       | title, description | The solid warning alert: the page color on the warning color, 2.05:1 and 1.9:1. The status kinds get a tint and an outline with the alert's spec, and no solid |
+| `UBanner`       | 1     | 2         | contrast       | dark, light | label              | An outline button on the banner: its label is drawn for the page and stands on the banner's fill, 1.29:1 in dark and 1.19:1 in light                           |
+| `UToggle`       | 1     | 2         | forced-state   | dark, light | pressed            | Pressed is a fill alone, which forced colors take away: a pressed state comes when it is restyled with the toggle group                                        |
+| `UToggleGroup`  | 1     | 3         | forced-state   | dark, light | pressed            | Pressed is a fill alone, which forced colors take away: a pressed state comes with its spec                                                                    |
+| `UInputRating`  | 1     | 1         | forced-state   | dark, light | radio              | A chosen star is the same icon as one that is not, in another color, which forced colors take away                                                             |
+| `USwitch`       | 1     | 3         | forced-state   | dark, light | switch             | On and off are the same empty outline: the thumb and the fill of the track are fills alone, which forced colors take away. Its spec draws both                 |
+| `UContextMenu`  | 1     | 2         | forced-edge    | dark, light | content            | Reka writes outline: none on the list itself, which the outline the stylesheet gives a ring does not win over. Its restyling draws the edge as a border        |
+| `UDropdownMenu` | 1     | 3         | forced-edge    | dark, light | content            | Reka writes outline: none on the list itself, which the outline the stylesheet gives a ring does not win over. Its spec draws the edge as a border             |
 
 <details>
 
@@ -174,7 +170,7 @@ The components that do not pass level 1 yet, with each check they fail:
 | `USkeleton`                 | Element        | 1     | 2         | Others               | Yes                                               |
 | `UToggle`                   | Element        | 1     | 2         | Others               | No: forced-state                                  |
 | `UToggleGroup`              | Element        | 1     | 3         | Others               | No: forced-state                                  |
-| `UCheckbox`                 | Form           | 3     | 3         | Gallery              | No: contrast                                      |
+| `UCheckbox`                 | Form           | 3     | 3         | Gallery              | Yes                                               |
 | `UCheckboxGroup`            | Form           | 1     | 3         | Others               | Yes                                               |
 | `UColorPicker`              | Form           | 1     | 1         | Others               | Yes                                               |
 | `UFileUpload`               | Form           | 1     | 2         | Others               | Yes                                               |
@@ -189,7 +185,7 @@ The components that do not pass level 1 yet, with each check they fail:
 | `UInputTime`                | Form           | 1     | 2         | Others               | Yes                                               |
 | `UListbox`                  | Form           | 1     | 2         | Others               | Yes                                               |
 | `UPinInput`                 | Form           | 1     | 2         | Others               | Yes                                               |
-| `URadioGroup`               | Form           | 3     | 3         | Gallery              | No: contrast                                      |
+| `URadioGroup`               | Form           | 3     | 3         | Gallery              | Yes                                               |
 | `USelect`                   | Form           | 3     | 3         | Gallery              | Yes                                               |
 | `USelectMenu`               | Form           | 3     | 3         | Gallery              | Yes                                               |
 | `USlider`                   | Form           | 1     | 3         | Others               | Yes                                               |
@@ -297,7 +293,7 @@ The components that do not pass level 1 yet, with each check they fail:
 | `ProseCallout`              | Prose          | 1     | 1         | Others               | Yes                                               |
 | `ProseCard`                 | Prose          | 1     | 1         | Others               | Yes                                               |
 | `ProseCardGroup`            | Prose          | 1     | 1         | Others               | Yes                                               |
-| `ProseCaution`              | Prose          | 1     | 1         | Others               | No: contrast                                      |
+| `ProseCaution`              | Prose          | 1     | 1         | Others               | Yes                                               |
 | `ProseCode`                 | Prose          | 1     | 1         | Others               | Yes                                               |
 | `ProseCodeCollapse`         | Prose          | 1     | 1         | Others               | Yes                                               |
 | `ProseCodeGroup`            | Prose          | 1     | 1         | Others               | Yes                                               |
@@ -317,7 +313,7 @@ The components that do not pass level 1 yet, with each check they fail:
 | `ProseImg`                  | Prose          | 1     | 1         | Others               | Yes                                               |
 | `ProseKbd`                  | Prose          | 1     | 1         | Others               | Yes                                               |
 | `ProseLi`                   | Prose          | 1     | 1         | Others               | Yes                                               |
-| `ProseNote`                 | Prose          | 1     | 1         | Others               | No: contrast                                      |
+| `ProseNote`                 | Prose          | 1     | 1         | Others               | Yes                                               |
 | `ProseOl`                   | Prose          | 1     | 1         | Others               | Yes                                               |
 | `ProseP`                    | Prose          | 1     | 1         | Others               | Yes                                               |
 | `ProsePre`                  | Prose          | 1     | 1         | Others               | Yes                                               |
@@ -332,10 +328,10 @@ The components that do not pass level 1 yet, with each check they fail:
 | `ProseTd`                   | Prose          | 1     | 1         | Others               | Yes                                               |
 | `ProseTh`                   | Prose          | 1     | 1         | Others               | Yes                                               |
 | `ProseThead`                | Prose          | 1     | 1         | Others               | Yes                                               |
-| `ProseTip`                  | Prose          | 1     | 1         | Others               | No: contrast                                      |
+| `ProseTip`                  | Prose          | 1     | 1         | Others               | Yes                                               |
 | `ProseTr`                   | Prose          | 1     | 1         | Others               | Yes                                               |
 | `ProseUl`                   | Prose          | 1     | 1         | Others               | Yes                                               |
-| `ProseWarning`              | Prose          | 1     | 1         | Others               | No: contrast                                      |
+| `ProseWarning`              | Prose          | 1     | 1         | Others               | Yes                                               |
 | `UContextMenuContent`       | Internal parts | 1     | 2         | No: an internal part | No: forced-edge (checked through `UContextMenu`)  |
 | `UDropdownMenuContent`      | Internal parts | 1     | 3         | No: an internal part | No: forced-edge (checked through `UDropdownMenu`) |
 | `ULinkBase`                 | Internal parts | 1     | 1         | No: an internal part | Yes (checked through `ULink`)                     |

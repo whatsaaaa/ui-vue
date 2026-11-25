@@ -57,21 +57,24 @@ export const cardHoverBorder =
   'hover:not-has-disabled:not-has-aria-disabled:not-has-focus-visible:not-has-data-[state=checked]:border-field-border'
 
 /**
- * A checked card: the border in the color, on the color's tint. The border is given again for a
- * focused card, where it wins over the plain border of cardFocus.
+ * The line about a checked card's option, in the text color: on a tint, text is the text color,
+ * as the secondary one is under 4.5:1 on the interactive tint in the dark theme. A disabled card
+ * keeps the faint line of the disabled variant.
+ */
+const checkedCardDescription =
+  'not-has-disabled:not-has-aria-disabled:has-data-[state=checked]:**:data-[slot=description]:text-text'
+
+/**
+ * A checked card: the border in the color, on the color's tint, and its line in the text color.
+ * The border is given again for a focused card, where it wins over the plain border of cardFocus.
  */
 export const checkedCard: ByColor = {
-  primary:
-    'has-data-[state=checked]:border-interactive has-data-[state=checked]:bg-tag-bg not-has-disabled:has-focus-visible:has-data-[state=checked]:border-interactive',
-  success:
-    'has-data-[state=checked]:border-tip has-data-[state=checked]:bg-tip-tint not-has-disabled:has-focus-visible:has-data-[state=checked]:border-tip',
-  info: 'has-data-[state=checked]:border-note has-data-[state=checked]:bg-note-tint not-has-disabled:has-focus-visible:has-data-[state=checked]:border-note',
-  warning:
-    'has-data-[state=checked]:border-warning has-data-[state=checked]:bg-warning-tint not-has-disabled:has-focus-visible:has-data-[state=checked]:border-warning',
-  error:
-    'has-data-[state=checked]:border-danger has-data-[state=checked]:bg-danger-tint not-has-disabled:has-focus-visible:has-data-[state=checked]:border-danger',
-  neutral:
-    'has-data-[state=checked]:border-text has-data-[state=checked]:bg-raised not-has-disabled:has-focus-visible:has-data-[state=checked]:border-text',
+  primary: `has-data-[state=checked]:border-interactive has-data-[state=checked]:bg-tag-bg not-has-disabled:has-focus-visible:has-data-[state=checked]:border-interactive ${checkedCardDescription}`,
+  success: `has-data-[state=checked]:border-tip has-data-[state=checked]:bg-tip-tint not-has-disabled:has-focus-visible:has-data-[state=checked]:border-tip ${checkedCardDescription}`,
+  info: `has-data-[state=checked]:border-note has-data-[state=checked]:bg-note-tint not-has-disabled:has-focus-visible:has-data-[state=checked]:border-note ${checkedCardDescription}`,
+  warning: `has-data-[state=checked]:border-warning has-data-[state=checked]:bg-warning-tint not-has-disabled:has-focus-visible:has-data-[state=checked]:border-warning ${checkedCardDescription}`,
+  error: `has-data-[state=checked]:border-danger has-data-[state=checked]:bg-danger-tint not-has-disabled:has-focus-visible:has-data-[state=checked]:border-danger ${checkedCardDescription}`,
+  neutral: `has-data-[state=checked]:border-text has-data-[state=checked]:bg-raised not-has-disabled:has-focus-visible:has-data-[state=checked]:border-text ${checkedCardDescription}`,
 }
 
 /**
