@@ -5,8 +5,9 @@
  *
  * - Level 1, inherits: it takes the system's colors, radius and fonts through the stylesheet. It
  *   is on a gallery page in both themes, and the level 1 checks pass on it: no contrast failure
- *   by axe, and in forced colors every icon is painted, every part whose edge is a ring keeps an
- *   edge and a control that is on differs from one that is off.
+ *   by axe, in forced colors every icon is painted, every part whose edge is a ring keeps an edge
+ *   and a control that is on differs from one that is off, and at 390 px, the width of a phone,
+ *   nothing of its example reaches past the frame of the gallery.
  * - Level 2, restyled: it has a theme in the package, written on the system's tiers.
  * - Level 3, specced: the design system has a spec for it, and its gallery passes the parity test.
  *
@@ -51,10 +52,10 @@ export type Level = 1 | 2 | 3
 export type Theme = 'dark' | 'light'
 
 /**
- * A level 1 check: contrast is axe's color-contrast rule, and forced-icon, forced-edge and
- * forced-state are the three of forced colors.
+ * A level 1 check: contrast is axe's color-contrast rule, forced-icon, forced-edge and
+ * forced-state are the three of forced colors, and overflow is the width of a phone, 390 px.
  */
-export type Check = 'contrast' | 'forced-icon' | 'forced-edge' | 'forced-state'
+export type Check = 'contrast' | 'forced-icon' | 'forced-edge' | 'forced-state' | 'overflow'
 
 /**
  * A level 1 check a component is known to fail. It stands for one failure for each of its themes
@@ -176,6 +177,12 @@ export const components = {
         slots: ['pressed'],
         note: 'Pressed is a fill alone, which forced colors take away: a pressed state comes with its spec',
       },
+      {
+        check: 'overflow',
+        themes: ['dark', 'light'],
+        slots: ['root'],
+        note: 'A row of toggles does not wrap: its three views, apart or attached, are wider than the 332 px the frame has. Its spec can let the row wrap or scroll',
+      },
     ],
   },
 
@@ -244,7 +251,19 @@ export const components = {
   UFooterColumns: { family: 'navigation', today: 1, target: 1 },
   ULink: { family: 'navigation', today: 1, target: 2 },
   UNavigationMenu: { family: 'navigation', today: 1, target: 2 },
-  UPagination: { family: 'navigation', today: 1, target: 2 },
+  UPagination: {
+    family: 'navigation',
+    today: 1,
+    target: 2,
+    fails: [
+      {
+        check: 'overflow',
+        themes: ['dark', 'light'],
+        slots: ['root'],
+        note: 'The list is one row that does not wrap: its four arrows and five places are wider than the 332 px the frame has. Fewer places on a narrow screen would fit it',
+      },
+    ],
+  },
   UStepper: { family: 'navigation', today: 1, target: 3 },
   UTabs: { family: 'navigation', today: 3, target: 3 },
 
@@ -358,11 +377,35 @@ export const components = {
   UEditorToolbar: { family: 'editor', today: 1, target: 1 },
 
   // content
-  UContentNavigation: { family: 'content', today: 1, target: 1 },
+  UContentNavigation: {
+    family: 'content',
+    today: 1,
+    target: 1,
+    fails: [
+      {
+        check: 'overflow',
+        themes: ['dark', 'light'],
+        slots: ['root'],
+        note: "Its list is pulled 10 px out on each side by a negative margin, so that a link's text lines up with the page and its highlight reaches out: past the frame's edge on the left. Taking the margin away would fit it",
+      },
+    ],
+  },
   UContentSearch: { family: 'content', today: 1, target: 1 },
   UContentSearchButton: { family: 'content', today: 1, target: 1 },
   UContentSurround: { family: 'content', today: 1, target: 1 },
-  UContentToc: { family: 'content', today: 1, target: 1 },
+  UContentToc: {
+    family: 'content',
+    today: 1,
+    target: 1,
+    fails: [
+      {
+        check: 'overflow',
+        themes: ['dark', 'light'],
+        slots: ['root'],
+        note: "It is pulled 16 px out on each side by a negative margin, so that it spans the screen as a bar on a phone: past the frame's edge on the left. Taking the margin away would fit it",
+      },
+    ],
+  },
 
   // color-mode
   UColorModeAvatar: { family: 'color-mode', today: 1, target: 1 },
