@@ -29,6 +29,18 @@
   --text-color-info: var(--ws-color-note-text);
   --text-color-warning: var(--ws-color-warning-text);
   --text-color-error: var(--ws-color-danger-text);
+
+  /* Nuxt UI sets a callout's text in a shade of its color: it is the text color, as in a callout of the system */
+  --text-color-success-300: var(--ws-color-text);
+  --text-color-success-600: var(--ws-color-text);
+  --text-color-info-300: var(--ws-color-text);
+  --text-color-info-600: var(--ws-color-text);
+  --text-color-warning-300: var(--ws-color-text);
+  --text-color-warning-600: var(--ws-color-text);
+  --text-color-error-300: var(--ws-color-text);
+  --text-color-error-600: var(--ws-color-text);
+  --text-color-primary-300: var(--ws-color-text);
+  --text-color-primary-600: var(--ws-color-text);
 }
 
 /* A control that does something when clicked says so with the pointer, as in the sample apps. */
