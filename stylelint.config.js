@@ -1,8 +1,9 @@
 /**
- * The stylesheets take every color from a design system token: a hex value, a named color or a
- * color function is an error, and so is a variable that nothing defines.
+ * The stylesheets take every color from a design system token: the design system's config makes a
+ * hex value, a named color or a color function an error, and a variable that nothing defines too.
  */
 export default {
+<<<<<<< before updating
   extends: ['stylelint-config-standard'],
   plugins: ['stylelint-value-no-unknown-custom-properties'],
   ignoreFiles: ['**/dist/**', '**/coverage/**', '**/.nuxt/**', '**/.output/**'],
@@ -51,6 +52,10 @@ export default {
     'custom-property-pattern': null,
     'no-descending-specificity': null,
   },
+=======
+  extends: ['@whatsaaaa/design-system/stylelint'],
+  ignoreFiles: ['**/dist/**', '**/coverage/**'],
+>>>>>>> after updating
   overrides: [
     {
       files: ['**/*.vue'],

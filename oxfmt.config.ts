@@ -3,5 +3,7 @@ import whatsaaaa from '@whatsaaaa/format-config/oxfmt'
 
 export default defineConfig({
   ...whatsaaaa,
-  ignorePatterns: ['pnpm-lock.yaml', '.github/assets'],
+  // Copier writes .copier-answers.yml, wrapping a long answer at 80 columns, and rewrites it on
+  // every update
+  ignorePatterns: ['pnpm-lock.yaml', '.github/assets', '.copier-answers.yml'],
 })
