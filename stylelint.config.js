@@ -1,36 +1,14 @@
 /**
- * The stylesheets take every color from a design system token: a hex value, a named color or a
- * color function is an error, and so is a variable that nothing defines.
+ * The stylesheets take every color from a design system token: the design system's config makes a
+ * hex value, a named color or a color function an error, and a variable that nothing defines too.
+ * It extends stylelint-config-standard, and loads it and stylelint-value-no-unknown-custom-properties
+ * from this repository's devDependencies. The rules below are this repository's own: Tailwind's
+ * at-rules, and the naming and ordering it leaves to the stylesheets.
  */
 export default {
-  extends: ['stylelint-config-standard'],
-  plugins: ['stylelint-value-no-unknown-custom-properties'],
+  extends: ['@whatsaaaa/design-system/stylelint'],
   ignoreFiles: ['**/dist/**', '**/coverage/**', '**/.nuxt/**', '**/.output/**'],
   rules: {
-    'color-no-hex': true,
-    'color-named': 'never',
-    'function-disallowed-list': [
-      'rgb',
-      'rgba',
-      'hsl',
-      'hsla',
-      'oklch',
-      'oklab',
-      'lab',
-      'lch',
-      'hwb',
-    ],
-    'csstools/value-no-unknown-custom-properties': [
-      true,
-      {
-        // what a stylesheet may read besides its own variables: the design system's tokens
-        // and icons, and Tailwind's theme
-        importFrom: [
-          'packages/ui-vue/node_modules/@whatsaaaa/design-system/dist/tokens.css',
-          'packages/ui-vue/node_modules/@whatsaaaa/design-system/dist/css/icons.css',
-        ],
-      },
-    ],
     // Tailwind's at-rules and functions
     'at-rule-no-unknown': [
       true,
@@ -46,7 +24,6 @@ export default {
       true,
       { ignoreAtRules: ['custom-variant', 'utility'] },
     ],
-    'import-notation': 'string',
     'selector-class-pattern': null,
     'custom-property-pattern': null,
     'no-descending-specificity': null,
