@@ -9,6 +9,7 @@
 | `packages/ui-vue`  | `@whatsaaaa/ui-vue`: the theme, the stylesheet and the color mode's head script                                              |
 | `playgrounds/nuxt` | The gallery: every themed component in its variants, sizes and states, and a page of every other, generated as a static site |
 | `playgrounds/vue`  | The smallest plain Vue (Vite) setup, one page                                                                                |
+| `docs`             | [How ui-vue meets each design system spec](./docs/specs.md): its props, deviations and parity result                         |
 
 ## Use it
 
@@ -99,6 +100,8 @@ How far a Nuxt UI component follows the design system is one of three levels, ea
 1. **Inherits.** It takes the system's colors, radius and fonts through the stylesheet, and nothing else: its type, its sizes and its states are still Nuxt UI's. It is on the gallery's page of the others in both themes, where axe finds no contrast failure, where in forced colors every icon and every edge drawn as a ring is still there and a control that is on differs from one that is off, and where at 390 px, the width of a phone, nothing of its example reaches past the gallery's frame.
 2. **Restyled.** It has a theme in the package, written on the system's tiers.
 3. **Specced.** The design system has a spec for it, and its section of the gallery passes the parity test.
+
+[docs/specs.md](./docs/specs.md) records, for each spec, the props that draw its kinds and sizes, where ui-vue does not meet it yet and its parity result.
 
 `packages/ui-vue/levels.ts` lists every component of the Nuxt UI version the package pins with the level it is at today and the level it is to reach for 1.0.0. A unit test fails when Nuxt UI has a component the file does not name.
 
