@@ -20,9 +20,13 @@ export const control =
 /** The fill of a checked control, over the control and its edge, in the control's shape. */
 export const indicator = 'absolute -inset-(--ws-border-width-thin) size-auto rounded-[inherit]'
 
-/** The label of an option, and the line about it. */
+/**
+ * The label of an option, and the line about it. The line is in the color a checked card gives it
+ * in --choice-description, or else in its own.
+ */
 export const label = 'font-sans font-normal text-(--ws-choice-label-text-rest) cursor-pointer'
-export const description = 'font-sans text-(--ws-choice-description-text-rest) text-body-sm'
+export const description =
+  'font-sans text-(--choice-description,var(--ws-choice-description-text-rest)) text-body-sm'
 
 /** A disabled control, its label and its line: faint, and the same under the pointer. */
 export const disabled = {
@@ -60,9 +64,14 @@ export const cardHoverBorder =
  * The line about a checked card's option, in the text color: on a tint, text is the text color,
  * as the secondary one is under 4.5:1 on the interactive tint in the dark theme. A disabled card
  * keeps the faint line of the disabled variant.
+ *
+ * The card puts the color in --choice-description, which the line inherits and reads, so the
+ * :has() stays on the card it styles. A rule from the card down to the line, such as
+ * **:data-[slot=description], puts :has() in an ancestor of the line, a shape whose changes
+ * Chrome cannot narrow: each change to the page then has the whole page's style worked out again.
  */
 const checkedCardDescription =
-  'not-has-disabled:not-has-aria-disabled:has-data-[state=checked]:**:data-[slot=description]:text-text'
+  'not-has-disabled:not-has-aria-disabled:has-data-[state=checked]:[--choice-description:var(--ws-color-text)]'
 
 /**
  * A checked card: the border in the color, on the color's tint, and its line in the text color.
