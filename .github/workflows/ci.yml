@@ -21,3 +21,6 @@ jobs:
       # The version of @playwright/test in package.json, which is the tag of the Playwright image
       # the browser job runs in. tests/playwright-version.test.ts holds the two together.
       playwright-version: 1.65.0
+      # No browser test or playground reads Markdown, so a pull request that changes only Markdown
+      # skips the browser job
+      docs-paths: '**/*.md'
