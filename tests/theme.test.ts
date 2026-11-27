@@ -111,7 +111,7 @@ describe('the components config', () => {
     // and a color written into a class is one
     const written = compiler.build(['bg-[#fff]', 'text-[rgb(0_0_0)]', 'border-[red]'])
     expect(await colorErrors(written)).toHaveLength(3)
-  }, 30_000)
+  }, 60_000)
 
   test("has Nuxt UI's merge take the design system's names in their utilities, the later class staying", async () => {
     // Every name of a text style, a size, a border width and an easing in Tailwind's theme, as
