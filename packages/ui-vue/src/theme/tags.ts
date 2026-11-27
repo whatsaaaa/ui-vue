@@ -51,6 +51,11 @@ export const tagDeleteIcon = `${forcedIcon} forced-colors:in-data-[state=active]
  */
 export const tagDeleteIconSize = 'size-icon'
 
-/** The text field after the tags, with no edge of its own: the field shows its focus. */
+/**
+ * The text field after the tags, with no edge of its own: the field shows its focus. It fills
+ * what its line leaves, at least --ws-space-48. Its width is a share of the field's, as a text
+ * field's is: one with no width takes the browser's twenty characters at least, which would hold
+ * a field of tags at the larger sizes, with the room for its icons, wider than a phone's column.
+ */
 export const tagsInput =
-  'min-w-(--ws-space-48) text-(--ws-field-text-rest) placeholder:text-text-secondary disabled:text-(--ws-field-text-disabled) disabled:opacity-100'
+  'w-full min-w-(--ws-space-48) text-(--ws-field-text-rest) placeholder:text-text-secondary disabled:text-(--ws-field-text-disabled) disabled:opacity-100'

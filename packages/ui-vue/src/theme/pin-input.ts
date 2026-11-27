@@ -1,4 +1,4 @@
-import { fieldCompoundVariants, fieldVariants } from './field.ts'
+import { fieldStateVariants, fieldVariants } from './field.ts'
 import { transition } from './shared.ts'
 
 /*
@@ -37,5 +37,6 @@ export default {
     },
     variant: fieldVariants,
   },
-  compoundVariants: fieldCompoundVariants,
+  // a cell has no icons: the field's states alone
+  compoundVariants: fieldStateVariants,
 }
