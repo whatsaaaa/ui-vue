@@ -45,6 +45,8 @@ const stepPlace = {
       'pe-[calc(var(--ws-control-border-width-rest)+var(--ws-space-8)-var(--ws-control-gap-xs))]',
     button:
       '[&>button]:w-[calc(var(--ws-control-icon-size-xs)+var(--ws-control-gap-xs)+var(--ws-control-gap-xs))] [&>button]:h-[calc(var(--ws-control-height-xs)-var(--ws-space-8))]',
+    bareDecrement: 'ps-[calc(var(--ws-space-8)-var(--ws-control-gap-xs))]',
+    bareIncrement: 'pe-[calc(var(--ws-space-8)-var(--ws-control-gap-xs))]',
   },
   sm: {
     decrement:
@@ -53,6 +55,8 @@ const stepPlace = {
       'pe-[calc(var(--ws-control-border-width-rest)+var(--ws-space-10)-var(--ws-control-gap-sm))]',
     button:
       '[&>button]:w-[calc(var(--ws-control-icon-size-sm)+var(--ws-control-gap-sm)+var(--ws-control-gap-sm))] [&>button]:h-[calc(var(--ws-control-height-sm)-var(--ws-space-8))]',
+    bareDecrement: 'ps-[calc(var(--ws-space-10)-var(--ws-control-gap-sm))]',
+    bareIncrement: 'pe-[calc(var(--ws-space-10)-var(--ws-control-gap-sm))]',
   },
   md: {
     decrement:
@@ -61,6 +65,8 @@ const stepPlace = {
       'pe-[calc(var(--ws-control-border-width-rest)+var(--ws-space-12)-var(--ws-control-gap-md))]',
     button:
       '[&>button]:w-[calc(var(--ws-control-icon-size-md)+var(--ws-control-gap-md)+var(--ws-control-gap-md))] [&>button]:h-[calc(var(--ws-control-height-md)-var(--ws-space-8))]',
+    bareDecrement: 'ps-[calc(var(--ws-space-12)-var(--ws-control-gap-md))]',
+    bareIncrement: 'pe-[calc(var(--ws-space-12)-var(--ws-control-gap-md))]',
   },
   lg: {
     decrement:
@@ -69,6 +75,8 @@ const stepPlace = {
       'pe-[calc(var(--ws-control-border-width-rest)+var(--ws-space-14)-var(--ws-control-gap-lg))]',
     button:
       '[&>button]:w-[calc(var(--ws-control-icon-size-lg)+var(--ws-control-gap-lg)+var(--ws-control-gap-lg))] [&>button]:h-[calc(var(--ws-control-height-lg)-var(--ws-space-8))]',
+    bareDecrement: 'ps-[calc(var(--ws-space-14)-var(--ws-control-gap-lg))]',
+    bareIncrement: 'pe-[calc(var(--ws-space-14)-var(--ws-control-gap-lg))]',
   },
   xl: {
     decrement:
@@ -77,6 +85,8 @@ const stepPlace = {
       'pe-[calc(var(--ws-control-border-width-rest)+var(--ws-space-16)-var(--ws-control-gap-xl))]',
     button:
       '[&>button]:w-[calc(var(--ws-control-icon-size-xl)+var(--ws-control-gap-xl)+var(--ws-control-gap-xl))] [&>button]:h-[calc(var(--ws-control-height-xl)-var(--ws-space-8))]',
+    bareDecrement: 'ps-[calc(var(--ws-space-16)-var(--ws-control-gap-xl))]',
+    bareIncrement: 'pe-[calc(var(--ws-space-16)-var(--ws-control-gap-xl))]',
   },
 }
 
@@ -97,10 +107,6 @@ export default {
       xl: fieldSizes.xl.base,
     },
     variant: fieldVariants,
-    // the icon says a button is disabled by its color, not by fading
-    disabled: {
-      true: { increment: 'opacity-100', decrement: 'opacity-100' },
-    },
   },
   compoundVariants: [
     ...fieldStateVariants,
@@ -115,6 +121,12 @@ export default {
         decrement: `${stepPlace[size].decrement} ${stepPlace[size].button}`,
         increment: `${stepPlace[size].increment} ${stepPlace[size].button}`,
       },
+    })),
+    ...fieldSizeNames.map((size) => ({
+      variant: 'none',
+      orientation: 'horizontal',
+      size,
+      class: { decrement: stepPlace[size].bareDecrement, increment: stepPlace[size].bareIncrement },
     })),
   ],
 }

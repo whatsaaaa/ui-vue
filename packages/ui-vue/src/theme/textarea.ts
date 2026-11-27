@@ -42,5 +42,32 @@ const size = {
 export default {
   slots: input.slots,
   variants: { ...input.variants, size },
-  compoundVariants: input.compoundVariants,
+  compoundVariants: [
+    ...input.compoundVariants,
+    {
+      variant: 'none',
+      size: 'xs',
+      class: 'py-[calc(var(--ws-space-2)-var(--field-edge-extra,0px))]',
+    },
+    {
+      variant: 'none',
+      size: 'sm',
+      class: 'py-[calc(var(--ws-space-4)-var(--field-edge-extra,0px))]',
+    },
+    {
+      variant: 'none',
+      size: 'md',
+      class: 'py-[calc(var(--ws-space-6)-var(--field-edge-extra,0px))]',
+    },
+    {
+      variant: 'none',
+      size: 'lg',
+      class: 'py-[calc(var(--ws-space-8)-var(--field-edge-extra,0px))]',
+    },
+    {
+      variant: 'none',
+      size: 'xl',
+      class: 'py-[calc(var(--ws-space-10)-var(--field-edge-extra,0px))]',
+    },
+  ],
 }
