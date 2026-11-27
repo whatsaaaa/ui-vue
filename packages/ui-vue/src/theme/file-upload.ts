@@ -98,14 +98,6 @@ export default {
         files: 'gap-(--ws-space-16)',
       },
     },
-    disabled: {
-      true: {
-        base: 'opacity-100 border-(--ws-field-border-disabled)',
-        icon: 'text-(--ws-field-text-disabled)',
-        label: 'text-(--ws-field-text-disabled)',
-        description: 'text-(--ws-field-text-disabled)',
-      },
-    },
   },
   compoundVariants: [
     // over Nuxt UI's ring and edge in each color: the system's ring, the edge as it is at rest
@@ -114,6 +106,16 @@ export default {
       interactive: true,
       disabled: false,
       class: 'hover:bg-(--ws-field-bg-rest) hover:border-(--ws-field-border-hover)',
+    },
+    // disabled, unfaded: the edge and the words in the field's disabled colors
+    {
+      disabled: true,
+      class: {
+        base: 'opacity-100 border-(--ws-field-border-disabled)',
+        icon: 'text-(--ws-field-text-disabled)',
+        label: 'text-(--ws-field-text-disabled)',
+        description: 'text-(--ws-field-text-disabled)',
+      },
     },
     // solid, as every edge of the system, and under a file dragged over it as under the pointer
     {

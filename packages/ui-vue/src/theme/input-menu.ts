@@ -80,12 +80,14 @@ export default {
     },
   },
   compoundVariants: [
-    // Nuxt UI takes the edge off a field of one value after the variants have drawn it
+    // Nuxt UI takes the edge off a field of one value after the variants have drawn it, and
+    // fades it disabled and dims its placeholder: the text field's are drawn over them
     {
       multiple: false,
       variant: ['outline', 'soft', 'subtle', 'ghost'],
       class: 'border-(length:--ws-control-border-width-rest)',
     },
+    { multiple: false, class: 'disabled:opacity-100 placeholder:text-text-secondary' },
     // with several values the field is one with the focus inside it, disabled by data-disabled
     ...Object.entries(fieldWithinVariants).map(([variant, classes]) => ({
       multiple: true,

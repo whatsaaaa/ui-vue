@@ -202,7 +202,7 @@ export default {
     },
     // In a field group the button with the focus comes over a field in a color or under the
     // pointer, which field.ts raises, so that its ring shows whole.
-    { fieldGroup: ['horizontal', 'vertical'], class: 'focus-visible:z-[2]' },
+    { fieldGroup: ['horizontal', 'vertical'], class: 'focus-visible:z-[3]' },
     // An icon button is as wide as it is tall.
     { square: true, size: 'xs', class: 'w-(--ws-control-height-xs) px-0 justify-center' },
     { square: true, size: 'sm', class: 'w-(--ws-control-height-sm) px-0 justify-center' },

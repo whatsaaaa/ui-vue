@@ -95,6 +95,14 @@ function propsOf(themes: Theme[]): Record<string, unknown>[] {
   return all
 }
 
+/** Nuxt UI's theme of the component, and the package's. */
+async function themesOf(name: string) {
+  const file = join(NUXT_UI_THEMES, `${fileOf(name)}.ts`)
+  const nuxtUi = ((await import(file)) as { default: Theme }).default
+  const ours = (ui as unknown as Record<string, Theme | undefined>)[keyOf(name)] ?? {}
+  return { nuxtUi, ours }
+}
+
 /** Every class a part of the component has, with the props given, as Nuxt UI merges them. */
 function classesOf(nuxtUi: Theme, ours: Theme, props: Record<string, unknown>) {
   const component = createTV(ui.tv)({ extend: createTV(ui.tv)(nuxtUi as never), ...ours } as never)
@@ -142,13 +150,20 @@ describe('a component at level 2', () => {
       expect(existsSync(file), `${file}: pnpm install writes it, with nuxt prepare`).toBe(true)
     })
 
+    // A variant that is one class string in one theme and classes by part in the other is merged
+    // into a string with the object written in it: its classes by part are lost.
+    test('gives no part an object as a class, in any of its variants', async () => {
+      const { nuxtUi, ours } = await themesOf(name)
+      const found = new Set<string>()
+      for (const props of propsOf([nuxtUi, ours]))
+        for (const { slot, classes } of classesOf(nuxtUi, ours, props))
+          if (classes.includes('[object') || classes.includes('Object]'))
+            found.add(`${slot}: ${JSON.stringify(props)}`)
+      expect([...found].sort()).toEqual([])
+    })
+
     test('draws no part with a Tailwind type size, a ring as an edge, a shadow or a color shade, in any of its variants', async () => {
-      const nuxtUi = (
-        (await import(join(NUXT_UI_THEMES, `${fileOf(name)}.ts`))) as {
-          default: Theme
-        }
-      ).default
-      const ours = (ui as unknown as Record<string, Theme | undefined>)[keyOf(name)] ?? {}
+      const { nuxtUi, ours } = await themesOf(name)
       const found = new Set<string>()
       for (const props of propsOf([nuxtUi, ours]))
         for (const { slot, classes } of classesOf(nuxtUi, ours, props))

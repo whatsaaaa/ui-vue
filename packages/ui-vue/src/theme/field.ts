@@ -220,23 +220,28 @@ export const fieldWithinCompoundVariants = [
 
 /**
  * In a field group each control's edge lies over the one before it, so that the two make one
- * line. A field in a color or under the pointer comes over the controls beside it, so that the
- * line is its edge, and one with the focus, on itself or on a part inside it, over those too, so
- * that its ring shows whole: on the part that is the group's item, the field itself, or the root
- * around a text field.
+ * line. A field under the pointer comes over the controls beside it, so that the line is its
+ * edge, one in a color over those too, under the pointer or not, so that its color keeps the
+ * line, and one with the focus, on itself or on a part inside it, over all of them, so that its
+ * ring shows whole: on the part that is the group's item, the field itself, or the root around a
+ * text field.
  */
 export const inGroup = [
   {
     fieldGroup: ['horizontal', 'vertical'],
-    class: 'hover:z-[1] focus-visible:z-[2] has-focus-visible:z-[2]',
+    class: 'hover:z-[1] focus-visible:z-[3] has-focus-visible:z-[3]',
   },
-  { fieldGroup: ['horizontal', 'vertical'], highlight: true, class: 'z-[1]' },
+  { fieldGroup: ['horizontal', 'vertical'], highlight: true, class: 'z-[2] hover:z-[2]' },
 ]
 
 export const inGroupRoot = [
   {
     fieldGroup: ['horizontal', 'vertical'],
-    class: { root: 'hover:z-[1] has-focus-visible:z-[2]' },
+    class: { root: 'hover:z-[1] has-focus-visible:z-[3]' },
   },
-  { fieldGroup: ['horizontal', 'vertical'], highlight: true, class: { root: 'z-[1]' } },
+  {
+    fieldGroup: ['horizontal', 'vertical'],
+    highlight: true,
+    class: { root: 'z-[2] hover:z-[2]' },
+  },
 ]
