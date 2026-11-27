@@ -1,5 +1,5 @@
 import { AxeBuilder } from '@axe-core/playwright'
-import { expect, test, type Page } from '@playwright/test'
+import { expect, test, type FileChooser, type Page } from '@playwright/test'
 import { type ComponentLevels, components } from '../../packages/ui-vue/levels.ts'
 import { alike, openWithSystemColors } from './forced.ts'
 import { open, playground } from './pages.ts'
@@ -283,15 +283,19 @@ const keys: Record<string, ((page: Page) => Promise<void>) | 'none'> = {
   },
 
   async UFileUpload(page) {
-    // the area is a button: Enter and Space open the browser's file chooser
+    // the browser's file chooser, caught from before the keys are pressed: Playwright starts
+    // catching it once something listens for it
+    const choosers: FileChooser[] = []
+    page.on('filechooser', (chooser) => choosers.push(chooser))
+    // the area is a button: Enter and Space open the file chooser
     const area = page.locator('#file-upload [role=button]').first()
     await area.focus()
     await expect(area).toBeFocused()
-    for (const key of ['Enter', 'Space']) {
-      const chooser = page.waitForEvent('filechooser')
+    for (const [index, key] of ['Enter', 'Space'].entries()) {
       await page.keyboard.press(key)
+      await expect.poll(() => choosers.length, key).toBe(index + 1)
       // closed with no file, so that the next can open
-      await (await chooser).setFiles([])
+      await choosers[index]!.setFiles([])
     }
   },
 }

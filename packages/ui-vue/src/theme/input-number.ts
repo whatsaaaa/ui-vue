@@ -5,6 +5,7 @@ import {
   fieldVariants,
   iconRoomEnd,
   iconRoomStart,
+  inGroupRoot,
 } from './field.ts'
 import input from './input.ts'
 
@@ -130,5 +131,8 @@ export default {
       size,
       class: { decrement: stepPlace[size].bareDecrement, increment: stepPlace[size].bareIncrement },
     })),
+    // In a field group it comes over the controls beside it as a text field does, with the focus
+    // over those in a color or under the pointer.
+    ...inGroupRoot,
   ],
 }
