@@ -28,6 +28,8 @@ const specs: Record<keyof typeof parts, string> = {
   modal: '/open',
   table: '/',
   tabs: '/',
+  textarea: '/',
+  'number-field': '/',
 }
 
 for (const [name, path] of Object.entries(specs))

@@ -2,7 +2,7 @@
 
 # ui-vue
 
-[Nuxt UI](https://ui.nuxt.com) themed with the [Whatsaaaa design system](https://github.com/whatsaaaa/design-system), for Vue and Nuxt. A trial: ten core components (button, badge, input, select and select menu, checkbox, radio group, card, modal, table, tabs) take the system's terminal look through Nuxt UI's central config, in both themes.
+[Nuxt UI](https://ui.nuxt.com) themed with the [Whatsaaaa design system](https://github.com/whatsaaaa/design-system), for Vue and Nuxt. A trial: twelve core components (button, badge, input, text area, number field, select and select menu, checkbox, radio group, card, modal, table, tabs) take the system's terminal look through Nuxt UI's central config, in both themes.
 
 | Folder             | What it is                                                                                                                   |
 | ------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
@@ -18,7 +18,7 @@
 An app adds the package next to Nuxt UI, and with it the design system and Tailwind, which the package reads:
 
 ```sh
-pnpm add @whatsaaaa/ui-vue '@whatsaaaa/design-system@^1.0.0' '@nuxt/ui@~4.13.0' tailwindcss
+pnpm add @whatsaaaa/ui-vue '@whatsaaaa/design-system@^1.1.0' '@nuxt/ui@~4.13.0' tailwindcss
 ```
 
 The versions are the package's peer ranges. A release works with one minor of Nuxt UI, the one its tests passed on: a theme leans on Nuxt UI's own classes, which change in a minor, so a new minor of Nuxt UI comes with a new minor of the package. Until the design system's 1.0.0, a release works with one minor of it too.
@@ -67,10 +67,11 @@ A `dark` or `light` class, like `data-theme`, also keeps a part of a page in one
 
 A select menu's search draws the search icon by default. An app that passes its own `searchInput`, for example to give it a placeholder naming what it searches, passes `icon: 'i-lucide-search'` with it: Nuxt UI takes a passed `searchInput` in place of the default.
 
-Three things Nuxt UI leaves to the app, which the gallery does and a page has to do too:
+Four things Nuxt UI leaves to the app, which the gallery does and a page has to do too:
 
 - **A card's title is a heading.** Nuxt UI draws the title in a `div` unless the `as` prop names another element for it, so name a heading, at the level the page's outline puts the card at: `<UCard title="Harbour Conf" :as="{ title: 'h3' }">`. A heading passed in the `#title` slot still works, and is what the gallery does: `<template #title><h3>Harbour Conf</h3></template>`. The theme draws it as the card's title either way.
 - **An amount in a table is set by its column.** Nuxt UI has no slot for an amount, so the theme cannot find one: give the column `meta: { class: { th: 'text-end', td: 'text-end tabular-nums' } }`, which puts the amounts and their column's name at the end of the column, in figures of one width.
+- **A number field's step buttons are named for the field.** Nuxt UI names them Decrement and Increment, where a name says what each does to which field: pass each its name, `<UInputNumber :decrement="{ 'aria-label': 'Decrease Tickets' }" :increment="{ 'aria-label': 'Increase Tickets' }" />`. Nuxt UI's type of those props leaves out a button's attributes, so in TypeScript the object takes a cast to it, as in the gallery's `InputNumberSection.vue`. The theme draws the buttons whatever props an app passes them.
 - **The key hints need the design system's keys head script.** `colorModeInitScript` is the theme's head script only. An app with a status line whose keys work, by `enableShortcuts` from `@whatsaaaa/design-system/shortcuts`, also inlines `keysInitScript` from the same module in the `<head>`, after the color mode's script: on Nuxt `script: [{ innerHTML: colorModeInitScript }, { innerHTML: keysInitScript }]`, on Vue from the Vite plugin that inlines the other. The design system's usage guide has the markup of the hints and of the keys switch.
 
 On Nuxt, as in `playgrounds/nuxt`, the color mode switches the theme:
@@ -114,7 +115,7 @@ The tables below, and what they say of where the fixes come from, are drawn from
 | Family         | Components | Level 3 today | Level 2 today | Level 1 today | Pass every level 1 check | Fail a level 1 check | Not in the gallery | Level 3 for 1.0.0 | Level 2 for 1.0.0 | Level 1 for 1.0.0 |
 | -------------- | ---------- | ------------- | ------------- | ------------- | ------------------------ | -------------------- | ------------------ | ----------------- | ----------------- | ----------------- |
 | Element        | 19         | 3             | 0             | 16            | 15                       | 4                    | 0                  | 6                 | 10                | 3                 |
-| Form           | 21         | 6             | 0             | 15            | 19                       | 2                    | 0                  | 11                | 7                 | 3                 |
+| Form           | 21         | 8             | 0             | 13            | 19                       | 2                    | 0                  | 11                | 7                 | 3                 |
 | Data           | 10         | 1             | 0             | 9             | 10                       | 0                    | 0                  | 2                 | 4                 | 4                 |
 | Navigation     | 8          | 1             | 0             | 7             | 7                        | 1                    | 0                  | 3                 | 4                 | 1                 |
 | Overlay        | 8          | 1             | 0             | 7             | 6                        | 2                    | 0                  | 6                 | 2                 | 0                 |
@@ -128,7 +129,7 @@ The tables below, and what they say of where the fixes come from, are drawn from
 | Locale         | 1          | 0             | 0             | 1             | 1                        | 0                    | 0                  | 0                 | 0                 | 1                 |
 | Prose          | 47         | 0             | 0             | 47            | 46                       | 0                    | 1                  | 0                 | 0                 | 47                |
 | Internal parts | 5          | 0             | 0             | 5             | 0                        | 0                    | 5                  | 2                 | 1                 | 2                 |
-| **All**        | 186        | 12            | 0             | 174           | 168                      | 11                   | 7                  | 30                | 44                | 112               |
+| **All**        | 186        | 14            | 0             | 172           | 168                      | 11                   | 7                  | 30                | 44                | 112               |
 
 A component that is not in the gallery is counted apart from the ones that pass or fail: one that draws nothing of its own is not checked, and an internal part is checked through the component that draws it.
 
@@ -186,7 +187,7 @@ The components that do not pass level 1 yet, with each check they fail:
 | `UInput`                    | Form           | 3     | 3         | Gallery              | Yes                                               |
 | `UInputDate`                | Form           | 1     | 2         | Others               | Yes                                               |
 | `UInputMenu`                | Form           | 1     | 2         | Others               | Yes                                               |
-| `UInputNumber`              | Form           | 1     | 3         | Others               | Yes                                               |
+| `UInputNumber`              | Form           | 3     | 3         | Gallery              | Yes                                               |
 | `UInputRating`              | Form           | 1     | 1         | Others               | No: forced-state                                  |
 | `UInputTags`                | Form           | 1     | 2         | Others               | Yes                                               |
 | `UInputTime`                | Form           | 1     | 2         | Others               | Yes                                               |
@@ -197,7 +198,7 @@ The components that do not pass level 1 yet, with each check they fail:
 | `USelectMenu`               | Form           | 3     | 3         | Gallery              | Yes                                               |
 | `USlider`                   | Form           | 1     | 3         | Others               | Yes                                               |
 | `USwitch`                   | Form           | 1     | 3         | Others               | No: forced-state                                  |
-| `UTextarea`                 | Form           | 1     | 3         | Others               | Yes                                               |
+| `UTextarea`                 | Form           | 3     | 3         | Gallery              | Yes                                               |
 | `UAccordion`                | Data           | 1     | 3         | Others               | Yes                                               |
 | `UCarousel`                 | Data           | 1     | 1         | Others               | Yes                                               |
 | `UChart`                    | Data           | 1     | 1         | Others               | Yes                                               |

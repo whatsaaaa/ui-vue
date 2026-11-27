@@ -51,7 +51,7 @@
   "devDependencies": {
     "@nuxt/ui": "4.13.0",
     "@types/node": "^24.19.2",
-    "@whatsaaaa/design-system": "^1.0.0",
+    "@whatsaaaa/design-system": "^1.1.0",
     "@whatsaaaa/tsconfig": "^1.0.0",
     "tailwindcss": "^4.3.5",
     "typescript": "~6.0.3",
@@ -59,7 +59,7 @@
   },
   "peerDependencies": {
     "@nuxt/ui": "~4.13.0",
-    "@whatsaaaa/design-system": "^1.0.0",
+    "@whatsaaaa/design-system": "^1.1.0",
     "tailwindcss": "^4.3.5",
     "vue": "^3.5.0"
   },

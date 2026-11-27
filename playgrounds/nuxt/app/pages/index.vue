@@ -3,6 +3,8 @@ const sections = [
   { id: 'button', label: 'UButton' },
   { id: 'badge', label: 'UBadge' },
   { id: 'input', label: 'UInput' },
+  { id: 'textarea', label: 'UTextarea' },
+  { id: 'input-number', label: 'UInputNumber' },
   { id: 'select', label: 'USelect' },
   { id: 'checkbox', label: 'UCheckbox' },
   { id: 'radio-group', label: 'URadioGroup' },
@@ -16,7 +18,7 @@ const sections = [
 <template>
   <GalleryFrame
     title="Nuxt UI on the design system"
-    lead="Ten core Nuxt UI components, dressed in the Whatsaaaa design system through its central config, in the dark and the light theme."
+    lead="Twelve core Nuxt UI components, dressed in the Whatsaaaa design system through its central config, in the dark and the light theme."
   >
     <div class="mt-10 flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-16">
       <nav aria-labelledby="contents-title" class="min-w-0">
@@ -33,6 +35,8 @@ const sections = [
     <SectionsButtonSection />
     <SectionsBadgeSection />
     <SectionsInputSection />
+    <SectionsTextareaSection />
+    <SectionsInputNumberSection />
     <SectionsSelectSection />
     <SectionsCheckboxSection />
     <SectionsRadioGroupSection />

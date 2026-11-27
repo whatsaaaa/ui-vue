@@ -2,12 +2,12 @@
 
 # @whatsaaaa/ui-vue
 
-[Nuxt UI](https://ui.nuxt.com) themed with the [Whatsaaaa design system](https://github.com/whatsaaaa/design-system), for Vue and Nuxt. A trial: ten core components (button, badge, input, select and select menu, checkbox, radio group, card, modal, table, tabs) take the system's terminal look through Nuxt UI's central config, in both themes.
+[Nuxt UI](https://ui.nuxt.com) themed with the [Whatsaaaa design system](https://github.com/whatsaaaa/design-system), for Vue and Nuxt. A trial: twelve core components (button, badge, input, text area, number field, select and select menu, checkbox, radio group, card, modal, table, tabs) take the system's terminal look through Nuxt UI's central config, in both themes.
 
 ## Install
 
 ```sh
-pnpm add @whatsaaaa/ui-vue '@whatsaaaa/design-system@^1.0.0' '@nuxt/ui@~4.13.0' tailwindcss
+pnpm add @whatsaaaa/ui-vue '@whatsaaaa/design-system@^1.1.0' '@nuxt/ui@~4.13.0' tailwindcss
 ```
 
 The versions are the package's peer ranges: a release works with one minor of Nuxt UI and, until the design system's 1.0.0, one minor of it.

@@ -89,71 +89,35 @@ const highlight: ByColor = {
   neutral: `${edge} border-text hover:border-text focus-visible:border-text`,
 }
 
-/** Text before or after the value starts past the icon: the field's padding, the icon and the gap. */
-const iconRoom = [
-  {
-    leading: true,
-    size: 'xs',
-    class:
-      'ps-[calc(var(--ws-space-8)+var(--ws-control-icon-size-xs)+var(--ws-control-gap-xs)-var(--field-edge-extra,0px))]',
-  },
-  {
-    leading: true,
-    size: 'sm',
-    class:
-      'ps-[calc(var(--ws-space-10)+var(--ws-control-icon-size-sm)+var(--ws-control-gap-sm)-var(--field-edge-extra,0px))]',
-  },
-  {
-    leading: true,
-    size: 'md',
-    class:
-      'ps-[calc(var(--ws-space-12)+var(--ws-control-icon-size-md)+var(--ws-control-gap-md)-var(--field-edge-extra,0px))]',
-  },
-  {
-    leading: true,
-    size: 'lg',
-    class:
-      'ps-[calc(var(--ws-space-14)+var(--ws-control-icon-size-lg)+var(--ws-control-gap-lg)-var(--field-edge-extra,0px))]',
-  },
-  {
-    leading: true,
-    size: 'xl',
-    class:
-      'ps-[calc(var(--ws-space-16)+var(--ws-control-icon-size-xl)+var(--ws-control-gap-xl)-var(--field-edge-extra,0px))]',
-  },
-  {
-    trailing: true,
-    size: 'xs',
-    class:
-      'pe-[calc(var(--ws-space-8)+var(--ws-control-icon-size-xs)+var(--ws-control-gap-xs)-var(--field-edge-extra,0px))]',
-  },
-  {
-    trailing: true,
-    size: 'sm',
-    class:
-      'pe-[calc(var(--ws-space-10)+var(--ws-control-icon-size-sm)+var(--ws-control-gap-sm)-var(--field-edge-extra,0px))]',
-  },
-  {
-    trailing: true,
-    size: 'md',
-    class:
-      'pe-[calc(var(--ws-space-12)+var(--ws-control-icon-size-md)+var(--ws-control-gap-md)-var(--field-edge-extra,0px))]',
-  },
-  {
-    trailing: true,
-    size: 'lg',
-    class:
-      'pe-[calc(var(--ws-space-14)+var(--ws-control-icon-size-lg)+var(--ws-control-gap-lg)-var(--field-edge-extra,0px))]',
-  },
-  {
-    trailing: true,
-    size: 'xl',
-    class:
-      'pe-[calc(var(--ws-space-16)+var(--ws-control-icon-size-xl)+var(--ws-control-gap-xl)-var(--field-edge-extra,0px))]',
-  },
-]
+/**
+ * The room for an icon at the start or the end of the field, where text before or after the value
+ * starts past it: the field's padding, the icon and the gap, less the extra edge.
+ */
+export const iconRoomStart = {
+  xs: 'ps-[calc(var(--ws-space-8)+var(--ws-control-icon-size-xs)+var(--ws-control-gap-xs)-var(--field-edge-extra,0px))]',
+  sm: 'ps-[calc(var(--ws-space-10)+var(--ws-control-icon-size-sm)+var(--ws-control-gap-sm)-var(--field-edge-extra,0px))]',
+  md: 'ps-[calc(var(--ws-space-12)+var(--ws-control-icon-size-md)+var(--ws-control-gap-md)-var(--field-edge-extra,0px))]',
+  lg: 'ps-[calc(var(--ws-space-14)+var(--ws-control-icon-size-lg)+var(--ws-control-gap-lg)-var(--field-edge-extra,0px))]',
+  xl: 'ps-[calc(var(--ws-space-16)+var(--ws-control-icon-size-xl)+var(--ws-control-gap-xl)-var(--field-edge-extra,0px))]',
+}
 
-export const fieldCompoundVariants = [
+export const iconRoomEnd = {
+  xs: 'pe-[calc(var(--ws-space-8)+var(--ws-control-icon-size-xs)+var(--ws-control-gap-xs)-var(--field-edge-extra,0px))]',
+  sm: 'pe-[calc(var(--ws-space-10)+var(--ws-control-icon-size-sm)+var(--ws-control-gap-sm)-var(--field-edge-extra,0px))]',
+  md: 'pe-[calc(var(--ws-space-12)+var(--ws-control-icon-size-md)+var(--ws-control-gap-md)-var(--field-edge-extra,0px))]',
+  lg: 'pe-[calc(var(--ws-space-14)+var(--ws-control-icon-size-lg)+var(--ws-control-gap-lg)-var(--field-edge-extra,0px))]',
+  xl: 'pe-[calc(var(--ws-space-16)+var(--ws-control-icon-size-xl)+var(--ws-control-gap-xl)-var(--field-edge-extra,0px))]',
+}
+
+export type FieldSize = keyof typeof iconRoomStart
+
+export const fieldSizeNames = Object.keys(iconRoomStart) as FieldSize[]
+
+/**
+ * What every field shares across its states: the edge on hover, on focus and disabled, the
+ * focus ring, the highlighted edge, and one size of the value at every width.
+ */
+export const fieldStateVariants = [
   // The edge lightens on hover, stays as it is on focus, where the ring shows, and fades when
   // the field is disabled.
   {
@@ -179,10 +143,16 @@ export const fieldCompoundVariants = [
     color: 'error',
     class: '[--field-edge-extra:var(--ws-control-border-width-invalid)]',
   },
-  ...iconRoom,
   // Nuxt UI sets the value smaller from md up, where iOS would not zoom: the system keeps one size.
   { fixed: false, size: ['xs', 'sm'], class: 'md:text-body-sm' },
   { fixed: false, size: ['md', 'lg', 'xl'], class: 'md:text-body' },
+]
+
+export const fieldCompoundVariants = [
+  ...fieldStateVariants,
+  // Text before or after the value starts past the icon.
+  ...fieldSizeNames.map((size) => ({ leading: true, size, class: iconRoomStart[size] })),
+  ...fieldSizeNames.map((size) => ({ trailing: true, size, class: iconRoomEnd[size] })),
   // The loading icon turns only for a reader who has not asked for less motion.
   { loading: true, leading: true, class: { leadingIcon: 'animate-none motion-safe:animate-spin' } },
   {
