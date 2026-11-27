@@ -13,7 +13,6 @@ const arrival = shallowRef(new CalendarDate(2027, 5, 9))
 const start = shallowRef(new Time(9, 30))
 const city = ref('Belgrade')
 const cities = ['Belgrade', 'Novi Sad', 'Niš', 'Kragujevac', 'Subotica']
-const seats = ref(2)
 const rating = ref(4)
 const topics = ref(['forms', 'accessibility'])
 const code = ref(['4', '2'])
@@ -25,7 +24,6 @@ const tracks = [
   { label: 'Tooling', value: 'tooling' },
 ]
 const budget = ref(40)
-const notes = ref('A vegetarian lunch, please.')
 
 const state = reactive({ name: 'Milica Jovanović', email: 'milica@example.com' })
 </script>
@@ -72,12 +70,6 @@ const state = reactive({ name: 'Milica Jovanović', email: 'milica@example.com' 
     </UFormField>
   </OthersSample>
 
-  <OthersSample name="UInputNumber">
-    <UFormField label="Seats" class="w-40">
-      <UInputNumber v-model="seats" :min="1" :max="8" />
-    </UFormField>
-  </OthersSample>
-
   <OthersSample name="UInputRating">
     <UFormField label="How was the workshop?">
       <UInputRating v-model="rating" />
@@ -117,11 +109,5 @@ const state = reactive({ name: 'Milica Jovanović', email: 'milica@example.com' 
       :default-value="true"
     />
     <USwitch label="Lunch" :default-value="false" />
-  </OthersSample>
-
-  <OthersSample name="UTextarea">
-    <UFormField label="Notes" help="Anything we should know." class="w-72">
-      <UTextarea v-model="notes" class="w-full" />
-    </UFormField>
   </OthersSample>
 </template>

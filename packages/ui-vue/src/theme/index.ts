@@ -3,6 +3,7 @@ import button from './button.ts'
 import card from './card.ts'
 import checkbox from './checkbox.ts'
 import formField from './form-field.ts'
+import inputNumber from './input-number.ts'
 import input from './input.ts'
 import modal from './modal.ts'
 import radioGroup from './radio-group.ts'
@@ -11,6 +12,7 @@ import select from './select.ts'
 import { colors } from './shared.ts'
 import table from './table.ts'
 import tabs from './tabs.ts'
+import textarea from './textarea.ts'
 
 /*
  * The names the design system's Tailwind entry adds to Tailwind's. tailwind-merge, which Nuxt UI
@@ -111,10 +113,12 @@ export const ui = {
   checkbox,
   formField,
   input,
+  inputNumber,
   modal,
   radioGroup,
   select,
   selectMenu,
   table,
   tabs,
+  textarea,
 }

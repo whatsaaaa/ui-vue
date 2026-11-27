@@ -284,6 +284,25 @@ test.describe('the gallery', () => {
     await expect(payment.getByRole('radio', { name: 'Bank transfer' })).toBeFocused()
   })
 
+  test('a number field steps with its arrow keys, and its step buttons are no stops of the Tab key', async ({
+    page,
+  }) => {
+    const section = page.locator('#input-number')
+    const tickets = section.getByRole('spinbutton').first()
+    await tickets.focus()
+    await page.keyboard.press('ArrowUp')
+    await expect(tickets).toHaveValue('3')
+    await page.keyboard.press('ArrowDown')
+    await page.keyboard.press('ArrowDown')
+    await expect(tickets).toHaveValue('1')
+    // At the minimum the decrement is disabled, and the increment still steps.
+    await expect(section.getByRole('button', { name: 'Decrease Tickets' }).first()).toBeDisabled()
+    await expect(section.getByRole('button', { name: 'Increase Tickets' }).first()).toBeEnabled()
+    // Tab goes on to the next field, past both buttons.
+    await page.keyboard.press('Tab')
+    await expect(section.getByRole('spinbutton').nth(1)).toBeFocused()
+  })
+
   test('the number of a tab opens it, and the keys stay on there', async ({ page }) => {
     await page.keyboard.press('2')
     await waitForPage(page, /\/dark$/)

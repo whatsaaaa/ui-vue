@@ -24,6 +24,17 @@ export const parts = {
     'error-icon': 'error::before',
   },
   modal: {},
+  // the input, and inside each step button's slot the button itself and its icon
+  'number-field': {
+    root: 'base',
+    placeholder: 'base::placeholder',
+    decrement: 'decrement base',
+    'decrement-icon': 'decrement leadingIcon',
+    increment: 'increment base',
+    'increment-icon': 'increment leadingIcon',
+    required: 'label::after',
+    'error-icon': 'error::before',
+  },
   'radio-group': {
     required: 'legend::after',
     control: 'base',
@@ -55,4 +66,10 @@ export const parts = {
   // a row and a cell of the body, not of the head, and the loading bar under the head
   table: { tr: 'tbody tr', td: 'tbody td', 'loading-bar': 'thead::after' },
   tabs: { 'leading-icon': 'leadingIcon' },
+  textarea: {
+    root: 'base',
+    placeholder: 'base::placeholder',
+    required: 'label::after',
+    'error-icon': 'error::before',
+  },
 } satisfies Record<string, Record<string, string>>

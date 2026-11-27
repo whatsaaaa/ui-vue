@@ -196,7 +196,7 @@ export const components = {
   UInput: { family: 'form', today: 3, target: 3 },
   UInputDate: { family: 'form', today: 1, target: 2 },
   UInputMenu: { family: 'form', today: 1, target: 2 },
-  UInputNumber: { family: 'form', today: 1, target: 3 },
+  UInputNumber: { family: 'form', today: 3, target: 3 },
   UInputRating: {
     family: 'form',
     today: 1,
@@ -231,7 +231,7 @@ export const components = {
       },
     ],
   },
-  UTextarea: { family: 'form', today: 1, target: 3 },
+  UTextarea: { family: 'form', today: 3, target: 3 },
 
   // data
   UAccordion: { family: 'data', today: 1, target: 3 },

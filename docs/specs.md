@@ -7,27 +7,29 @@ How ui-vue meets each component spec of the [Whatsaaaa design system](https://gi
 - **Deviations**: where ui-vue does not meet the spec yet, and where that shows in this repository.
 - **Parity**: whether the gallery passes the parity test, `tests/browser/spec.spec.ts`, and against which versions.
 
-Each spec has a section of its own, whose anchor is the spec's name: [button](#button), [input](#input), [select](#select), [select-menu](#select-menu), [checkbox](#checkbox), [radio-group](#radio-group), [modal](#modal), [badge](#badge), [card](#card), [table](#table) and [tabs](#tabs).
+Each spec has a section of its own, whose anchor is the spec's name: [button](#button), [input](#input), [textarea](#textarea), [number-field](#number-field), [select](#select), [select-menu](#select-menu), [checkbox](#checkbox), [radio-group](#radio-group), [modal](#modal), [badge](#badge), [card](#card), [table](#table) and [tabs](#tabs).
 
 ## Parity
 
 The parity test holds the gallery's examples of each spec to the spec's values, part by part, in both themes and in forced colors, with the design system's helper, `@whatsaaaa/design-system/testing`. It checks what a part draws: its colors, measures and type. A spec's keys, its accessibility rules and the Lucide names of its icons are left to the implementation: ui-vue's other browser tests, such as `tests/browser/keyboard.spec.ts`, check some of them, and the deviations below were found by reading the theme and Nuxt UI against the rest and checking them in the built gallery.
 
-Last checked on 2026-11-26, against `@whatsaaaa/design-system` 1.0.0 and `@nuxt/ui` 4.13.0:
+Last checked on 2026-11-27, against `@whatsaaaa/design-system` 1.1.0 and `@nuxt/ui` 4.13.0:
 
-| Spec                        | Nuxt UI component      | Parity | Deviations |
-| --------------------------- | ---------------------- | ------ | ---------- |
-| [button](#button)           | `UButton`              | Passes | None       |
-| [input](#input)             | `UInput`, `UFormField` | Passes | 1          |
-| [select](#select)           | `USelect`              | Passes | None       |
-| [select-menu](#select-menu) | `USelectMenu`          | Passes | None       |
-| [checkbox](#checkbox)       | `UCheckbox`            | Passes | 1          |
-| [radio-group](#radio-group) | `URadioGroup`          | Passes | 1          |
-| [modal](#modal)             | `UModal`               | Passes | 1          |
-| [badge](#badge)             | `UBadge`               | Passes | None       |
-| [card](#card)               | `UCard`                | Passes | 1          |
-| [table](#table)             | `UTable`               | Passes | 2          |
-| [tabs](#tabs)               | `UTabs`                | Passes | None       |
+| Spec                          | Nuxt UI component            | Parity | Deviations |
+| ----------------------------- | ---------------------------- | ------ | ---------- |
+| [button](#button)             | `UButton`                    | Passes | None       |
+| [input](#input)               | `UInput`, `UFormField`       | Passes | 1          |
+| [textarea](#textarea)         | `UTextarea`, `UFormField`    | Passes | 1          |
+| [number-field](#number-field) | `UInputNumber`, `UFormField` | Passes | 3          |
+| [select](#select)             | `USelect`                    | Passes | None       |
+| [select-menu](#select-menu)   | `USelectMenu`                | Passes | None       |
+| [checkbox](#checkbox)         | `UCheckbox`                  | Passes | 1          |
+| [radio-group](#radio-group)   | `URadioGroup`                | Passes | 1          |
+| [modal](#modal)               | `UModal`                     | Passes | 1          |
+| [badge](#badge)               | `UBadge`                     | Passes | None       |
+| [card](#card)                 | `UCard`                      | Passes | 1          |
+| [table](#table)               | `UTable`                     | Passes | 2          |
+| [tabs](#tabs)                 | `UTabs`                      | Passes | None       |
 
 Every component token a spec's rows name is read by name in the theme, so a change of the design system's component tier reaches ui-vue.
 
@@ -80,6 +82,44 @@ Sizes: `size` on the `UFormField`, or on the `UInput`. Icons: `icon` or `leading
 **Deviations:**
 
 - The error icon is the design system's own danger glyph, `--ws-icon-danger`, drawn as a mask before the error, where the spec names Lucide's `octagon-alert`. Both are an octagon with an exclamation mark, at the icon size and in the error icon's color, which the parity test checks; the glyph is not Lucide's. Shows in the form field's theme, `packages/ui-vue/src/theme/form-field.ts`, and in the part map, `'error-icon': 'error::before'`.
+
+**Parity:** passes.
+
+## Textarea
+
+`UTextarea` inside a `UFormField`, as the [input](#input) is: the input's edge, value and form field, with rows of text in place of its one line.
+
+| Kind    | Props                                  |
+| ------- | -------------------------------------- |
+| outline | `variant="outline"`, Nuxt UI's default |
+
+Sizes: `size` on the `UFormField`, or on the `UTextarea`. Its height is its rows, `rows`, three by Nuxt UI's default; `autoresize` grows it with its text, as the spec lets an implementation. The spec draws no icons and no loading state, so the gallery passes neither: Nuxt UI's `icon` and `loading` still work, outside the spec, with an icon where the input's is.
+
+**Parts:** `root` is `base`, `placeholder` is `base::placeholder`, `required` is `label::after` and `error-icon` is `error::before`, as the input's. `label`, `help` and `error` are the form field's slots of those names.
+
+**Deviations:**
+
+- The error icon is the design system's danger glyph, not Lucide's `octagon-alert`, as the [input](#input)'s.
+
+**Parity:** passes.
+
+## Number field
+
+`UInputNumber` inside a `UFormField`, as the [input](#input) is, with Nuxt UI's two step buttons on either side of the value: its default `orientation="horizontal"`.
+
+| Kind    | Props                                  |
+| ------- | -------------------------------------- |
+| outline | `variant="outline"`, Nuxt UI's default |
+
+Sizes: `size` on the `UFormField`, or on the `UInputNumber`. The range is `min`, `max` and `step`. The step buttons are Nuxt UI's link buttons with Lucide's `minus` and `plus`, as the spec names them, which Reka UI keeps out of the Tab order and disables at a limit; the theme draws them through the `decrement` and `increment` slots around them, so they keep their look when an app passes its own props to `decrement` or `increment`. The field is Reka UI's text input with the role `spinbutton`, one of the two the spec allows. Two step buttons stacked at the end, `orientation="vertical"`, keep Nuxt UI's look, outside the spec.
+
+**Parts:** `root` is `base`, the input, `placeholder` is `base::placeholder`, `required` is `label::after` and `error-icon` is `error::before`, as the input's. A step button is the button inside its slot and its icon that button's icon: `decrement` is `decrement base`, `decrement-icon` is `decrement leadingIcon`, `increment` is `increment base` and `increment-icon` is `increment leadingIcon`. `label`, `help` and `error` are the form field's slots of those names.
+
+**Deviations:**
+
+- The step buttons' names do not say which field they step unless the app names them. Nuxt UI names them Decrement and Increment, where the spec's names say what each does to which field, such as Decrease Tickets and Increase Tickets. An app passes the names, `:decrement="{ 'aria-label': 'Decrease Tickets' }"` and `:increment="{ 'aria-label': 'Increase Tickets' }"`, as the gallery does; Nuxt UI's type of those props leaves out a button's attributes, so TypeScript takes them only with a cast. Shows in the README, under the four things Nuxt UI leaves to the app.
+- The field's edge does not take its hover color while the pointer is on a step button. The hover is the input's, and the buttons lie over it, inside the edge, where the spec's hover is the pointer anywhere on the field. Not recorded elsewhere in this repository yet.
+- The error icon is the design system's danger glyph, not Lucide's `octagon-alert`, as the [input](#input)'s.
 
 **Parity:** passes.
 
@@ -205,7 +245,7 @@ One size. The title is `title` or the `#title` slot, the description `descriptio
 
 **Deviations:**
 
-- The title is not a heading unless the app makes it one. Nuxt UI draws it in a `div`, where the spec's title is a heading, so that the card is a section of the page's outline. An app names a heading for it, `:as="{ title: 'h3' }"`, or passes one in the `#title` slot, as the gallery does. Shows in the README, under the three things Nuxt UI leaves to the app.
+- The title is not a heading unless the app makes it one. Nuxt UI draws it in a `div`, where the spec's title is a heading, so that the card is a section of the page's outline. An app names a heading for it, `:as="{ title: 'h3' }"`, or passes one in the `#title` slot, as the gallery does. Shows in the README, under the four things Nuxt UI leaves to the app.
 
 **Parity:** passes.
 
@@ -224,7 +264,7 @@ One size. The loading line is `loading`, in the primary color, Nuxt UI's default
 
 **Deviations:**
 
-- An amount has no slot of Nuxt UI's, so the theme cannot draw it at the end of its column in figures of one width. The app gives its column `meta: { class: { th: 'text-end', td: 'text-end tabular-nums' } }`; the gallery also draws each amount in an element with `data-slot="amount"`, which the parity test finds. Shows in the README, under the three things Nuxt UI leaves to the app.
+- An amount has no slot of Nuxt UI's, so the theme cannot draw it at the end of its column in figures of one width. The app gives its column `meta: { class: { th: 'text-end', td: 'text-end tabular-nums' } }`; the gallery also draws each amount in an element with `data-slot="amount"`, which the parity test finds. Shows in the README, under the four things Nuxt UI leaves to the app.
 - A table wider than its frame cannot take the focus as its frame while a control is in it, such as the checkboxes of a selectable table, so the arrow keys cannot scroll it. Neither Nuxt UI's table nor the theme gives the frame a `tabindex`, and Chromium makes a frame that scrolls a stop of the Tab key only when nothing in it takes the focus. The theme draws the frame's focus ring, so an app can pass `tabindex="0"` to `UTable`, whose frame takes the attribute. Not recorded elsewhere in this repository yet.
 
 **Parity:** passes.
