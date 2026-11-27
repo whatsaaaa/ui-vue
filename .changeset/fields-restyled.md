@@ -1,5 +1,0 @@
----
-'@whatsaaaa/ui-vue': minor
----
-
-The pin input, input tags, input menu, input date, input time, file upload and field group are restyled on the design system's tiers, at level 2. Each field has the control's heights, the field's edge as a border, which forced colors keep, the system's focus ring, its text styles in place of Tailwind's sizes, and no shadow. A pin input's cells are squares of the control height, 40 px at md. A tag field's and an input menu's tags are the system's neutral tag, the one the arrow keys are on ringed. The input menu's list is the select menu's. A date field's segment with the focus is on the interactive tint. A file upload's drop area has a solid edge, as the system has no dashed one. In a field group the edges of two controls lie over each other as one line at every size, a field under the pointer comes over its neighbours and one in a color over those too, the input, number field, select and select menu in a group too, and a field or a button with the focus comes over them all. A file upload drawn as a button is named in its `#leading` slot, as the README shows.
