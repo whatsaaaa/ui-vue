@@ -123,6 +123,7 @@ export default {
         increment: `${stepPlace[size].increment} ${stepPlace[size].button}`,
       },
     })),
+    // The bare field draws no edge: the buttons' icons start the padding in, as a bare input's do.
     ...fieldSizeNames.map((size) => ({
       variant: 'none',
       orientation: 'horizontal',

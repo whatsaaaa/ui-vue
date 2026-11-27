@@ -44,6 +44,8 @@ export default {
   variants: { ...input.variants, size },
   compoundVariants: [
     ...input.compoundVariants,
+    // The bare field draws no edge, so it takes none off the padding: one row is still as tall as
+    // the input of its size.
     {
       variant: 'none',
       size: 'xs',
