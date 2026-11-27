@@ -62,10 +62,10 @@ export const fieldSizes = {
 }
 
 /**
- * The icons of a field that draws them inside its edge, as a field of tags and a date field do:
- * the padding in from the edge, less what an edge wider than at rest adds, so that they sit where
- * a text field's do and stay there when the edge widens. On the bare field, which draws no edge,
- * that is the padding in from its side, as on a bare text field.
+ * The icons of a field that draws them inside its edge, as a select, a field of tags and a date
+ * field do: the padding in from the edge, less what an edge wider than at rest adds, so that they
+ * sit where a text field's do and stay there when the edge widens. On the bare field, which draws
+ * no edge, that is the padding in from its side, as on a bare text field.
  */
 export const iconsWithinSizes = {
   xs: {

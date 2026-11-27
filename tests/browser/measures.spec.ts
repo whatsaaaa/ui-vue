@@ -187,6 +187,117 @@ test("a bare field's icon starts where its value would, the control's gap from i
   }
 })
 
+/**
+ * The room on each side of a date's or a time's separators, in pixels to the hundredth: each
+ * literal that is drawn, a slash or a colon, from the value before it to the value after it, and
+ * the dash of a range. Not the space before the half of the day, nor the empty literal after it,
+ * which draw nothing.
+ */
+function separatorsOf(field: Locator) {
+  return field.evaluate((field) => {
+    const round = (pixels: number) => Math.round(pixels * 100) / 100
+    const text = (element: Element) => {
+      const range = document.createRange()
+      range.selectNodeContents(element)
+      return range.getBoundingClientRect()
+    }
+    const parts = [
+      ...field.querySelectorAll('[data-slot="segment"], [data-slot="separatorIcon"]'),
+    ].filter((part) => part.getAttribute('data-slot') !== 'segment' || part.textContent?.trim())
+    return parts.flatMap((part, index) => {
+      const slot = part.getAttribute('data-slot')
+      if (slot === 'segment' && part.getAttribute('data-segment') !== 'literal') return []
+      const box = slot === 'segment' ? text(part) : part.getBoundingClientRect()
+      return [
+        {
+          separator: slot === 'segment' ? part.textContent!.trim() : 'dash',
+          before: round(box.left - text(parts[index - 1]!).right),
+          after: round(text(parts[index + 1]!).left - box.right),
+        },
+      ]
+    })
+  })
+}
+
+test("a date's and a time's separators have the same room on each side, one figure or two", async ({
+  page,
+}, testInfo) => {
+  test.skip(playground(testInfo) !== 'nuxt', 'The fields are in the gallery')
+  await open(page)
+  // the room of the tint around a value, which a literal follows straight after; the dash of a
+  // range has its own margin of the same room on each side, beyond the tint
+  const room = await resolveLength(page, 'var(--ws-space-4)')
+  const even = (separators: { separator: string }[]) =>
+    separators.map(({ separator }) => {
+      const side = separator === 'dash' ? 2 * room : room
+      return { separator, before: side, after: side }
+    })
+  for (const section of ['#input-date', '#input-time']) {
+    // 5/10/2027 and 9:30 AM, a month and an hour of one figure, at every size; the range, from
+    // 5/10/2027 to 5/12/2027, a month of one figure after its dash, and from 9:30 AM to
+    // 11:00 AM, an hour of two
+    const fields = [
+      ...['xs', 'sm', 'md', 'lg', 'xl'].map((size) => `size ${size}`),
+      'From the first to the last.',
+    ]
+    for (const help of fields) {
+      const separators = await separatorsOf(
+        example(page, section, help).locator('[data-slot="base"]'),
+      )
+      expect(separators.length, `${section}, ${help}`).toBeGreaterThan(0)
+      expect(separators, `${section}, ${help}`).toEqual(even(separators))
+    }
+    // the month and the hour typed up to two figures, 12/10/2027 and 10:30 AM
+    const field = example(page, section, 'As on your ticket.').locator('[data-slot="base"]')
+    await field.locator('[data-slot="segment"]').first().focus()
+    for (let step = 0; step < (section === '#input-date' ? 7 : 1); step++)
+      await page.keyboard.press('ArrowUp')
+    await expect(field.locator('[data-slot="segment"]').first()).toHaveText(
+      section === '#input-date' ? '12' : '10',
+    )
+    const separators = await separatorsOf(field)
+    expect(separators, `${section}, two figures`).toEqual(even(separators))
+  }
+})
+
+test("a date's and a time's focus tint has the same room on each side of a value, one figure or two", async ({
+  page,
+}, testInfo) => {
+  test.skip(playground(testInfo) !== 'nuxt', 'The fields are in the gallery')
+  // a tint that is drawn at once as the focus comes, not faded in
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await open(page)
+  const room = await resolveLength(page, 'var(--ws-space-4)')
+  for (const section of ['#input-date', '#input-time']) {
+    for (const size of ['xs', 'sm', 'md', 'lg', 'xl']) {
+      // 5/10/2027 and 9:30 AM: each value with the focus in turn, of one figure, two or four
+      const values = example(page, section, `size ${size}`).locator(
+        '[data-slot="segment"]:not([data-segment="literal"])',
+      )
+      for (let index = 0; index < (await values.count()); index++) {
+        const value = values.nth(index)
+        await value.focus()
+        const tint = await value.evaluate((value) => {
+          const round = (pixels: number) => Math.round(pixels * 100) / 100
+          const range = document.createRange()
+          range.selectNodeContents(value)
+          const [box, text] = [value.getBoundingClientRect(), range.getBoundingClientRect()]
+          return {
+            drawn: getComputedStyle(value).backgroundColor !== 'rgba(0, 0, 0, 0)',
+            before: round(text.left - box.left),
+            after: round(box.right - text.right),
+          }
+        })
+        expect(tint, `${section}, ${size}, ${await value.textContent()}`).toEqual({
+          drawn: true,
+          before: room,
+          after: room,
+        })
+      }
+    }
+  }
+})
+
 test("a field's and a button's corners follow the tier's control radius as it changes", async ({
   page,
 }, testInfo) => {
