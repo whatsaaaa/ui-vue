@@ -7,7 +7,7 @@ import {
   components,
   shownOn,
 } from '../../packages/ui-vue/levels.ts'
-import { type Finding, edges, icons, openWithSystemColors, settle } from './forced.ts'
+import { type Finding, alike, edges, icons, openWithSystemColors, settle } from './forced.ts'
 import { open, playground, reportsOf } from './pages.ts'
 
 /*
@@ -112,56 +112,6 @@ async function contrast(page: Page, within?: { selector: string; where: string }
     nodes,
   )
   return within ? findings.map((finding) => ({ ...finding, where: within.where })) : findings
-}
-
-/**
- * Whether two elements are painted alike: every pixel of each has one like it in the other, at
- * its place or within two pixels of it. An edge that falls between two pixels is smoothed
- * otherwise from one place on the page to another, which is not a difference: a mark of a state
- * is wider than that.
- */
-async function alike(page: Page, one: Locator, other: Locator): Promise<boolean> {
-  const images: string[] = []
-  for (const locator of [one, other]) {
-    // on whole pixels, so that the two are smoothed alike, the text in them too
-    await locator.evaluate((element: HTMLElement) => {
-      const { left, top } = element.getBoundingClientRect()
-      element.style.translate = `${Math.round(left) - left}px ${Math.round(top) - top}px`
-    })
-    const image = await locator.screenshot({ animations: 'disabled', scale: 'css' })
-    await locator.evaluate((element: HTMLElement) => element.style.removeProperty('translate'))
-    images.push(image.toString('base64'))
-  }
-  return page.evaluate(async (images) => {
-    const [a, b] = await Promise.all(
-      images.map(async (png) => {
-        const bytes = Uint8Array.from(atob(png), (character) => character.charCodeAt(0))
-        const image = await createImageBitmap(new Blob([bytes], { type: 'image/png' }))
-        const canvas = new OffscreenCanvas(image.width, image.height).getContext('2d')!
-        canvas.drawImage(image, 0, 0)
-        return canvas.getImageData(0, 0, image.width, image.height)
-      }),
-    )
-    // an element between two pixels is a pixel wider or taller in one image than in the other
-    if (Math.abs(a!.width - b!.width) > 1 || Math.abs(a!.height - b!.height) > 1) return false
-    const like = (from: ImageData, to: ImageData, x: number, y: number) => {
-      for (let dy = -2; dy <= 2; dy++)
-        for (let dx = -2; dx <= 2; dx++) {
-          const [nx, ny] = [x + dx, y + dy]
-          if (nx < 0 || ny < 0 || nx >= to.width || ny >= to.height) continue
-          const [i, j] = [(y * from.width + x) * 4, (ny * to.width + nx) * 4]
-          if ([0, 1, 2].every((c) => Math.abs(from.data[i + c]! - to.data[j + c]!) < 64))
-            return true
-        }
-      return false
-    }
-    const within = (from: ImageData, to: ImageData) => {
-      for (let y = 0; y < from.height; y++)
-        for (let x = 0; x < from.width; x++) if (!like(from, to, x, y)) return false
-      return true
-    }
-    return within(a!, b!) && within(b!, a!)
-  }, images)
 }
 
 /**

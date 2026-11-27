@@ -13,16 +13,24 @@ import { playground, waitForNoFindings } from './pages.ts'
 type Findings = string[]
 
 /**
- * Every field has an edge: a text field, and the trigger of a select or a select menu. A field
- * draws it as a border, not a ring, so the parts with a ring leave it out.
+ * Every field has an edge: a text field, the trigger of a select or a select menu, a field whose
+ * text field is inside it, as a tag field's is, a date field and a file upload's area. A field
+ * draws it as a border, not a ring, so the parts with a ring leave it out. The button that opens
+ * an input menu's list is inside its field.
  */
 function fieldEdges(within: Locator): Promise<Findings> {
   return within.evaluate((root) => {
     const findings: string[] = []
-    const fields = root.querySelectorAll<HTMLElement>(
-      'input:not([type=checkbox], [type=radio], [type=hidden]), button[role=combobox], button[aria-haspopup=listbox]',
+    const parts = root.querySelectorAll<HTMLElement>(
+      'input:not([type=checkbox], [type=radio], [type=hidden]), button[role=combobox], button[aria-haspopup=listbox]:not([data-slot=trailing]), [data-slot=base]:has(> [data-slot=segment]), [data-slot=base][data-dragging]',
     )
-    for (const field of fields) {
+    // the field a text field is in, where the field draws the edge around it and its tags
+    const fields = [...parts].map((part) =>
+      part.matches('[data-slot=input], [data-slot=tagsInput]')
+        ? part.closest<HTMLElement>('[data-slot=root], [data-slot=base]')!
+        : part,
+    )
+    for (const field of new Set(fields)) {
       const box = field.getBoundingClientRect()
       if (box.width <= 2 || box.height <= 2 || !field.checkVisibility({ opacityProperty: true }))
         continue

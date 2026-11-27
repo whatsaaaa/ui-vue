@@ -114,13 +114,6 @@ const views = [
     </UCollapsible>
   </OthersSample>
 
-  <OthersSample name="UFieldGroup">
-    <UFieldGroup>
-      <UInput placeholder="Discount code" aria-label="Discount code" />
-      <UButton label="Apply" color="neutral" variant="outline" />
-    </UFieldGroup>
-  </OthersSample>
-
   <OthersSample name="UIcon">
     <UIcon name="i-lucide-ticket" class="size-icon" />
     <UIcon name="i-lucide-map-pin" class="size-icon-lg" />

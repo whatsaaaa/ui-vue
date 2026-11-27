@@ -8,15 +8,20 @@
  *   by axe, in forced colors every icon is painted, every part whose edge is a ring keeps an edge
  *   and a control that is on differs from one that is off, and at 390 px, the width of a phone,
  *   nothing of its example reaches past the frame of the gallery.
- * - Level 2, restyled: it has a theme in the package, written on the system's tiers.
+ * - Level 2, restyled: it has a theme in the package, written on the system's tiers, and passes
+ *   the level 2 checks: tests/level-2.test.ts finds no Tailwind type size, ring as an edge, shadow
+ *   or color shade in its theme merged onto Nuxt UI's, and tests/browser/level-2.spec.ts holds its
+ *   section of the gallery to its states and sizes, to axe in both themes, to its checked, current
+ *   and selected examples in forced colors and to its keys. visual.spec.ts stores the section's
+ *   screenshot.
  * - Level 3, specced: the design system has a spec for it, and its gallery passes the parity test.
  *
  * A component from level 2 has a section of the gallery, and one at level 1 an example on the
  * page of the others, playgrounds/nuxt/app/pages/others.vue, unless it is `unshown`.
  *
  * The levels are data: the README's tables and the gallery's page of the others are drawn from
- * this file, tests/levels.test.ts holds it to the components Nuxt UI has, and
- * tests/browser/level-1.spec.ts to what the pages draw.
+ * this file, tests/levels.test.ts holds it to the components Nuxt UI has, and the level 1 and
+ * level 2 tests to what the pages draw.
  *
  * A component with an entry under `fails` does not pass level 1 yet: the entry is a level 1
  * check it fails today, carried here so that the test passes without restyling anything. The
@@ -146,7 +151,7 @@ export const components = {
   UCard: { family: 'element', today: 3, target: 3 },
   UChip: { family: 'element', today: 1, target: 2 },
   UCollapsible: { family: 'element', today: 1, target: 1 },
-  UFieldGroup: { family: 'element', today: 1, target: 2 },
+  UFieldGroup: { family: 'element', today: 2, target: 2 },
   UIcon: { family: 'element', today: 1, target: 1 },
   UKbd: { family: 'element', today: 1, target: 3 },
   UProgress: { family: 'element', today: 1, target: 2 },
@@ -190,12 +195,12 @@ export const components = {
   UCheckbox: { family: 'form', today: 3, target: 3 },
   UCheckboxGroup: { family: 'form', today: 1, target: 3 },
   UColorPicker: { family: 'form', today: 1, target: 1 },
-  UFileUpload: { family: 'form', today: 1, target: 2 },
+  UFileUpload: { family: 'form', today: 2, target: 2 },
   UForm: { family: 'form', today: 1, target: 1 },
   UFormField: { family: 'form', today: 3, target: 3 },
   UInput: { family: 'form', today: 3, target: 3 },
-  UInputDate: { family: 'form', today: 1, target: 2 },
-  UInputMenu: { family: 'form', today: 1, target: 2 },
+  UInputDate: { family: 'form', today: 2, target: 2 },
+  UInputMenu: { family: 'form', today: 2, target: 2 },
   UInputNumber: { family: 'form', today: 3, target: 3 },
   UInputRating: {
     family: 'form',
@@ -210,10 +215,10 @@ export const components = {
       },
     ],
   },
-  UInputTags: { family: 'form', today: 1, target: 2 },
-  UInputTime: { family: 'form', today: 1, target: 2 },
+  UInputTags: { family: 'form', today: 2, target: 2 },
+  UInputTime: { family: 'form', today: 2, target: 2 },
   UListbox: { family: 'form', today: 1, target: 2 },
-  UPinInput: { family: 'form', today: 1, target: 2 },
+  UPinInput: { family: 'form', today: 2, target: 2 },
   URadioGroup: { family: 'form', today: 3, target: 3 },
   USelect: { family: 'form', today: 3, target: 3 },
   USelectMenu: { family: 'form', today: 3, target: 3 },

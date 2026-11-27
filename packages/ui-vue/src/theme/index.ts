@@ -2,10 +2,17 @@ import badge from './badge.ts'
 import button from './button.ts'
 import card from './card.ts'
 import checkbox from './checkbox.ts'
+import fieldGroup from './field-group.ts'
+import fileUpload from './file-upload.ts'
 import formField from './form-field.ts'
+import inputDate from './input-date.ts'
+import inputMenu from './input-menu.ts'
 import inputNumber from './input-number.ts'
+import inputTags from './input-tags.ts'
+import inputTime from './input-time.ts'
 import input from './input.ts'
 import modal from './modal.ts'
+import pinInput from './pin-input.ts'
 import radioGroup from './radio-group.ts'
 import selectMenu from './select-menu.ts'
 import select from './select.ts'
@@ -111,10 +118,17 @@ export const ui = {
   button,
   card,
   checkbox,
+  fieldGroup,
+  fileUpload,
   formField,
   input,
+  inputDate,
+  inputMenu,
   inputNumber,
+  inputTags,
+  inputTime,
   modal,
+  pinInput,
   radioGroup,
   select,
   selectMenu,

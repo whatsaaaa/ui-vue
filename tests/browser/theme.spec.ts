@@ -51,7 +51,9 @@ test('asks no other host for anything: the fonts and the icons are in the build'
 }) => {
   const elsewhere: string[] = []
   page.on('request', (request) => {
-    if (!request.url().startsWith(baseURL!) && !request.url().startsWith('data:'))
+    // data the page has, written in the URL or made by the page itself, as the file upload's
+    // preview of a chosen file
+    if (!request.url().startsWith(baseURL!) && !/^(data|blob):/.test(request.url()))
       elsewhere.push(request.url())
   })
   await open(page)

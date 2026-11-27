@@ -39,7 +39,7 @@ const samples = {
 /** What a family is, in a line under its name. */
 const leads: Record<Family, string> = {
   element: 'The small parts of a page: notices, avatars, key caps, progress.',
-  form: 'The fields and controls of a form that have no spec yet.',
+  form: 'The fields and controls of a form the package does not theme yet.',
   data: 'Lists, trees and timelines.',
   navigation: 'Where you are, and where you can go.',
   overlay: 'What opens over the page: menus, popovers, panels and toasts.',
@@ -57,15 +57,23 @@ const leads: Record<Family, string> = {
 
 const entries = Object.entries(components) as [string, ComponentLevels][]
 
-/** Each family with its components: the ones this page shows, and the others with the reason. */
+/**
+ * Each family with its components: the ones this page shows, the ones the gallery shows, restyled
+ * or held to a spec, and the others with the reason.
+ */
 const sections = families.map((family) => {
   const own = entries.filter(([, component]) => component.family === family)
   const shown = (where: ReturnType<typeof shownOn>) =>
     own.filter(([, component]) => shownOn(component) === where).map(([name]) => name)
+  const inGallery = (level: number) =>
+    own
+      .filter(([, component]) => shownOn(component) === 'gallery' && component.today === level)
+      .map(([name]) => name)
   return {
     family,
     shown: shown('others'),
-    gallery: shown('gallery'),
+    restyled: inGallery(2),
+    specced: inGallery(3),
     unshown: own.flatMap(([name, { unshown }]) => (unshown ? [{ name, note: unshown.note }] : [])),
   }
 })
@@ -74,7 +82,7 @@ const sections = families.map((family) => {
 <template>
   <GalleryFrame
     title="The others, as they inherit"
-    lead="Every Nuxt UI component the package does not hold to a spec yet, by family. Each takes the system's colors, radius and fonts through the stylesheet, and nothing else: its type, its sizes and its states are still Nuxt UI's. The levels come from the package's levels file."
+    lead="Every Nuxt UI component the package does not theme yet, by family. Each takes the system's colors, radius and fonts through the stylesheet, and nothing else: its type, its sizes and its states are still Nuxt UI's. The levels come from the package's levels file."
   >
     <div class="mt-10 flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-16">
       <nav aria-labelledby="contents-title" class="min-w-0">
@@ -101,9 +109,13 @@ const sections = families.map((family) => {
             <a :href="`#${name}`">{{ name }}</a>
           </li>
         </ul>
-        <p v-if="section.gallery.length">
+        <p v-if="section.specced.length">
           In the <NuxtLink to="/">gallery</NuxtLink>, held to a spec:
-          {{ section.gallery.join(', ') }}.
+          {{ section.specced.join(', ') }}.
+        </p>
+        <p v-if="section.restyled.length">
+          In the <NuxtLink to="/">gallery</NuxtLink>, restyled on the system's tiers:
+          {{ section.restyled.join(', ') }}.
         </p>
         <ul v-if="section.unshown.length" class="flex flex-col gap-1">
           <li v-for="{ name, note } in section.unshown" :key="name">

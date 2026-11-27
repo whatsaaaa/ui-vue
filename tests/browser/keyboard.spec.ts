@@ -45,12 +45,17 @@ function focusRing(page: Page) {
   })
 }
 
+/** How many stops the Tab key may make before the focus comes round: the gallery has some 500. */
+const MAX_STOPS = 800
+
 test('every control the Tab key reaches shows the focus ring', async ({ page }) => {
+  // a stop takes a reading of the page
+  test.slow()
   await open(page)
   const seen = new Set<string>()
   let stops = 0
   // Tab through the whole page, until the focus comes round to where it started.
-  for (; stops < 400; stops++) {
+  for (; stops < MAX_STOPS; stops++) {
     await page.keyboard.press('Tab')
     const ring = await focusRing(page)
     if (!ring) continue
@@ -69,7 +74,7 @@ test('every control the Tab key reaches shows the focus ring', async ({ page }) 
   }
   // all of the gallery, and the eight stops of the Vue page
   expect(seen.size).toBeGreaterThanOrEqual(playground(test.info()) === 'nuxt' ? 100 : 8)
-  expect(stops).toBeLessThan(400)
+  expect(stops).toBeLessThan(MAX_STOPS)
 })
 
 test.describe('the gallery', () => {
@@ -107,7 +112,8 @@ test.describe('the gallery', () => {
     const menu = page.getByTestId('select-menu')
     await menu.focus()
     await page.keyboard.press('Enter')
-    await expect(page.getByRole('combobox').and(page.locator('input'))).toBeFocused()
+    // the search at the top of the list
+    await expect(page.locator('[data-slot=content]').getByRole('combobox')).toBeFocused()
     await page.keyboard.type('Pra')
     const options = page.getByRole('option')
     await expect(options).toHaveCount(1)

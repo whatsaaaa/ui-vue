@@ -263,6 +263,68 @@ test('a card without its control centers its label in the card: the hidden contr
   expect(insets).toEqual(insets.map(() => ({ start: 0, end: 0 })))
 })
 
+/**
+ * Where the controls of each field group of the gallery meet: the edges the two draw there, the
+ * edge of a text field being its field's, not its root's, and how far they lie over each other.
+ * And whether the one drawn on top at the seam is the one with the wider edge.
+ */
+function seams(page: Page) {
+  return page.locator('#field-group [data-orientation]').evaluateAll((groups) =>
+    groups.flatMap((group) => {
+      // in view, where the point of the seam is drawn
+      group.scrollIntoView({ block: 'center' })
+      const vertical = group.getAttribute('data-orientation') === 'vertical'
+      const edgeOf = (item: Element) =>
+        item.matches('[data-slot=root]') ? item.querySelector('[data-slot=base]')! : item
+      const items = [...group.children].map(edgeOf)
+      return items.slice(1).map((after, index) => {
+        const before = items[index]!
+        const [a, b] = [before.getBoundingClientRect(), after.getBoundingClientRect()]
+        const width = (element: Element, side: string) =>
+          parseFloat(getComputedStyle(element).getPropertyValue(`border-${side}-width`))
+        const edges = vertical
+          ? [width(before, 'bottom'), width(after, 'top')]
+          : [width(before, 'right'), width(after, 'left')]
+        const overlap = vertical ? a.bottom - b.top : a.right - b.left
+        // the middle of the line the two edges share
+        const [x, y] = vertical
+          ? [(b.left + b.right) / 2, b.top + overlap / 2]
+          : [b.left + overlap / 2, (b.top + b.bottom) / 2]
+        const top = document.elementFromPoint(x, y)
+        const wider = edges[0]! > edges[1]! ? before : edges[1]! > edges[0]! ? after : undefined
+        return {
+          seam: `${group.closest('figure')?.querySelector('figcaption')?.textContent}, ${index + 1}`,
+          edges,
+          overlap: Math.round(overlap * 100) / 100,
+          widerOnTop: wider ? !!top && (wider === top || wider.contains(top)) : true,
+        }
+      })
+    }),
+  )
+}
+
+for (const forcedColors of ['none', 'active'] as const) {
+  test.describe(`forced colors: ${forcedColors}`, () => {
+    test.use({ forcedColors })
+
+    test('where two controls of a field group meet, their edges lie over each other as one line, at every size', async ({
+      page,
+    }, testInfo) => {
+      test.skip(playground(testInfo) !== 'nuxt', 'The field groups are in the gallery')
+      await open(page)
+      const found = await seams(page)
+      // the rows of states and controls, the five sizes and the two columns
+      expect(found.length).toBeGreaterThanOrEqual(14)
+      for (const { seam, edges, overlap, widerOnTop } of found) {
+        expect(Math.min(...edges), seam).toBeGreaterThanOrEqual(1)
+        // the narrower edge lies wholly on the wider one, which is drawn over it
+        expect(overlap, seam).toBe(Math.min(...edges))
+        expect(widerOnTop, seam).toBe(true)
+      }
+    })
+  })
+}
+
 for (const colorScheme of ['dark', 'light'] as const) {
   test.describe(`on a ${colorScheme} system`, () => {
     test.use({ colorScheme })

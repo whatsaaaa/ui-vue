@@ -117,7 +117,7 @@ Sizes: `size` on the `UFormField`, or on the `UInputNumber`. The range is `min`,
 
 **Deviations:**
 
-- The step buttons' names do not say which field they step unless the app names them. Nuxt UI names them Decrement and Increment, where the spec's names say what each does to which field, such as Decrease Tickets and Increase Tickets. An app passes the names, `:decrement="{ 'aria-label': 'Decrease Tickets' }"` and `:increment="{ 'aria-label': 'Increase Tickets' }"`, as the gallery does; Nuxt UI's type of those props leaves out a button's attributes, so TypeScript takes them only with a cast. Shows in the README, under the four things Nuxt UI leaves to the app.
+- The step buttons' names do not say which field they step unless the app names them. Nuxt UI names them Decrement and Increment, where the spec's names say what each does to which field, such as Decrease Tickets and Increase Tickets. An app passes the names, `:decrement="{ 'aria-label': 'Decrease Tickets' }"` and `:increment="{ 'aria-label': 'Increase Tickets' }"`, as the gallery does; Nuxt UI's type of those props leaves out a button's attributes, so TypeScript takes them only with a cast. Shows in the README, under the five things Nuxt UI leaves to the app.
 - The field's edge does not take its hover color while the pointer is on a step button. The hover is the input's, and the buttons lie over it, inside the edge, where the spec's hover is the pointer anywhere on the field. Not recorded elsewhere in this repository yet.
 - The error icon is the design system's danger glyph, not Lucide's `octagon-alert`, as the [input](#input)'s.
 
@@ -245,7 +245,7 @@ One size. The title is `title` or the `#title` slot, the description `descriptio
 
 **Deviations:**
 
-- The title is not a heading unless the app makes it one. Nuxt UI draws it in a `div`, where the spec's title is a heading, so that the card is a section of the page's outline. An app names a heading for it, `:as="{ title: 'h3' }"`, or passes one in the `#title` slot, as the gallery does. Shows in the README, under the four things Nuxt UI leaves to the app.
+- The title is not a heading unless the app makes it one. Nuxt UI draws it in a `div`, where the spec's title is a heading, so that the card is a section of the page's outline. An app names a heading for it, `:as="{ title: 'h3' }"`, or passes one in the `#title` slot, as the gallery does. Shows in the README, under the five things Nuxt UI leaves to the app.
 
 **Parity:** passes.
 
@@ -264,7 +264,7 @@ One size. The loading line is `loading`, in the primary color, Nuxt UI's default
 
 **Deviations:**
 
-- An amount has no slot of Nuxt UI's, so the theme cannot draw it at the end of its column in figures of one width. The app gives its column `meta: { class: { th: 'text-end', td: 'text-end tabular-nums' } }`; the gallery also draws each amount in an element with `data-slot="amount"`, which the parity test finds. Shows in the README, under the four things Nuxt UI leaves to the app.
+- An amount has no slot of Nuxt UI's, so the theme cannot draw it at the end of its column in figures of one width. The app gives its column `meta: { class: { th: 'text-end', td: 'text-end tabular-nums' } }`; the gallery also draws each amount in an element with `data-slot="amount"`, which the parity test finds. Shows in the README, under the five things Nuxt UI leaves to the app.
 - A table wider than its frame cannot take the focus as its frame while a control is in it, such as the checkboxes of a selectable table, so the arrow keys cannot scroll it. Neither Nuxt UI's table nor the theme gives the frame a `tabindex`, and Chromium makes a frame that scrolls a stop of the Tab key only when nothing in it takes the focus. The theme draws the frame's focus ring, so an app can pass `tabindex="0"` to `UTable`, whose frame takes the attribute. Not recorded elsewhere in this repository yet.
 
 **Parity:** passes.
