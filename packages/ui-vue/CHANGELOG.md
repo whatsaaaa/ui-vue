@@ -1,5 +1,13 @@
 # @whatsaaaa/ui-vue
 
+## 0.2.0
+
+### Minor Changes
+
+- [#61](https://github.com/whatsaaaa/ui-vue/pull/61) [`d2d5138`](https://github.com/whatsaaaa/ui-vue/commit/d2d51380dbb9be891ba671b40e3fb65b3348de07) Thanks [@whatsaaaa](https://github.com/whatsaaaa)! - The pin input, input tags, input menu, input date, input time, file upload and field group are restyled on the design system's tiers, at level 2. Each field has the control's heights, the field's edge as a border, which forced colors keep, the system's focus ring, its text styles in place of Tailwind's sizes, and no shadow. A pin input's cells are squares of the control height, 40 px at md. A tag field's and an input menu's tags are the system's neutral tag, the one the arrow keys are on ringed. The input menu's list is the select menu's. A date field's segment with the focus is on the interactive tint. A file upload's drop area has a solid edge, as the system has no dashed one. In a field group the edges of two controls lie over each other as one line at every size, a field under the pointer comes over its neighbours and one in a color over those too, the input, number field, select and select menu in a group too, and a field or a button with the focus comes over them all. A file upload drawn as a button is named in its `#leading` slot, as the README shows.
+
+- [#58](https://github.com/whatsaaaa/ui-vue/pull/58) [`af2607e`](https://github.com/whatsaaaa/ui-vue/commit/af2607ef5284e9366b9b3a07c0560fd7dffe7eba) Thanks [@whatsaaaa](https://github.com/whatsaaaa)! - `UTextarea` and `UInputNumber` follow the design system's new `textarea` and `number-field` specs, and the package takes `@whatsaaaa/design-system` `^1.1.0` as its peer, the release that brings them. A text area is the input's field with rows of text and no height of its own: its value is the field's text style at each size, and one row is as tall as the input of its size. A number field is the input's field at the control height, its value in figures of one width, with its two step buttons inside the edge where the input draws its icons, their icons in the field's icon color and faint where a button is disabled. Both keep an edge in forced colors. Nuxt UI names the step buttons Decrement and Increment: pass each a name that says which field it steps, `:decrement="{ 'aria-label': 'Decrease Tickets' }"`, as the spec asks.
+
 ## 0.1.0
 
 ### Minor Changes
