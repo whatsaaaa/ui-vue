@@ -1,5 +1,13 @@
 # @whatsaaaa/ui-vue
 
+## 0.2.1
+
+### Patch Changes
+
+- [#62](https://github.com/whatsaaaa/ui-vue/pull/62) [`5529c11`](https://github.com/whatsaaaa/ui-vue/commit/5529c118a225a7f9b7790ca5ee473634e87ebfe2) Thanks [@whatsaaaa](https://github.com/whatsaaaa)! - `UInputDate` and `UInputTime` fit each segment to its value, in place of a width of two figures, four for a year, in which Nuxt UI centers it. The room on each side of every slash and colon, of a range's dash and of the focus tint is now the same, whatever the value: 9:30 AM and 5/10/2027 are spaced evenly, where the 9 and the 5 stood half a figure off the literal after them. The figures keep one width, so a value moves the text after it only as a second figure is typed. An empty segment's placeholder fits its letters or dashes the same way. The select's icons inside its edge take their paddings from the definition the tag field, the date and time fields and the input menu take them from, so they cannot drift apart; they do not move.
+
+- [#64](https://github.com/whatsaaaa/ui-vue/pull/64) [`4cf2860`](https://github.com/whatsaaaa/ui-vue/commit/4cf2860788182ac0b13a00d2b4efba5a99487c94) Thanks [@whatsaaaa](https://github.com/whatsaaaa)! - In forced colors, a segment of `UInputDate` and `UInputTime` draws no outline, where Nuxt UI's `outline-hidden` drew one in the text color around every segment and every slash and colon, with nothing focused. The segment with the focus stays in the selection colors, Highlight under HighlightText.
+
 ## 0.2.0
 
 ### Minor Changes
