@@ -4,6 +4,7 @@ import {
   fieldVariants,
   fieldWithinCompoundVariants,
   fieldWithinVariants,
+  iconsWithinSizes,
   inGroupRoot,
 } from './field.ts'
 import { bareIcons, inputSlots } from './input.ts'
@@ -44,11 +45,11 @@ const sizes = Object.fromEntries(
   }),
 )
 
-/** With several values, the field of tags at each size. */
+/** With several values, the field of tags at each size, its icons inside its edge. */
 const tagsFields = (['xs', 'sm', 'md', 'lg', 'xl'] as const).map((size) => ({
   multiple: true,
   size,
-  class: { base: tagsFieldSizes[size] },
+  class: { base: tagsFieldSizes[size], ...iconsWithinSizes[size] },
 }))
 
 export default {
@@ -94,12 +95,12 @@ export default {
       variant,
       class: classes,
     })),
-    ...fieldCompoundVariants,
     ...bareIcons,
+    ...tagsFields,
+    ...fieldCompoundVariants,
     ...inGroupRoot,
     // with several values the field shows the focus of the text field inside it
     ...fieldWithinCompoundVariants.map((compound) => ({ ...compound, multiple: true })),
     { multiple: true, variant: ['soft', 'subtle'], class: { tagsItem: tagOnRaised } },
-    ...tagsFields,
   ],
 }

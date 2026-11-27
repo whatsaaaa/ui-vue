@@ -58,15 +58,15 @@ function example(page: Page, section: string, text: string) {
 /**
  * Where a field lays out its value and its icons, in pixels in from its outer edges, to the
  * hundredth: the value from each side, past the edge and the padding, and each icon's near and far
- * side from its own side of the field. And the edge's width. An input's icons sit beside it, a
- * select's inside it.
+ * side from its own side of the field. And the edge's width. An input's icons sit beside it, as
+ * a field of tags' do, a select's inside it.
  */
 function layoutOf(field: Locator) {
   return field.evaluate((field) => {
     const round = (pixels: number) => Math.round(pixels * 100) / 100
     const box = field.getBoundingClientRect()
     const style = getComputedStyle(field)
-    const around = field.localName === 'input' ? field.parentElement! : field
+    const around = field.parentElement!
     const icon = (slot: string, side: 'leading' | 'trailing') => {
       const icon = around.querySelector(`[data-slot="${slot}"]`)?.getBoundingClientRect()
       if (!icon) return undefined
@@ -93,16 +93,37 @@ test("a field's icons start where a field's value does, the control's gap from i
   await open(page)
   for (const size of ['xs', 'sm', 'md', 'lg', 'xl']) {
     const gap = await resolveLength(page, `var(--ws-control-gap-${size})`)
-    // a text field with an icon on each side, and a select with its chevron and no icon before
+    // a text field with an icon on each side and a select with its chevron and no icon before;
+    // and the fields that draw their icons inside their edge: a field of tags, a date and a time
+    // field with an icon before, and an input menu of several values with its chevron
     const input = await layoutOf(example(page, '#input', `size ${size}`).getByRole('textbox'))
     const select = await layoutOf(example(page, '#select', `size ${size}`).getByRole('combobox'))
+    const leading = {
+      tags: await layoutOf(
+        example(page, '#input-tags', `size ${size}`).locator('[data-slot="root"]'),
+      ),
+      date: await layoutOf(example(page, '#input-date', `size ${size}`).getByRole('group')),
+      time: await layoutOf(example(page, '#input-time', `size ${size}`).getByRole('group')),
+    }
+    const menu = await layoutOf(
+      example(page, '#input-menu', `size ${size}, several values`).locator('[data-slot="base"]'),
+    )
     expect(input.value.start - input.leadingIcon!.end, size).toBe(gap)
     expect(input.value.end - input.trailingIcon!.end, size).toBe(gap)
     expect(select.value.end - select.trailingIcon!.end, size).toBe(gap)
+    for (const [field, { value, leadingIcon }] of Object.entries(leading))
+      expect(value.start - leadingIcon!.end, `${field}, ${size}`).toBe(gap)
+    expect(menu.value.end - menu.trailingIcon!.end, `menu, ${size}`).toBe(gap)
     expect(
-      [input.leadingIcon!.start, input.trailingIcon!.start, select.trailingIcon!.start],
+      [
+        input.leadingIcon!.start,
+        input.trailingIcon!.start,
+        select.trailingIcon!.start,
+        ...Object.values(leading).map(({ leadingIcon }) => leadingIcon!.start),
+        menu.trailingIcon!.start,
+      ],
       size,
-    ).toEqual([select.value.start, select.value.start, select.value.start])
+    ).toEqual(Array.from({ length: 7 }, () => select.value.start))
   }
 })
 
@@ -128,6 +149,8 @@ test("a field's value and its icons stay where they are when its edge widens in 
       'Where the conference takes place.',
       'Choose the day you are registering for.',
     ],
+    // a field that draws its icon inside its edge
+    ['#input-date', 'group', 'As on your ticket.', 'Choose a day of the conference.'],
   ] as const) {
     const atRest = await layoutOf(example(page, section, rest).getByRole(role))
     // the field of the states row, at the default size, before the sizes of the error

@@ -1,5 +1,11 @@
-import { fieldSizes, fieldWithinCompoundVariants, fieldWithinVariants, inGroup } from './field.ts'
-import { bareIcons, inputSlots } from './input.ts'
+import {
+  fieldSizes,
+  fieldWithinCompoundVariants,
+  fieldWithinVariants,
+  iconsWithinSizes,
+  inGroup,
+} from './field.ts'
+import { inputSlots } from './input.ts'
 import {
   tag,
   tagDelete,
@@ -22,6 +28,7 @@ const sizes = Object.fromEntries(
     size,
     {
       ...fieldSizes[size],
+      ...iconsWithinSizes[size],
       base: tagsFieldSizes[size],
       item: tagOfField[size],
       itemDeleteIcon: tagDeleteIconSize,
@@ -45,7 +52,6 @@ export default {
   },
   compoundVariants: [
     ...fieldWithinCompoundVariants,
-    ...bareIcons,
     ...inGroup,
     { variant: ['soft', 'subtle'], class: { item: tagOnRaised } },
   ],

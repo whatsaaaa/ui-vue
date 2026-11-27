@@ -1,5 +1,11 @@
-import { fieldSizes, fieldWithinCompoundVariants, fieldWithinVariants, inGroup } from './field.ts'
-import { bareIcons, inputSlots } from './input.ts'
+import {
+  fieldSizes,
+  fieldWithinCompoundVariants,
+  fieldWithinVariants,
+  iconsWithinSizes,
+  inGroup,
+} from './field.ts'
+import { inputSlots } from './input.ts'
 import { transition } from './shared.ts'
 
 /*
@@ -23,30 +29,35 @@ const segmentWidths =
 const sizes = {
   xs: {
     ...fieldSizes.xs,
+    ...iconsWithinSizes.xs,
     base: 'h-(--ws-control-height-xs) px-[calc(var(--ws-space-8)-var(--field-edge-extra,0px))] py-0 gap-0 text-body-sm',
     separatorIcon: 'size-(--ws-control-icon-size-xs)',
     segment: segmentWidths,
   },
   sm: {
     ...fieldSizes.sm,
+    ...iconsWithinSizes.sm,
     base: 'h-(--ws-control-height-sm) px-[calc(var(--ws-space-10)-var(--field-edge-extra,0px))] py-0 gap-0 text-body-sm',
     separatorIcon: 'size-(--ws-control-icon-size-sm)',
     segment: segmentWidths,
   },
   md: {
     ...fieldSizes.md,
+    ...iconsWithinSizes.md,
     base: 'h-(--ws-control-height-md) px-[calc(var(--ws-space-12)-var(--field-edge-extra,0px))] py-0 gap-0 text-body',
     separatorIcon: 'size-(--ws-control-icon-size-md)',
     segment: segmentWidths,
   },
   lg: {
     ...fieldSizes.lg,
+    ...iconsWithinSizes.lg,
     base: 'h-(--ws-control-height-lg) px-[calc(var(--ws-space-14)-var(--field-edge-extra,0px))] py-0 gap-0 text-body',
     separatorIcon: 'size-(--ws-control-icon-size-lg)',
     segment: segmentWidths,
   },
   xl: {
     ...fieldSizes.xl,
+    ...iconsWithinSizes.xl,
     base: 'h-(--ws-control-height-xl) px-[calc(var(--ws-space-16)-var(--field-edge-extra,0px))] py-0 gap-0 text-body',
     separatorIcon: 'size-(--ws-control-icon-size-xl)',
     segment: segmentWidths,
@@ -68,7 +79,6 @@ export default {
   },
   compoundVariants: [
     ...fieldWithinCompoundVariants,
-    ...bareIcons,
     ...inGroup,
     // over Nuxt UI's fill of each variant, and under the pointer
     {

@@ -62,6 +62,35 @@ export const fieldSizes = {
 }
 
 /**
+ * The icons of a field that draws them inside its edge, as a field of tags and a date field do:
+ * the padding in from the edge, less what an edge wider than at rest adds, so that they sit where
+ * a text field's do and stay there when the edge widens. On the bare field, which draws no edge,
+ * that is the padding in from its side, as on a bare text field.
+ */
+export const iconsWithinSizes = {
+  xs: {
+    leading: 'ps-[calc(var(--ws-space-8)-var(--field-edge-extra,0px))]',
+    trailing: 'pe-[calc(var(--ws-space-8)-var(--field-edge-extra,0px))]',
+  },
+  sm: {
+    leading: 'ps-[calc(var(--ws-space-10)-var(--field-edge-extra,0px))]',
+    trailing: 'pe-[calc(var(--ws-space-10)-var(--field-edge-extra,0px))]',
+  },
+  md: {
+    leading: 'ps-[calc(var(--ws-space-12)-var(--field-edge-extra,0px))]',
+    trailing: 'pe-[calc(var(--ws-space-12)-var(--field-edge-extra,0px))]',
+  },
+  lg: {
+    leading: 'ps-[calc(var(--ws-space-14)-var(--field-edge-extra,0px))]',
+    trailing: 'pe-[calc(var(--ws-space-14)-var(--field-edge-extra,0px))]',
+  },
+  xl: {
+    leading: 'ps-[calc(var(--ws-space-16)-var(--field-edge-extra,0px))]',
+    trailing: 'pe-[calc(var(--ws-space-16)-var(--field-edge-extra,0px))]',
+  },
+}
+
+/**
  * The field's edge, of the control's width: transparent where the variant draws none, so that
  * every field lays out alike, and forced colors draw one there. The bare field, inside another
  * control, has none: its value starts the padding in, as that control's content does.
