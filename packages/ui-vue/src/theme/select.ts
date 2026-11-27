@@ -1,4 +1,4 @@
-import { fieldCompoundVariants, fieldSizes, fieldVariants } from './field.ts'
+import { fieldCompoundVariants, fieldSizes, fieldVariants, inGroup } from './field.ts'
 import { forcedIcon, transition } from './shared.ts'
 
 /*
@@ -118,5 +118,5 @@ export const selectVariants = {
 export default {
   slots: selectSlots,
   variants: selectVariants,
-  compoundVariants: fieldCompoundVariants,
+  compoundVariants: [...fieldCompoundVariants, ...inGroup],
 }

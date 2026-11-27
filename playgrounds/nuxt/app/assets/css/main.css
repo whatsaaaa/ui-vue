@@ -34,6 +34,16 @@
 }
 
 /*
+ * The focus from the pointer too, as a click puts it on a segment of a date field: on the marked
+ * part alone, as it is on one part at a time.
+ */
+@custom-variant focus {
+  &:is(:focus, [data-demo~='focus']) {
+    @slot;
+  }
+}
+
+/*
  * An open list highlights the option the focus is on: the chosen one, as it opens. An open list
  * in the gallery, marked data-demo="open", takes no focus, so its chosen option is drawn
  * highlighted.
@@ -67,6 +77,34 @@
   min-width: 0 !important;
   transform: none !important;
   margin-top: var(--ws-space-8);
+}
+
+/*
+ * An input menu's list is inside the root of its field, beside the text field and its icons: they
+ * share the first line of a grid there, the icons at its ends, and the list has the line under it.
+ * The example is marked by a class: a rule that found the root by the list in it would have the
+ * browser look into every root of the page on any change of it.
+ */
+.gallery-open--in-field > [data-slot='root'] {
+  display: grid;
+  grid-template-columns: 100%;
+  align-items: center;
+}
+
+.gallery-open--in-field > [data-slot='root'] > * {
+  grid-area: 1 / 1;
+}
+
+.gallery-open--in-field > [data-slot='root'] > :is([data-slot='leading'], [data-slot='trailing']) {
+  position: static;
+}
+
+.gallery-open--in-field > [data-slot='root'] > [data-slot='trailing'] {
+  justify-self: end;
+}
+
+.gallery-open--in-field > [data-slot='root'] > [data-reka-popper-content-wrapper] {
+  grid-area: 2 / 1;
 }
 
 /* and as wide as its content, where its example leaves it more room than its trigger has */

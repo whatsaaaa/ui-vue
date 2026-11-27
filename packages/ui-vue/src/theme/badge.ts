@@ -51,6 +51,15 @@ const subtleRing: ByColor = {
   neutral: 'ring ring-inset ring-border',
 }
 
+/** The tag's room and type at each size: an input's tags take them too. */
+export const tagSizes = {
+  xs: 'rounded-(--ws-tag-radius) px-(--ws-tag-padding-inline-xs) py-0 gap-(--ws-space-4) text-caption',
+  sm: 'rounded-(--ws-tag-radius) px-(--ws-tag-padding-inline-sm) py-(--ws-tag-padding-block-sm) gap-(--ws-space-4) text-caption',
+  md: 'rounded-(--ws-tag-radius) px-(--ws-tag-padding-inline-md) py-(--ws-tag-padding-block-md) gap-(--ws-space-6) text-label-sm',
+  lg: 'rounded-(--ws-tag-radius) px-(--ws-tag-padding-inline-lg) py-(--ws-tag-padding-block-lg) gap-(--ws-space-6) text-label',
+  xl: 'rounded-(--ws-tag-radius) px-(--ws-tag-padding-inline-xl) py-(--ws-tag-padding-block-xl) gap-(--ws-space-8) text-label',
+}
+
 /** The icon of the system's text, at every size. */
 const icon = { leadingIcon: 'size-icon', trailingIcon: 'size-icon' }
 
@@ -64,26 +73,11 @@ export default {
   },
   variants: {
     size: {
-      xs: {
-        base: 'rounded-(--ws-tag-radius) px-(--ws-tag-padding-inline-xs) py-0 gap-(--ws-space-4) text-caption',
-        ...icon,
-      },
-      sm: {
-        base: 'rounded-(--ws-tag-radius) px-(--ws-tag-padding-inline-sm) py-(--ws-tag-padding-block-sm) gap-(--ws-space-4) text-caption',
-        ...icon,
-      },
-      md: {
-        base: 'rounded-(--ws-tag-radius) px-(--ws-tag-padding-inline-md) py-(--ws-tag-padding-block-md) gap-(--ws-space-6) text-label-sm',
-        ...icon,
-      },
-      lg: {
-        base: 'rounded-(--ws-tag-radius) px-(--ws-tag-padding-inline-lg) py-(--ws-tag-padding-block-lg) gap-(--ws-space-6) text-label',
-        ...icon,
-      },
-      xl: {
-        base: 'rounded-(--ws-tag-radius) px-(--ws-tag-padding-inline-xl) py-(--ws-tag-padding-block-xl) gap-(--ws-space-8) text-label',
-        ...icon,
-      },
+      xs: { base: tagSizes.xs, ...icon },
+      sm: { base: tagSizes.sm, ...icon },
+      md: { base: tagSizes.md, ...icon },
+      lg: { base: tagSizes.lg, ...icon },
+      xl: { base: tagSizes.xl, ...icon },
     },
   },
   compoundVariants: [

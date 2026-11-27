@@ -58,15 +58,15 @@ function example(page: Page, section: string, text: string) {
 /**
  * Where a field lays out its value and its icons, in pixels in from its outer edges, to the
  * hundredth: the value from each side, past the edge and the padding, and each icon's near and far
- * side from its own side of the field. And the edge's width. An input's icons sit beside it, a
- * select's inside it.
+ * side from its own side of the field. And the edge's width. An input's icons sit beside it, as
+ * a field of tags' do, a select's inside it.
  */
 function layoutOf(field: Locator) {
   return field.evaluate((field) => {
     const round = (pixels: number) => Math.round(pixels * 100) / 100
     const box = field.getBoundingClientRect()
     const style = getComputedStyle(field)
-    const around = field.localName === 'input' ? field.parentElement! : field
+    const around = field.parentElement!
     const icon = (slot: string, side: 'leading' | 'trailing') => {
       const icon = around.querySelector(`[data-slot="${slot}"]`)?.getBoundingClientRect()
       if (!icon) return undefined
@@ -93,16 +93,37 @@ test("a field's icons start where a field's value does, the control's gap from i
   await open(page)
   for (const size of ['xs', 'sm', 'md', 'lg', 'xl']) {
     const gap = await resolveLength(page, `var(--ws-control-gap-${size})`)
-    // a text field with an icon on each side, and a select with its chevron and no icon before
+    // a text field with an icon on each side and a select with its chevron and no icon before;
+    // and the fields that draw their icons inside their edge: a field of tags, a date and a time
+    // field with an icon before, and an input menu of several values with its chevron
     const input = await layoutOf(example(page, '#input', `size ${size}`).getByRole('textbox'))
     const select = await layoutOf(example(page, '#select', `size ${size}`).getByRole('combobox'))
+    const leading = {
+      tags: await layoutOf(
+        example(page, '#input-tags', `size ${size}`).locator('[data-slot="root"]'),
+      ),
+      date: await layoutOf(example(page, '#input-date', `size ${size}`).getByRole('group')),
+      time: await layoutOf(example(page, '#input-time', `size ${size}`).getByRole('group')),
+    }
+    const menu = await layoutOf(
+      example(page, '#input-menu', `size ${size}, several values`).locator('[data-slot="base"]'),
+    )
     expect(input.value.start - input.leadingIcon!.end, size).toBe(gap)
     expect(input.value.end - input.trailingIcon!.end, size).toBe(gap)
     expect(select.value.end - select.trailingIcon!.end, size).toBe(gap)
+    for (const [field, { value, leadingIcon }] of Object.entries(leading))
+      expect(value.start - leadingIcon!.end, `${field}, ${size}`).toBe(gap)
+    expect(menu.value.end - menu.trailingIcon!.end, `menu, ${size}`).toBe(gap)
     expect(
-      [input.leadingIcon!.start, input.trailingIcon!.start, select.trailingIcon!.start],
+      [
+        input.leadingIcon!.start,
+        input.trailingIcon!.start,
+        select.trailingIcon!.start,
+        ...Object.values(leading).map(({ leadingIcon }) => leadingIcon!.start),
+        menu.trailingIcon!.start,
+      ],
       size,
-    ).toEqual([select.value.start, select.value.start, select.value.start])
+    ).toEqual(Array.from({ length: 7 }, () => select.value.start))
   }
 })
 
@@ -128,6 +149,8 @@ test("a field's value and its icons stay where they are when its edge widens in 
       'Where the conference takes place.',
       'Choose the day you are registering for.',
     ],
+    // a field that draws its icon inside its edge
+    ['#input-date', 'group', 'As on your ticket.', 'Choose a day of the conference.'],
   ] as const) {
     const atRest = await layoutOf(example(page, section, rest).getByRole(role))
     // the field of the states row, at the default size, before the sizes of the error
@@ -262,6 +285,68 @@ test('a card without its control centers its label in the card: the hidden contr
   )
   expect(insets).toEqual(insets.map(() => ({ start: 0, end: 0 })))
 })
+
+/**
+ * Where the controls of each field group of the gallery meet: the edges the two draw there, the
+ * edge of a text field being its field's, not its root's, and how far they lie over each other.
+ * And whether the one drawn on top at the seam is the one with the wider edge.
+ */
+function seams(page: Page) {
+  return page.locator('#field-group [data-orientation]').evaluateAll((groups) =>
+    groups.flatMap((group) => {
+      // in view, where the point of the seam is drawn
+      group.scrollIntoView({ block: 'center' })
+      const vertical = group.getAttribute('data-orientation') === 'vertical'
+      const edgeOf = (item: Element) =>
+        item.matches('[data-slot=root]') ? item.querySelector('[data-slot=base]')! : item
+      const items = [...group.children].map(edgeOf)
+      return items.slice(1).map((after, index) => {
+        const before = items[index]!
+        const [a, b] = [before.getBoundingClientRect(), after.getBoundingClientRect()]
+        const width = (element: Element, side: string) =>
+          parseFloat(getComputedStyle(element).getPropertyValue(`border-${side}-width`))
+        const edges = vertical
+          ? [width(before, 'bottom'), width(after, 'top')]
+          : [width(before, 'right'), width(after, 'left')]
+        const overlap = vertical ? a.bottom - b.top : a.right - b.left
+        // the middle of the line the two edges share
+        const [x, y] = vertical
+          ? [(b.left + b.right) / 2, b.top + overlap / 2]
+          : [b.left + overlap / 2, (b.top + b.bottom) / 2]
+        const top = document.elementFromPoint(x, y)
+        const wider = edges[0]! > edges[1]! ? before : edges[1]! > edges[0]! ? after : undefined
+        return {
+          seam: `${group.closest('figure')?.querySelector('figcaption')?.textContent}, ${index + 1}`,
+          edges,
+          overlap: Math.round(overlap * 100) / 100,
+          widerOnTop: wider ? !!top && (wider === top || wider.contains(top)) : true,
+        }
+      })
+    }),
+  )
+}
+
+for (const forcedColors of ['none', 'active'] as const) {
+  test.describe(`forced colors: ${forcedColors}`, () => {
+    test.use({ forcedColors })
+
+    test('where two controls of a field group meet, their edges lie over each other as one line, at every size', async ({
+      page,
+    }, testInfo) => {
+      test.skip(playground(testInfo) !== 'nuxt', 'The field groups are in the gallery')
+      await open(page)
+      const found = await seams(page)
+      // the rows of states and controls, the five sizes and the two columns
+      expect(found.length).toBeGreaterThanOrEqual(14)
+      for (const { seam, edges, overlap, widerOnTop } of found) {
+        expect(Math.min(...edges), seam).toBeGreaterThanOrEqual(1)
+        // the narrower edge lies wholly on the wider one, which is drawn over it
+        expect(overlap, seam).toBe(Math.min(...edges))
+        expect(widerOnTop, seam).toBe(true)
+      }
+    })
+  })
+}
 
 for (const colorScheme of ['dark', 'light'] as const) {
   test.describe(`on a ${colorScheme} system`, () => {

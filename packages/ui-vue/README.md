@@ -2,7 +2,7 @@
 
 # @whatsaaaa/ui-vue
 
-[Nuxt UI](https://ui.nuxt.com) themed with the [Whatsaaaa design system](https://github.com/whatsaaaa/design-system), for Vue and Nuxt. A trial: twelve core components (button, badge, input, text area, number field, select and select menu, checkbox, radio group, card, modal, table, tabs) take the system's terminal look through Nuxt UI's central config, in both themes.
+[Nuxt UI](https://ui.nuxt.com) themed with the [Whatsaaaa design system](https://github.com/whatsaaaa/design-system), for Vue and Nuxt. A trial: twelve core components (button, badge, input, text area, number field, select and select menu, checkbox, radio group, card, modal, table, tabs) take the system's terminal look through Nuxt UI's central config, in both themes, held to its specs, and seven more (pin input, input tags, input menu, input date, input time, file upload, field group) are restyled on its tiers.
 
 ## Install
 

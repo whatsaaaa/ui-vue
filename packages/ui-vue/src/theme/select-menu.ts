@@ -1,4 +1,4 @@
-import { fieldCompoundVariants } from './field.ts'
+import { fieldCompoundVariants, inGroup } from './field.ts'
 import { selectSlots, selectVariants } from './select.ts'
 
 /*
@@ -20,6 +20,6 @@ export default {
     input: 'border-b-thin border-border',
   },
   variants: selectVariants,
-  compoundVariants: fieldCompoundVariants,
+  compoundVariants: [...fieldCompoundVariants, ...inGroup],
   defaultVariants,
 }

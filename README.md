@@ -2,7 +2,7 @@
 
 # ui-vue
 
-[Nuxt UI](https://ui.nuxt.com) themed with the [Whatsaaaa design system](https://github.com/whatsaaaa/design-system), for Vue and Nuxt. A trial: twelve core components (button, badge, input, text area, number field, select and select menu, checkbox, radio group, card, modal, table, tabs) take the system's terminal look through Nuxt UI's central config, in both themes.
+[Nuxt UI](https://ui.nuxt.com) themed with the [Whatsaaaa design system](https://github.com/whatsaaaa/design-system), for Vue and Nuxt. A trial: twelve core components (button, badge, input, text area, number field, select and select menu, checkbox, radio group, card, modal, table, tabs) take the system's terminal look through Nuxt UI's central config, in both themes, held to its specs, and seven more (pin input, input tags, input menu, input date, input time, file upload, field group) are restyled on its tiers.
 
 | Folder             | What it is                                                                                                                   |
 | ------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
@@ -67,11 +67,12 @@ A `dark` or `light` class, like `data-theme`, also keeps a part of a page in one
 
 A select menu's search draws the search icon by default. An app that passes its own `searchInput`, for example to give it a placeholder naming what it searches, passes `icon: 'i-lucide-search'` with it: Nuxt UI takes a passed `searchInput` in place of the default.
 
-Four things Nuxt UI leaves to the app, which the gallery does and a page has to do too:
+Five things Nuxt UI leaves to the app, which the gallery does and a page has to do too:
 
 - **A card's title is a heading.** Nuxt UI draws the title in a `div` unless the `as` prop names another element for it, so name a heading, at the level the page's outline puts the card at: `<UCard title="Harbour Conf" :as="{ title: 'h3' }">`. A heading passed in the `#title` slot still works, and is what the gallery does: `<template #title><h3>Harbour Conf</h3></template>`. The theme draws it as the card's title either way.
 - **An amount in a table is set by its column.** Nuxt UI has no slot for an amount, so the theme cannot find one: give the column `meta: { class: { th: 'text-end', td: 'text-end tabular-nums' } }`, which puts the amounts and their column's name at the end of the column, in figures of one width.
 - **A number field's step buttons are named for the field.** Nuxt UI names them Decrement and Increment, where a name says what each does to which field: pass each its name, `<UInputNumber :decrement="{ 'aria-label': 'Decrease Tickets' }" :increment="{ 'aria-label': 'Increase Tickets' }" />`. Nuxt UI's type of those props leaves out a button's attributes, so in TypeScript the object takes a cast to it, as in the gallery's `InputNumberSection.vue`. The theme draws the buttons whatever props an app passes them.
+- **A file upload drawn as a button is named in its slot.** Nuxt UI draws the button with an icon alone, and gives an `aria-label` to the file input it hides, so name it with words for screen readers in its `#leading` slot, next to the icon: `<template #leading="{ ui }"><UIcon name="i-lucide-upload" :class="ui.icon()" /><span class="sr-only">Add your ticket</span></template>`.
 - **The key hints need the design system's keys head script.** `colorModeInitScript` is the theme's head script only. An app with a status line whose keys work, by `enableShortcuts` from `@whatsaaaa/design-system/shortcuts`, also inlines `keysInitScript` from the same module in the `<head>`, after the color mode's script: on Nuxt `script: [{ innerHTML: colorModeInitScript }, { innerHTML: keysInitScript }]`, on Vue from the Vite plugin that inlines the other. The design system's usage guide has the markup of the hints and of the keys switch.
 
 On Nuxt, as in `playgrounds/nuxt`, the color mode switches the theme:
@@ -99,7 +100,7 @@ The package ships its TypeScript compiled, with the type declarations, in `dist/
 How far a Nuxt UI component follows the design system is one of three levels, each a test:
 
 1. **Inherits.** It takes the system's colors, radius and fonts through the stylesheet, and nothing else: its type, its sizes and its states are still Nuxt UI's. It is on the gallery's page of the others in both themes, where axe finds no contrast failure, where in forced colors every icon and every edge drawn as a ring is still there and a control that is on differs from one that is off, and where at 390 px, the width of a phone, nothing of its example reaches past the gallery's frame.
-2. **Restyled.** It has a theme in the package, written on the system's tiers.
+2. **Restyled.** It has a theme in the package, written on the system's tiers: the system's text styles and faces, the control's heights, borders for edges, the system's focus ring and icon sizes. A unit test over its theme, merged onto Nuxt UI's as Nuxt UI merges them, finds no Tailwind type size, no ring as an edge, no shadow and no color shade on any of its parts. It has a section of the gallery with its kinds, sizes and states, where axe finds nothing in either theme, in forced colors an example that is checked, current or selected is painted unlike one at rest, and its keys work where it has keys, and the section has a stored screenshot.
 3. **Specced.** The design system has a spec for it, and its section of the gallery passes the parity test.
 
 [docs/specs.md](./docs/specs.md) records, for each spec, the props that draw its kinds and sizes, where ui-vue does not meet it yet and its parity result.
@@ -114,8 +115,8 @@ The tables below, and what they say of where the fixes come from, are drawn from
 
 | Family         | Components | Level 3 today | Level 2 today | Level 1 today | Pass every level 1 check | Fail a level 1 check | Not in the gallery | Level 3 for 1.0.0 | Level 2 for 1.0.0 | Level 1 for 1.0.0 |
 | -------------- | ---------- | ------------- | ------------- | ------------- | ------------------------ | -------------------- | ------------------ | ----------------- | ----------------- | ----------------- |
-| Element        | 19         | 3             | 0             | 16            | 15                       | 4                    | 0                  | 6                 | 10                | 3                 |
-| Form           | 21         | 8             | 0             | 13            | 19                       | 2                    | 0                  | 11                | 7                 | 3                 |
+| Element        | 19         | 3             | 1             | 15            | 15                       | 4                    | 0                  | 6                 | 10                | 3                 |
+| Form           | 21         | 8             | 6             | 7             | 19                       | 2                    | 0                  | 11                | 7                 | 3                 |
 | Data           | 10         | 1             | 0             | 9             | 10                       | 0                    | 0                  | 2                 | 4                 | 4                 |
 | Navigation     | 8          | 1             | 0             | 7             | 7                        | 1                    | 0                  | 3                 | 4                 | 1                 |
 | Overlay        | 8          | 1             | 0             | 7             | 6                        | 2                    | 0                  | 6                 | 2                 | 0                 |
@@ -129,7 +130,7 @@ The tables below, and what they say of where the fixes come from, are drawn from
 | Locale         | 1          | 0             | 0             | 1             | 1                        | 0                    | 0                  | 0                 | 0                 | 1                 |
 | Prose          | 47         | 0             | 0             | 47            | 46                       | 0                    | 1                  | 0                 | 0                 | 47                |
 | Internal parts | 5          | 0             | 0             | 5             | 0                        | 0                    | 5                  | 2                 | 1                 | 2                 |
-| **All**        | 186        | 14            | 0             | 172           | 168                      | 11                   | 7                  | 30                | 44                | 112               |
+| **All**        | 186        | 14            | 7             | 165           | 168                      | 11                   | 7                  | 30                | 44                | 112               |
 
 A component that is not in the gallery is counted apart from the ones that pass or fail: one that draws nothing of its own is not checked, and an internal part is checked through the component that draws it.
 
@@ -169,7 +170,7 @@ The components that do not pass level 1 yet, with each check they fail:
 | `UCard`                     | Element        | 3     | 3         | Gallery              | Yes                                               |
 | `UChip`                     | Element        | 1     | 2         | Others               | Yes                                               |
 | `UCollapsible`              | Element        | 1     | 1         | Others               | Yes                                               |
-| `UFieldGroup`               | Element        | 1     | 2         | Others               | Yes                                               |
+| `UFieldGroup`               | Element        | 2     | 2         | Gallery              | Yes                                               |
 | `UIcon`                     | Element        | 1     | 1         | Others               | Yes                                               |
 | `UKbd`                      | Element        | 1     | 3         | Others               | Yes                                               |
 | `UProgress`                 | Element        | 1     | 2         | Others               | Yes                                               |
@@ -181,18 +182,18 @@ The components that do not pass level 1 yet, with each check they fail:
 | `UCheckbox`                 | Form           | 3     | 3         | Gallery              | Yes                                               |
 | `UCheckboxGroup`            | Form           | 1     | 3         | Others               | Yes                                               |
 | `UColorPicker`              | Form           | 1     | 1         | Others               | Yes                                               |
-| `UFileUpload`               | Form           | 1     | 2         | Others               | Yes                                               |
+| `UFileUpload`               | Form           | 2     | 2         | Gallery              | Yes                                               |
 | `UForm`                     | Form           | 1     | 1         | Others               | Yes                                               |
 | `UFormField`                | Form           | 3     | 3         | Gallery              | Yes                                               |
 | `UInput`                    | Form           | 3     | 3         | Gallery              | Yes                                               |
-| `UInputDate`                | Form           | 1     | 2         | Others               | Yes                                               |
-| `UInputMenu`                | Form           | 1     | 2         | Others               | Yes                                               |
+| `UInputDate`                | Form           | 2     | 2         | Gallery              | Yes                                               |
+| `UInputMenu`                | Form           | 2     | 2         | Gallery              | Yes                                               |
 | `UInputNumber`              | Form           | 3     | 3         | Gallery              | Yes                                               |
 | `UInputRating`              | Form           | 1     | 1         | Others               | No: forced-state                                  |
-| `UInputTags`                | Form           | 1     | 2         | Others               | Yes                                               |
-| `UInputTime`                | Form           | 1     | 2         | Others               | Yes                                               |
+| `UInputTags`                | Form           | 2     | 2         | Gallery              | Yes                                               |
+| `UInputTime`                | Form           | 2     | 2         | Gallery              | Yes                                               |
 | `UListbox`                  | Form           | 1     | 2         | Others               | Yes                                               |
-| `UPinInput`                 | Form           | 1     | 2         | Others               | Yes                                               |
+| `UPinInput`                 | Form           | 2     | 2         | Gallery              | Yes                                               |
 | `URadioGroup`               | Form           | 3     | 3         | Gallery              | Yes                                               |
 | `USelect`                   | Form           | 3     | 3         | Gallery              | Yes                                               |
 | `USelectMenu`               | Form           | 3     | 3         | Gallery              | Yes                                               |
