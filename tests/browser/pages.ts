@@ -1,4 +1,4 @@
-import { expect, test, type Page, type TestInfo } from '@playwright/test'
+import { expect, test, type Locator, type Page, type TestInfo } from '@playwright/test'
 
 export type Playground = 'nuxt' | 'vue'
 
@@ -56,6 +56,17 @@ export async function waitForPage(page: Page, url: RegExp): Promise<void> {
 export async function waitForNoFindings(read: () => Promise<string[]>): Promise<void> {
   allowAppWait()
   await expect.poll(read, { timeout: APP_WAIT }).toEqual([])
+}
+
+/**
+ * Expects a part of the page in a state the app draws, as a row is once a click has chosen it:
+ * its attributes, then its colors. On a busy machine the gallery takes the app more than the five
+ * seconds an expectation waits by default to draw it again, as for a reading of all of it. It
+ * polls for the state as any expectation does. This wait adds its time to the test's too.
+ */
+export function expectDrawn(part: Locator) {
+  allowAppWait()
+  return expect.configure({ timeout: APP_WAIT })(part)
 }
 
 /** Gives the test the time of one more wait for the app. */

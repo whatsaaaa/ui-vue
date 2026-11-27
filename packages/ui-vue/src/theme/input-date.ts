@@ -12,9 +12,11 @@ import { transition } from './shared.ts'
  * A date or a time typed a part at a time: the field is the text field, with its focus on the
  * part being typed, and its parts, the segments, sit side by side in it. The part with the focus
  * is on the tag's tint, the system's interactive tint, which reads on every variant of the field,
- * and in forced colors in the selection's colors. A part not filled in yet and the literal between
- * parts are the secondary text, an invalid date the danger text. Its icon is the one the app
- * names, or Nuxt UI's, at the control's icon size.
+ * and in forced colors in the selection's colors. Nuxt UI hides a part's outline with
+ * outline-hidden, which forced colors draw as a solid outline around every part, at rest too: a
+ * part has no outline there, and the selection's colors mark the one with the focus. A part not
+ * filled in yet and the literal between parts are the secondary text, an invalid date the danger
+ * text. Its icon is the one the app names, or Nuxt UI's, at the control's icon size.
  */
 
 /**
@@ -72,7 +74,7 @@ export default {
     base: `rounded-(--ws-control-radius) font-sans cursor-text ${transition}`,
     leadingIcon: inputSlots.leadingIcon,
     trailingIcon: inputSlots.trailingIcon,
-    segment: `rounded-(--ws-radius-sm) px-(--ws-space-4) data-[segment=literal]:px-0 tabular-nums text-(--ws-field-text-rest) data-placeholder:text-text-secondary data-[segment=literal]:text-text-secondary data-invalid:text-danger-text data-disabled:opacity-100 data-disabled:text-(--ws-field-text-disabled) forced-colors:focus:bg-[Highlight] forced-colors:focus:text-[HighlightText] forced-colors:focus:forced-color-adjust-none ${transition}`,
+    segment: `rounded-(--ws-radius-sm) px-(--ws-space-4) data-[segment=literal]:px-0 tabular-nums text-(--ws-field-text-rest) data-placeholder:text-text-secondary data-[segment=literal]:text-text-secondary data-invalid:text-danger-text data-disabled:opacity-100 data-disabled:text-(--ws-field-text-disabled) forced-colors:outline-none forced-colors:focus:bg-[Highlight] forced-colors:focus:text-[HighlightText] forced-colors:focus:forced-color-adjust-none ${transition}`,
     separatorIcon: 'mx-(--ws-space-4) text-(--ws-field-icon-rest)',
   },
   variants: {
