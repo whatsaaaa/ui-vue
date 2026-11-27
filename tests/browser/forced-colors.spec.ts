@@ -1,6 +1,6 @@
 import { expect, test, type Locator, type Page } from '@playwright/test'
 import { edges, icons, openWithSystemColors } from './forced.ts'
-import { playground, waitForNoFindings } from './pages.ts'
+import { expectDrawn, playground, waitForNoFindings } from './pages.ts'
 
 /*
  * The parts of the pages in forced colors that the theme draws again in the system's colors: a
@@ -127,6 +127,29 @@ function currentTabs(page: Page): Promise<Findings> {
 }
 
 /**
+ * Every segment of a date or a time field that draws an outline: Nuxt UI's outline-hidden, which
+ * forced colors draw in the text color, around every segment at rest.
+ */
+function outlinedSegments(within: Locator): Promise<Findings> {
+  return within.evaluate((root) => {
+    const findings: string[] = []
+    for (const segment of root.querySelectorAll<HTMLElement>('[data-slot=segment]')) {
+      if (!segment.checkVisibility()) continue
+      const style = getComputedStyle(segment)
+      if (
+        style.outlineStyle !== 'none' &&
+        parseFloat(style.outlineWidth) > 0 &&
+        !['rgba(0, 0, 0, 0)', window.systemColor(segment, 'Canvas')].includes(style.outlineColor)
+      )
+        findings.push(
+          `${segment.closest('section[id]')?.id} ${segment.dataset.segment} ${segment.innerText}: outline ${style.outlineWidth} ${style.outlineStyle} ${style.outlineColor}`,
+        )
+    }
+    return findings
+  })
+}
+
+/**
  * The contrast of a text as the browser paints it, by WCAG's formula: between the lightest and
  * the darkest pixels inside the box of its characters, a pixel in from its edges. Forced colors
  * draw a backplate in the page color behind text; text in that color on it has none.
@@ -179,6 +202,31 @@ for (const colorScheme of ['dark', 'light'] as const) {
       expect(await currentTabs(page)).toEqual([])
     })
 
+    test('a segment of a date or a time field has no outline, and the one with the focus is in the selection colors', async ({
+      page,
+    }, testInfo) => {
+      test.skip(playground(testInfo) !== 'nuxt', 'The date and time fields are in the gallery')
+      await openWithSystemColors(page)
+      for (const id of ['input-date', 'input-time']) {
+        const section = page.locator(`section#${id}`)
+        // every size and variant, in both themes, at rest
+        expect(await outlinedSegments(section)).toEqual([])
+        const segment = section.getByRole('spinbutton').first()
+        await segment.focus()
+        await expect(segment).toBeFocused()
+        // the focus on Highlight under HighlightText, with no outline around it either
+        await expectDrawn(segment).toHaveCSS(
+          'background-color',
+          await segment.evaluate((segment) => window.systemColor(segment, 'Highlight')),
+        )
+        await expectDrawn(segment).toHaveCSS(
+          'color',
+          await segment.evaluate((segment) => window.systemColor(segment, 'HighlightText')),
+        )
+        expect(await outlinedSegments(section)).toEqual([])
+      }
+    })
+
     test('a chosen row of a table is in the selection colors, and its text reads on them', async ({
       page,
     }, testInfo) => {
@@ -187,13 +235,13 @@ for (const colorScheme of ['dark', 'light'] as const) {
       const row = page.locator('[data-spec="table.selectable.selected"] tbody tr').first()
       await row.scrollIntoViewIfNeeded()
       // the table spec's chosen row in forced colors: Highlight under HighlightText
-      await expect(row).toHaveCSS(
+      await expectDrawn(row).toHaveCSS(
         'background-color',
         await row.evaluate((row) => window.systemColor(row, 'Highlight')),
       )
       // the line under it in the text color, as under every other row, not in its HighlightText,
       // which is the page's color
-      await expect(row).toHaveCSS(
+      await expectDrawn(row).toHaveCSS(
         'border-block-end-color',
         await row.evaluate((row) => window.systemColor(row, 'CanvasText')),
       )
@@ -208,7 +256,12 @@ for (const colorScheme of ['dark', 'light'] as const) {
       const withAction = page.getByTestId('table-action').locator('tbody tr').first()
       const edit = withAction.getByRole('button', { name: 'Edit Maya Collins' })
       await withAction.getByRole('checkbox', { name: 'Choose Maya Collins' }).click()
-      await expect(withAction).toHaveAttribute('data-selected', 'true')
+      await expectDrawn(withAction).toHaveAttribute('data-selected', 'true')
+      // painted on its Highlight, before its pixels are read
+      await expectDrawn(withAction).toHaveCSS(
+        'background-color',
+        await withAction.evaluate((row) => window.systemColor(row, 'Highlight')),
+      )
       expect(await paintedContrast(page, edit), 'Edit reads on the row').toBeGreaterThanOrEqual(4.5)
     })
 
@@ -221,15 +274,15 @@ for (const colorScheme of ['dark', 'light'] as const) {
       const rows = page.locator('[data-spec="table.selectable.selected"] tbody tr')
       const [first, second] = [rows.nth(0), rows.nth(1)]
       await second.getByRole('checkbox', { name: 'Choose Daniel Brooks' }).click()
-      await expect(second).toHaveAttribute('data-selected', 'true')
+      await expectDrawn(second).toHaveAttribute('data-selected', 'true')
       // the line between them on their Highlight, in its HighlightText, not in the text color,
       // which is near Highlight
-      await expect(first).toHaveCSS(
+      await expectDrawn(first).toHaveCSS(
         'border-block-end-color',
         await first.evaluate((row) => window.systemColor(row, 'HighlightText')),
       )
       // the line under the second, over a row that is not chosen, in the text color
-      await expect(second).toHaveCSS(
+      await expectDrawn(second).toHaveCSS(
         'border-block-end-color',
         await second.evaluate((row) => window.systemColor(row, 'CanvasText')),
       )
