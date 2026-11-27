@@ -113,6 +113,7 @@ export default {
     // The value starts past each step button as an input's does past an icon.
     ...fieldSizeNames.map((size) => ({ decrement: true, size, class: iconRoomStart[size] })),
     ...fieldSizeNames.map((size) => ({ increment: true, size, class: iconRoomEnd[size] })),
+    { orientation: 'horizontal', class: 'text-start' },
     // The buttons on either side of a row. A column of two at the end stays Nuxt UI's.
     ...fieldSizeNames.map((size) => ({
       orientation: 'horizontal',
