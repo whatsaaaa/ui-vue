@@ -18,12 +18,14 @@ import { transition } from './shared.ts'
  */
 
 /**
- * A segment is as wide as its figures, in figures of one width, with the room of the tint around
- * them: a day, a month, an hour and a minute two figures, a year four, whatever their value.
- * Nuxt UI gives each a width of its own at each size, which a year in Inter overflows.
+ * A segment is as wide as its value, in figures of one width, with the room of the tint around
+ * it: the room around every literal, around the dash of a range and in the tint of the focus is
+ * the same on each side, whatever the value, and the text after a segment moves by a figure as a
+ * second one is typed. Nuxt UI gives each a width of its own at each size, which a year in Inter
+ * overflows and a value of one figure does not fill.
  */
 const segmentWidths =
-  'data-[segment=day]:w-auto data-[segment=month]:w-auto data-[segment=year]:w-auto not-data-[segment=literal]:w-auto data-[segment=day]:min-w-[calc(2ch+2*var(--ws-space-4))] data-[segment=month]:min-w-[calc(2ch+2*var(--ws-space-4))] data-[segment=year]:min-w-[calc(4ch+2*var(--ws-space-4))] data-[segment=hour]:min-w-[calc(2ch+2*var(--ws-space-4))] data-[segment=minute]:min-w-[calc(2ch+2*var(--ws-space-4))] data-[segment=second]:min-w-[calc(2ch+2*var(--ws-space-4))]'
+  'data-[segment=day]:w-auto data-[segment=month]:w-auto data-[segment=year]:w-auto not-data-[segment=literal]:w-auto'
 
 /** The field at each size, and the icon between the two dates of a range at the control's size. */
 const sizes = {

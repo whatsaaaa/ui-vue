@@ -1,4 +1,10 @@
-import { fieldCompoundVariants, fieldSizes, fieldVariants, inGroup } from './field.ts'
+import {
+  fieldCompoundVariants,
+  fieldSizes,
+  fieldVariants,
+  iconsWithinSizes,
+  inGroup,
+} from './field.ts'
 import { forcedIcon, transition } from './shared.ts'
 
 /*
@@ -51,8 +57,7 @@ export const selectVariants = {
   size: {
     xs: {
       ...fieldSizes.xs,
-      leading: 'ps-[calc(var(--ws-space-8)-var(--field-edge-extra,0px))]',
-      trailing: 'pe-[calc(var(--ws-space-8)-var(--field-edge-extra,0px))]',
+      ...iconsWithinSizes.xs,
       label: 'px-(--ws-space-6) py-(--ws-space-4) text-overline',
       item: 'px-(--ws-space-6) py-(--ws-space-4) gap-(--ws-control-gap-xs) text-body-sm',
       itemLeadingIcon:
@@ -62,8 +67,7 @@ export const selectVariants = {
     },
     sm: {
       ...fieldSizes.sm,
-      leading: 'ps-[calc(var(--ws-space-10)-var(--field-edge-extra,0px))]',
-      trailing: 'pe-[calc(var(--ws-space-10)-var(--field-edge-extra,0px))]',
+      ...iconsWithinSizes.sm,
       label: 'px-(--ws-space-8) py-(--ws-space-4) text-overline',
       item: 'px-(--ws-space-8) py-(--ws-space-4) gap-(--ws-control-gap-sm) text-body-sm',
       itemLeadingIcon:
@@ -73,8 +77,7 @@ export const selectVariants = {
     },
     md: {
       ...fieldSizes.md,
-      leading: 'ps-[calc(var(--ws-space-12)-var(--field-edge-extra,0px))]',
-      trailing: 'pe-[calc(var(--ws-space-12)-var(--field-edge-extra,0px))]',
+      ...iconsWithinSizes.md,
       label: 'px-(--ws-space-8) py-(--ws-space-6) text-overline',
       item: 'px-(--ws-space-8) py-(--ws-space-6) gap-(--ws-control-gap-md) text-body',
       itemLeadingIcon:
@@ -84,8 +87,7 @@ export const selectVariants = {
     },
     lg: {
       ...fieldSizes.lg,
-      leading: 'ps-[calc(var(--ws-space-14)-var(--field-edge-extra,0px))]',
-      trailing: 'pe-[calc(var(--ws-space-14)-var(--field-edge-extra,0px))]',
+      ...iconsWithinSizes.lg,
       label: 'px-(--ws-space-10) py-(--ws-space-6) text-overline',
       item: 'px-(--ws-space-10) py-(--ws-space-8) gap-(--ws-control-gap-lg) text-body',
       itemLeadingIcon:
@@ -95,8 +97,7 @@ export const selectVariants = {
     },
     xl: {
       ...fieldSizes.xl,
-      leading: 'ps-[calc(var(--ws-space-16)-var(--field-edge-extra,0px))]',
-      trailing: 'pe-[calc(var(--ws-space-16)-var(--field-edge-extra,0px))]',
+      ...iconsWithinSizes.xl,
       label: 'px-(--ws-space-12) py-(--ws-space-8) text-overline',
       item: 'px-(--ws-space-12) py-(--ws-space-8) gap-(--ws-control-gap-xl) text-body',
       itemLeadingIcon:
